@@ -12,6 +12,8 @@ import { isLoggedIn, getMagic } from 'lib/magic';
  * @property {string} [redirectTo] If redirectTo is set, redirect if the user was not found
  * @property {boolean} [redirectIfFound] If redirectIfFound is also set, redirect if the user was found.
  * @property {boolean} [authOnLoad] Whether or not to check for magic authorization, defaults to true
+ * @property {boolean} [requiresAuth] Whether or not to perform automatic login and redirect back
+ *                                    to this page if unauthenticated
  */
 
 /**

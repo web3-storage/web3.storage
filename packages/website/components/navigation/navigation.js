@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useAuthorization } from 'components/contexts/authorizationContext';
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
-import { trackCustomLinkClick, events, ui } from 'lib/countly';
+import { events, saEvent, ui } from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
 import Sidebar from 'modules/docs-theme/sidebar/sidebar';
@@ -24,8 +24,9 @@ import Link from '../link/link';
  *
  * @param {Object} props
  * @param {Boolean} props.isProductApp
+ * @param {import('../breadcrumbs/breadcrumbs').Breadcrumb[]} [props.breadcrumbs]
  */
-export default function Navigation({ isProductApp }) {
+export default function Navigation({ breadcrumbs, isProductApp }) {
   const router = useRouter();
   const { isLoggedIn, isLoading, isFetching, logout } = useAuthorization();
   const isLoadingUser = useMemo(() => isLoading || isFetching, [isLoading, isFetching]);
@@ -39,7 +40,7 @@ export default function Navigation({ isProductApp }) {
   const navItems = links.filter(item => item.text.toLowerCase() !== 'account');
   const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
-  const theme = router.route === '/pricing' || isProductApp ? 'light' : 'dark';
+  const theme = isProductApp ? 'light' : 'dark';
   const buttonTheme = isProductApp ? 'pink-blue' : '';
   const isDocs = router.route.includes('docs');
 
@@ -49,7 +50,8 @@ export default function Navigation({ isProductApp }) {
 
   const onLinkClick = useCallback(
     e => {
-      trackCustomLinkClick(events.LINK_CLICK_NAVBAR, e.currentTarget);
+      saEvent(events.LINK_CLICK_NAVBAR, { target: e.currentTarget });
+
       if (isMenuOpen) {
         setMenuOpen(false);
       }
@@ -209,6 +211,7 @@ export default function Navigation({ isProductApp }) {
                       </div>
                     ) : (
                       <Link
+                        target={item.text === 'Blog' ? '_blank' : '_self'}
                         key={item.text}
                         href={item.url}
                         className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
@@ -238,7 +241,7 @@ export default function Navigation({ isProductApp }) {
               </div>
             </div>
 
-            {router.route === '/' ? null : <Breadcrumbs variant={theme} click={onLinkClick} />}
+            {breadcrumbs && <Breadcrumbs variant={theme} click={onLinkClick} items={breadcrumbs} />}
 
             <div className={clsx('nav-mobile-panel grid', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-nav-gradient-wrapper">
@@ -303,7 +306,7 @@ export default function Navigation({ isProductApp }) {
                                   {link.text}
                                 </button>
                               ) : (
-                                <Link passHref href={link.url} key={link.text}>
+                                <Link href={link.url} key={link.text}>
                                   <a
                                     href={link.url}
                                     className="nav-sublink"

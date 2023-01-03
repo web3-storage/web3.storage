@@ -2,14 +2,19 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 import { Miniflare } from 'miniflare'
+import { createFetchMock } from '@miniflare/core'
 import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
+import { Response } from '@web-std/fetch'
 
 // @ts-ignore
 global.crypto = webcrypto
+
+// @ts-ignore
+globalThis.Response = Response
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') })
@@ -32,18 +37,23 @@ export const mochaHooks = () => {
     async beforeAll () {
       this.timeout(120_000)
       AuthorizationTestContext.install(this)
-
-      console.log('⚡️ Starting Miniflare')
-      srv = await new Miniflare({
+      const fetchMock = createFetchMock()
+      const mf = new Miniflare({
         // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
         envPath: true,
-        scriptPath: 'dist/worker.mjs',
+        scriptPath: 'dist/worker.js',
         packagePath: true,
         wranglerConfigPath: true,
         wranglerConfigEnv: 'test',
         modules: true,
-        bindings: workerGlobals
-      }).startServer()
+        bindings: workerGlobals,
+        fetchMock
+      })
+      globalThis.miniflareFetchMock = fetchMock
+      globalThis.miniflare = mf
+
+      console.log('⚡️ Starting Miniflare')
+      srv = await mf.startServer()
 
       console.log('⚡️ Starting Minio')
       projectMinio = `web3-storage-minio-${Date.now()}`

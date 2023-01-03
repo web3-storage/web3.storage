@@ -15,6 +15,8 @@ The following jobs are available:
 
 Verify that the following are set in the `.env` file in root of the project monorepo.
 
+Heartbeat split by environments, runs every hour.
+
 ```ini
 ENV=dev
 

@@ -1,15 +1,17 @@
 import clsx from 'clsx';
 import filesz from 'filesize';
 import { useMemo, useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 
-import LockIcon from 'assets/icons/lock';
-import Button, { ButtonVariant } from 'components/button/button';
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
-import StorageLimitRequestModal from 'components/storageLimitRequestModal/storageLimitRequestModal';
+import { usePayment } from '../../../hooks/use-payment';
+import Tooltip from 'ZeroComponents/tooltip/tooltip';
+import InfoIcon from 'assets/icons/info';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
+const gibibyte = 1073741824;
 const defaultStorageLimit = tebibyte;
 
 /**
@@ -27,17 +29,23 @@ const StorageManager = ({ className = '', content }) => {
   const {
     storageData: { data, isLoading },
   } = useUser();
+  const { currentPlan } = usePayment();
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
   const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
-  const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
+  const limit = useMemo(() => {
+    if (currentPlan?.id === 'earlyAdopter') {
+      return data?.storageLimitBytes || defaultStorageLimit;
+    } else {
+      const byteConversion = currentPlan ? gibibyte * parseInt(currentPlan.baseStorage) : defaultStorageLimit;
+      return byteConversion;
+    }
+  }, [data, currentPlan]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
-  const [isUserRequestModalOpen, setIsUserRequestModalOpen] = useState(false);
 
-  const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
+  const { maxSpaceLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
       maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
-      unlockLabel: content.unlock_label,
       percentUploaded: Math.min((uploaded / limit) * 100, 100),
       percentPinned: Math.min((psaPinned / limit) * 100, 100),
     }),
@@ -88,6 +96,12 @@ const StorageManager = ({ className = '', content }) => {
 
   return (
     <div ref={storageManagerRef} className={clsx('section storage-manager-container', className)}>
+      <Link href={'account/payment'} passHref>
+        <a href={'account/payment'} className="storage-manager-payment-link">
+          Want more storage? Upgrade your plan here!
+        </a>
+      </Link>
+      <h6>Your Plan: {currentPlan?.title}</h6>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
           {isLoading ? (
@@ -102,29 +116,28 @@ const StorageManager = ({ className = '', content }) => {
                   standard: 'iec',
                 })}
               </span>
-              &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
+              {currentPlan?.id === 'earlyAdopter' ? (
+                <>
+                  &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
+                </>
+              ) : (
+                <>
+                  &nbsp;of <span className="storage-number">{currentPlan?.baseStorage}</span> used
+                </>
+              )}
+              <Tooltip content={content.tooltip_total}>
+                <InfoIcon />
+              </Tooltip>
             </>
           )}
         </div>
-        {/* <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
-          {content.buttons.search}
-        </Button> */}
       </div>
       <div className="storage-manager-meter-container">
         <div className="storage-manager-meter">
           {/* Mapping out tiers into labeled sections */}
           <div className="storage-manager-meter-pinned" style={pinnedStorageBarStyles} />
           <div className="storage-manager-meter-uploaded" style={uploadedStorageBarStyles} />
-          <span className="storage-manager-meter-label">{maxSpaceLabel}</span>
         </div>
-        {!!unlockLabel && (
-          <Button variant={ButtonVariant.TEXT} onClick={() => setIsUserRequestModalOpen(true)}>
-            <span>
-              <LockIcon />
-              {unlockLabel}
-            </span>
-          </Button>
-        )}
       </div>
       <div className={clsx('storage-manager-legend', uploaded > 0 || psaPinned > 0 ? '' : 'no-margin')}>
         {uploaded > 0 ? (
@@ -146,15 +159,6 @@ const StorageManager = ({ className = '', content }) => {
           </div>
         ) : null}
       </div>
-      <div className="storage-manager-info">
-        {content.prompt}&nbsp;
-        <button className="storage-manager__storage-request-button" onClick={() => setIsUserRequestModalOpen(true)}>
-          {content.buttons.request}
-        </button>
-      </div>
-      {isUserRequestModalOpen && (
-        <StorageLimitRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
-      )}
     </div>
   );
 };

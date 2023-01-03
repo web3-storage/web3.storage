@@ -94,7 +94,6 @@ export default function Hero({ block }) {
         <HeroIllustration id="index_hero-squiggle" src={ImageSquiggle} />
         <HeroIllustration id="index_hero-corkscrew" src={ImageCorkscrew} />
         <HeroIllustration id="index_hero-zigzag" src={ImageZigzag} />
-        <HeroIllustration id="index_hero-helix" src={ImageHelix} />
         <HeroIllustration id="index_hero-cross" src={ImageCross} />
         <HeroIllustration id="index_hero-triangle" src={ImageTriangle} />
       </>

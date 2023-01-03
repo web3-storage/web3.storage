@@ -1,6 +1,6 @@
 ---
-title: How to store data using Web3.Storage
-description: Learn how to store your data on the decentralized web with Web3.Storage.
+title: How to store data using web3.storage
+description: Learn how to store your data on the decentralized web with web3.storage.
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
@@ -11,21 +11,21 @@ import platformBrowserSource from '!!raw-loader!../../../assets/code-snippets/ho
 import platformNodeSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-node.js'
 import golangUpload from '!!raw-loader!../../../assets/code-snippets/how-to/golang/upload/upload.go'
 
-# How to store data using Web3.Storage
+# How to store data using web3.storage
 
-In this how-to guide, **you'll learn how to store data programmatically for your development projects using the Web3.Storage client libraries** in [JavaScript][reference-js] and [Go][reference-go]. This includes making your data available on the decentralized [IPFS](https://ipfs.io) network with persistent long-term storage provided by [Filecoin](https://filecoin.io) — all for free.
+In this how-to guide, **you'll learn how to store data programmatically for your development projects using the web3.storage client libraries** in [JavaScript][reference-js] and [Go][reference-go]. This includes making your data available on the decentralized [IPFS](https://ipfs.io) network with persistent long-term storage provided by [Filecoin](https://filecoin.io) — all for free.
 
-**If you just want to quickly store a few files using Web3.Storage rather than include upload functionality in an app or service you're building**, you may want to skip this guide for now and simply use the [Files page][site-files] on the Web3.Storage site.
+**If you just want to quickly store a few files using web3.storage rather than include upload functionality in an app or service you're building**, you may want to skip this guide for now and simply use the [Files page][site-files] on the web3.storage site.
 
-For developers, Web3.Storage provides a simple interface for storing data using syntax inspired by familiar web APIs such as [`fetch`][mdn-fetch] and [`File`][mdn-file]. This guide focuses on [JavaScript client library][reference-js] and [Go client library][reference-go], which are the simplest way to use Web3.Storage programmatically.
+For developers, web3.storage provides a simple interface for storing data using syntax inspired by familiar web APIs such as [`fetch`][mdn-fetch] and [`File`][mdn-file]. This guide focuses on [JavaScript client library][reference-js] and [Go client library][reference-go], which are the simplest way to use web3.storage programmatically.
 
 If you're using another language, see the [HTTP API reference][reference-http] for details on working with the underlying HTTP API.
 
-Uploading data to Web3.Storage using a client library requires a free API token, which in turn requires a Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
+Uploading data to web3.storage using a client library requires a free API token, which in turn requires a web3.storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
 
 <Callout type="warning">
 ##### CAUTION
-All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage.
+All data uploaded to web3.storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using web3.storage.
 </Callout>
 
 ## Installing the client
@@ -56,7 +56,7 @@ go get github.com/web3-storage/go-w3s-client
 <Tabs groupId="lang">
 <TabItem value="js" label="JavaScript">
 
-First, create a `Web3.Storage` client object, passing in an API token to its [constructor][reference-js-constructor]:
+First, create a `web3.storage` client object, passing in an API token to its [constructor][reference-js-constructor]:
 
 <CodeSnippet lang="js" src={howtoSource} region="makeStorageClient" />
 
@@ -86,7 +86,7 @@ client, err := w3s.NewClient(w3s.WithToken(token))
 
 <TabItem value="js" label="JavaScript" default>
 
-The Web3.Storage client's [`put` method][reference-js-put] accepts an array of [`File` objects](https://developer.mozilla.org/en-US/docs/Web/API/File).
+The web3.storage client's [`put` method][reference-js-put] accepts an array of [`File` objects](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
 There are a few different ways of creating `File` objects available, depending on your platform.
 
@@ -108,7 +108,7 @@ In Node.js, the `web3.storage` package exports some helpful utility functions fr
 
 <CodeSnippet lang="js" src={platformNodeSource} region="getFiles" />
 
-If you expect to be loading a lot of large files, you may be better served by the [`filesFromPath` helper](https://github.com/web3-storage/files-from-path#filesfrompath). It reduces memory pressure by `yield`ing `File` objects one by one as they're loaded from disk, instead of loading everything into memory. You can then issue multiple `put` requests to send each file to Web3.Storage.
+If you expect to be loading a lot of large files, you may be better served by the [`filesFromPath` helper](https://github.com/web3-storage/files-from-path#filesfrompath). It reduces memory pressure by `yield`ing `File` objects one by one as they're loaded from disk, instead of loading everything into memory. You can then issue multiple `put` requests to send each file to web3.storage.
 
 You can also manually create `File` objects by importing a Node.js implementation of `File` from the `web3.storage` package. This is useful when you want to store data created by your application, instead of files from the user's computer.
 
@@ -168,13 +168,13 @@ func opendir() {
 **When uploading multiple files, try to give each file a unique name.** All the files in a `put` request will be bundled into one content archive, and linking to the files inside is much easier if each file has a unique, human-readable name.
 </Callout>
 
-## Uploading to Web3.Storage
+## Uploading to web3.storage
 
 Once your files are ready, uploading is a simple method call on the client object.
 
 <Callout type="warning">
 ##### IMPORTANT
-Deleting files from the Web3.Storage site's [Files page][site-files] will remove them from the file listing for your account, but that doesn't prevent nodes on the [decentralized storage network][concepts-decentralized-storage] from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future.
+Deleting files from the web3.storage site's [Files page][site-files] will remove them from the file listing for your account, but that doesn't prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use web3.storage for data that may need to be permanently deleted in the future.
 </Callout>
 
 <Tabs groupId="lang">
@@ -201,7 +201,7 @@ Here's a simple example of using the callbacks to print the progress of an uploa
 
 The Go client's [`Client` interface][reference-go-client-interface] defines a `Put` method that accepts a [`context.Context`](https://pkg.go.dev/context#Context) and an [`fs.File`](https://pkg.go.dev/io/fs#File), which can be either a single file or a directory.
 
-The example below reads in an API token and the path to a file from the command line arguments, then uploads the file to Web3.Storage using the client's `Put` method.
+The example below reads in an API token and the path to a file from the command line arguments, then uploads the file to web3.storage using the client's `Put` method.
 
 A more in-depth example can be found [in the client's GitHub repository](https://github.com/web3-storage/go-w3s-client/blob/main/example/main.go), including uploads of multiple files and directories.
 
@@ -212,7 +212,7 @@ A more in-depth example can be found [in the client's GitHub repository](https:/
 
 ### Directory wrapping
 
-By default, files uploaded to Web3.Storage will be wrapped in an IPFS directory listing. This preserves the original filename and makes links more human-friendly than CID strings, which look like random gibberish.
+By default, files uploaded to web3.storage will be wrapped in an IPFS directory listing. This preserves the original filename and makes links more human-friendly than CID strings, which look like random gibberish.
 
 The CID you get back from the client when uploading is the CID of the directory, not the file itself! To link to the file itself using an IPFS URI, just add the filename to the CID, separated by a `/` like this: `ipfs://<cid>/<filename>`.
 
@@ -224,14 +224,14 @@ To avoid having your files wrapped in a directory listing, set the [`wrapWithDir
 
 ## Storing IPFS Content Archives
 
-So far we've focused on using the `put` method, which accepts regular files and packs them into an IPFS Content Archive (CAR) file before uploading to Web3.Storage. If you're already using IPFS in your application, or if you want more control over the [IPLD](https://ipld.io) graph used to structure your data, you can construct your own CAR files and upload them directly.
+So far we've focused on using the `put` method, which accepts regular files and packs them into an IPFS Content Archive (CAR) file before uploading to web3.storage. If you're already using IPFS in your application, or if you want more control over the [IPLD](https://ipld.io) graph used to structure your data, you can construct your own CAR files and upload them directly.
 
 See [Working with CAR files][howto-car-files] for more information about Content Archives, including how to create and manipulate them with code or command-line tools.
 
 <Tabs groupId="lang">
 <TabItem value="js" label="JavaScript">
 
-Once you have a Content Archive, you can use the [`putCar` client method][reference-js-put-car] to upload it to Web3.Storage.
+Once you have a Content Archive, you can use the [`putCar` client method][reference-js-put-car] to upload it to web3.storage.
 
 The `putCar` method accepts a `CarReader`, which is a type defined by the [`@ipld/car`][github-js-car] package.
 
@@ -246,7 +246,7 @@ const reader = await CarReader.fromBytes(carBytes);
 
 const client = makeStorageClient();
 const cid = await client.putCar(reader);
-console.log('Uploaded CAR file to Web3.Storage! CID:', cid);
+console.log('Uploaded CAR file to web3.storage! CID:', cid);
 ```
 
 See the [`putCar` reference documentation][reference-js-put-car] for more information about `putCar`, including optional parameters.
@@ -269,11 +269,43 @@ cid, err := client.PutCar(context.Background(), carfile)
 ```
 
 </TabItem>
+<TabItem value="curl" label="HTTP API (curl)">
+
+If you're using the [HTTP API][reference-http] directly, you can upload a CAR file by sending a `POST` request to the `/car` endpoint.
+
+Your request must include an `Authorization` header with a value of `Bearer $API_TOKEN`, where `$API_TOKEN` is a valid JWT token for the web3.storage service.
+
+The body of the request should be the binary CAR data, with no additional padding or encoding. Please note that the maximum size for a single CAR upload is 100 MiB. See [Working with CAR files][howto-car-files] for information about splitting CARs into smaller chunks for upload.
+
+The example below assumes that you have a CAR file named `mydata.car` that you want to upload.
+
+<Callout>
+When using `curl`, it's important to set the `--data-binary` flag. A common mistake is to use the `-d` flag instead, which sets the `Content-Type` header to the wrong value.
+</Callout>
+
+```bash
+curl --headers "Authorization: Bearer $API_TOKEN" --data-binary @mydata.car
+```
+
+The above example uses the generic `--headers` flag to set the `Authorization` header, since setting headers is supported by all HTTP clients. If you are using `curl`, you can optionally use the more consise `--oauth2-bearer` flag:
+
+```bash
+curl --oauth2-bearer $API_TOKEN --data-binary @mydata.car
+```
+
+You can also upload CAR data from non-file sources (for example, another network request) by piping it into the `curl` commmand and setting the input to `/dev/stdin`:
+
+```bash
+some-command-that-outputs-car-data | curl --oauth2-bearer $API_TOKEN --data-binary @/dev/stdin
+```
+
+</TabItem>
+
 </Tabs>
 
 ## Next steps
 
-The client returns an IPFS [content identifier (CID)][ipfs-docs-cid] that can be used to fetch your files over IPFS. Once uploaded, your data is immediately available for retrieval via IPFS and will be stored with Filecoin storage providers within 48 hours. To learn how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
+The client returns an IPFS [content identifier (CID)][ipfs-docs-cid] that can be used to fetch your files over IPFS. Once uploaded, your data is immediately available for retrieval via IPFS and will be stored with Filecoin storage providers within 48 hours. To learn how to fetch your data using the web3.storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
 
 You can also get more information about the status of your data. See the [query how-to guide][howto-query] to learn how to get more details about your data, including the status of any Filecoin storage deals.
 
@@ -291,7 +323,6 @@ You can also get more information about the status of your data. See the [query 
 [howto-query]: /docs/how-tos/query/
 [howto-car-files]: /docs/how-tos/work-with-car-files/
 [howto-list-dir]: /docs/how-tos/list-directory-contents/
-[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [site-files]: https://web3.storage/account/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/

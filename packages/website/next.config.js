@@ -17,6 +17,19 @@ const nextConfig = {
   images: {
     loader: 'custom',
   },
+  headers: () => {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+    ];
+  },
   webpack: function (config, options) {
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -56,9 +69,6 @@ const nextConfig = {
       });
     });
     return paths;
-  },
-  env: {
-    rawJsFromFile: fs.readFileSync('./rawJsFromFile.js').toString(),
   },
 };
 

@@ -2,7 +2,7 @@ name: Cron Pins
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/60 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         env: ['staging', 'production']
-    timeout-minutes: 15
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v2
         with: 
@@ -45,4 +45,4 @@ jobs:
 
       - name: Heartbeat
         if: ${{ success() }}
-        run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-pins
+        run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-pins-${{matrix.env}}

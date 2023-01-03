@@ -35,7 +35,7 @@ export async function uploadPost (request, env, ctx) {
   } else {
     const blob = await request.blob()
     if (blob.size === 0) {
-      throw new Error('Empty payload')
+      throw new HTTPError('Empty payload', 400)
     }
     input = [blob]
   }

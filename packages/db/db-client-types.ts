@@ -13,6 +13,9 @@ export type UpsertUserInput = {
 }
 
 export type UpsertUserOutput = {
+  id: string
+  // whether the upsert inserted a new record (if falsy, it was updated)
+  inserted: boolean
   issuer: string
 }
 
@@ -350,3 +353,8 @@ export type LogEmailSentInput = {
   emailType: string,
   messageId: string
 }
+
+export type ListKeysOptions = {
+  includeDeleted: boolean
+}
+export type AgreementKind = 'web3.storage-tos-v1'

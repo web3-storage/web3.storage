@@ -1,5 +1,284 @@
 # Changelog
 
+## [2.33.1](https://github.com/web3-storage/web3.storage/compare/website-v2.33.0...website-v2.33.1) (2022-12-14)
+
+
+### Bug Fixes
+
+* bump 'playwright' version & fix intermittent e2e test failure ([#2151](https://github.com/web3-storage/web3.storage/issues/2151)) ([dc529f5](https://github.com/web3-storage/web3.storage/commit/dc529f5035fdc525420d9dbdf28ee8d0ac7fee55))
+* update docs for PSA with IPLD codec info ([#2160](https://github.com/web3-storage/web3.storage/issues/2160)) ([e95e434](https://github.com/web3-storage/web3.storage/commit/e95e434264c4435fbb8f3640f042c76b71a123f1))
+
+## [2.33.0](https://github.com/web3-storage/web3.storage/compare/website-v2.32.0...website-v2.33.0) (2022-12-01)
+
+
+### Features
+
+* add tooltip to dashboard storage totals ([#2101](https://github.com/web3-storage/web3.storage/issues/2101)) ([2056ec6](https://github.com/web3-storage/web3.storage/commit/2056ec6fd692949f112b7b37d48d4da9d6a34523)), closes [#2081](https://github.com/web3-storage/web3.storage/issues/2081)
+* list and ability to delete psa request created though deleted tokens ([#2054](https://github.com/web3-storage/web3.storage/issues/2054)) ([e150d1f](https://github.com/web3-storage/web3.storage/commit/e150d1fa86dc0e6600f159fa92ccb7c8e65900e3))
+* simple analytics ([#2110](https://github.com/web3-storage/web3.storage/issues/2110)) ([4d5a1a0](https://github.com/web3-storage/web3.storage/commit/4d5a1a0e07db3c6749efed0072ab5b4c2fcb828e))
+
+
+### Bug Fixes
+
+* styles missing from custom storage form ([#2135](https://github.com/web3-storage/web3.storage/issues/2135)) ([04b66bc](https://github.com/web3-storage/web3.storage/commit/04b66bc27826aab4b10cc9c9b487126ccc7375b0))
+
+## [2.32.0](https://github.com/web3-storage/web3.storage/compare/website-v2.31.0...website-v2.32.0) (2022-11-11)
+
+
+### Features
+
+* add twitter logo to contact page [#2068](https://github.com/web3-storage/web3.storage/issues/2068) ([#2078](https://github.com/web3-storage/web3.storage/issues/2078)) ([179a844](https://github.com/web3-storage/web3.storage/commit/179a8443663e6d9e23acccb0269ae8b454cd8888))
+* **docs:** remove decentralized storage concept doc ([#2102](https://github.com/web3-storage/web3.storage/issues/2102)) ([f65c82e](https://github.com/web3-storage/web3.storage/commit/f65c82e7dddec58c2ea35d171b8894f0dafe3cf4))
+
+
+### Bug Fixes
+
+* align links when stacking mobile ([#2088](https://github.com/web3-storage/web3.storage/issues/2088)) ([3bedf2d](https://github.com/web3-storage/web3.storage/commit/3bedf2d584195a90912574cbcde1b69ea5e50220))
+* do not render account blocked modal unless account restricted ([#2089](https://github.com/web3-storage/web3.storage/issues/2089)) ([1025a22](https://github.com/web3-storage/web3.storage/commit/1025a223c9c3605447329a57a9bd1bca90d2569e))
+* incorrect class use ([#2094](https://github.com/web3-storage/web3.storage/issues/2094)) ([6919cb0](https://github.com/web3-storage/web3.storage/commit/6919cb09b335c7f757034f79235453e76c58ae77))
+* remove web apps footer link ([#2087](https://github.com/web3-storage/web3.storage/issues/2087)) ([a8c16a8](https://github.com/web3-storage/web3.storage/commit/a8c16a8f694567832a08d13009d0c8c8aedf79fe))
+* rm staging url in PSA docs ([#2037](https://github.com/web3-storage/web3.storage/issues/2037)) ([2dcc4dc](https://github.com/web3-storage/web3.storage/commit/2dcc4dcb988b606c7a9d62a9a22ddb3b3b1dce7f))
+* typo in w3name product page ([#2098](https://github.com/web3-storage/web3.storage/issues/2098)) ([9b50cc9](https://github.com/web3-storage/web3.storage/commit/9b50cc98425f67f79a8edd857fde93a02c6a64dc))
+* update product pages to have appropriate descriptions and titles ([#2085](https://github.com/web3-storage/web3.storage/issues/2085)) ([ae6ed12](https://github.com/web3-storage/web3.storage/commit/ae6ed12ced91718d6c60aa6fef709b1dbe371b64))
+
+## [2.31.0](https://github.com/web3-storage/web3.storage/compare/website-v2.30.0...website-v2.31.0) (2022-10-23)
+
+
+### Features
+
+* AddPaymentMethodForm shows a more end-user-friendly error message when it encounters an error ([#2058](https://github.com/web3-storage/web3.storage/issues/2058)) ([376e05b](https://github.com/web3-storage/web3.storage/commit/376e05ba48cf0cd626e189419ae981864be8e05d))
+* log terms of service acceptance ([#2028](https://github.com/web3-storage/web3.storage/issues/2028)) ([47c3540](https://github.com/web3-storage/web3.storage/commit/47c35400ae97e45d07d55e723355f139376233e6))
+
+
+### Bug Fixes
+
+* clarity on web3.storage PSA ([#2062](https://github.com/web3-storage/web3.storage/issues/2062)) ([62dadb1](https://github.com/web3-storage/web3.storage/commit/62dadb1fe181bb317c3dfc400084eb218d23273f))
+* properly center align the loading icon within login/logout button ([#2043](https://github.com/web3-storage/web3.storage/issues/2043)) ([4fa8ec3](https://github.com/web3-storage/web3.storage/commit/4fa8ec35ad44691aaf608406676f23b0aa9cacb1))
+
+## [2.30.0](https://github.com/web3-storage/web3.storage/compare/website-v2.29.0...website-v2.30.0) (2022-10-19)
+
+
+### Features
+
+* terms update ([#2052](https://github.com/web3-storage/web3.storage/issues/2052)) ([366f726](https://github.com/web3-storage/web3.storage/commit/366f72670c377c2ecc9c18fc865c3edce7014477))
+
+
+### Bug Fixes
+
+* update tier values ([#2026](https://github.com/web3-storage/web3.storage/issues/2026)) ([aacb1d7](https://github.com/web3-storage/web3.storage/commit/aacb1d75727f4a21eefa84f8a535c6d0a5578230))
+
+## [2.29.0](https://github.com/web3-storage/web3.storage/compare/website-v2.28.0...website-v2.29.0) (2022-10-18)
+
+
+### Features
+
+* enterprise let's chat form ([#2034](https://github.com/web3-storage/web3.storage/issues/2034)) ([ec2bb57](https://github.com/web3-storage/web3.storage/commit/ec2bb5743644e93cc7b30c2b7c3a0d6ea3d0989f))
+* show tier modal on account page after logging in ([#2048](https://github.com/web3-storage/web3.storage/issues/2048)) ([1204561](https://github.com/web3-storage/web3.storage/commit/12045617cb021eb38ec855460592bc7791456cac))
+
+## [2.28.0](https://github.com/web3-storage/web3.storage/compare/website-v2.27.0...website-v2.28.0) (2022-10-18)
+
+
+### Features
+
+* add css only logo carousel ([#2022](https://github.com/web3-storage/web3.storage/issues/2022)) ([5d96ddc](https://github.com/web3-storage/web3.storage/commit/5d96ddcdbabde80f0a1d56ef4db3d2ed1719d95b))
+* update testimonials ([#2032](https://github.com/web3-storage/web3.storage/issues/2032)) ([c8d9299](https://github.com/web3-storage/web3.storage/commit/c8d9299f8e47388cba0cdc033bb9c8a636716330))
+* website link component defaults target to _blank when the href is external ([#2038](https://github.com/web3-storage/web3.storage/issues/2038)) ([947e764](https://github.com/web3-storage/web3.storage/commit/947e764a21e4d845b6b606ee4f7a47429c056658))
+
+## [2.27.0](https://github.com/web3-storage/web3.storage/compare/website-v2.26.0...website-v2.27.0) (2022-10-17)
+
+
+### Features
+
+* status docs ([#1937](https://github.com/web3-storage/web3.storage/issues/1937)) ([5fde787](https://github.com/web3-storage/web3.storage/commit/5fde78773c9696fe1e9140d9f967f491bb5d3158))
+
+
+### Bug Fixes
+
+* no more request storage in docs ([#2029](https://github.com/web3-storage/web3.storage/issues/2029)) ([59715d9](https://github.com/web3-storage/web3.storage/commit/59715d94b273921b2161c57e527aeddcd6622365))
+* upload and pin table refactor ([#2018](https://github.com/web3-storage/web3.storage/issues/2018)) ([cbfe9d7](https://github.com/web3-storage/web3.storage/commit/cbfe9d70dbd6ce4ac9e70692160feeec5d2713e2))
+
+## [2.26.0](https://github.com/web3-storage/web3.storage/compare/website-v2.25.0...website-v2.26.0) (2022-10-13)
+
+
+### Features
+
+* tie in currentPlan into storage useage meter ([#2015](https://github.com/web3-storage/web3.storage/issues/2015)) ([a4ad62e](https://github.com/web3-storage/web3.storage/commit/a4ad62eff437373b4113d7f1645fc4e762f71380))
+
+
+### Bug Fixes
+
+* login redirect should preserve query parameters ([#2012](https://github.com/web3-storage/web3.storage/issues/2012)) ([477cf73](https://github.com/web3-storage/web3.storage/commit/477cf73def3850c5ce7b38d63725b516497e10f4))
+* missing prop for cc form in confirm modal ([#2007](https://github.com/web3-storage/web3.storage/issues/2007)) ([6b6ee15](https://github.com/web3-storage/web3.storage/commit/6b6ee151601bf2e5743b68b6f18be38c9e5f075a))
+
+## [2.25.0](https://github.com/web3-storage/web3.storage/compare/website-v2.24.2...website-v2.25.0) (2022-10-10)
+
+
+### Features
+
+* add link to blog post ([#1994](https://github.com/web3-storage/web3.storage/issues/1994)) ([2204ad5](https://github.com/web3-storage/web3.storage/commit/2204ad5fca06d92a7506524a5375df2210818cd6))
+
+## [2.24.2](https://github.com/web3-storage/web3.storage/compare/website-v2.24.1...website-v2.24.2) (2022-10-07)
+
+
+### Bug Fixes
+
+* "get started" only partially clickable ([#1996](https://github.com/web3-storage/web3.storage/issues/1996)) ([1416a97](https://github.com/web3-storage/web3.storage/commit/1416a9763dfdbcd5bcd1f48e03763a215d0ff514))
+* pointer-events: none the swoosh ([#2001](https://github.com/web3-storage/web3.storage/issues/2001)) ([6079070](https://github.com/web3-storage/web3.storage/commit/6079070d0ff68dc58b73ca7f81dc320b201c6aef))
+* remove background squiggle ([#1997](https://github.com/web3-storage/web3.storage/issues/1997)) ([e539ac8](https://github.com/web3-storage/web3.storage/commit/e539ac85fe27f84bbeba0639876c100cb0ec81b2))
+
+## [2.24.1](https://github.com/web3-storage/web3.storage/compare/website-v2.24.0...website-v2.24.1) (2022-10-07)
+
+
+### Bug Fixes
+
+* add terms for w3link usage ([#2013](https://github.com/web3-storage/web3.storage/issues/2013)) ([d4df533](https://github.com/web3-storage/web3.storage/commit/d4df5335c49afaef5675e406a091a031f59417a3))
+
+## [2.24.0](https://github.com/web3-storage/web3.storage/compare/website-v2.23.0...website-v2.24.0) (2022-10-06)
+
+
+### Features
+
+* consistent casing ([#1995](https://github.com/web3-storage/web3.storage/issues/1995)) ([48946b6](https://github.com/web3-storage/web3.storage/commit/48946b621200a974d36ed4e6a57acbb18284233d))
+
+## [2.23.0](https://github.com/web3-storage/web3.storage/compare/website-v2.22.2...website-v2.23.0) (2022-10-05)
+
+
+### Features
+
+* **website:** update API token howto to match current design ([#2000](https://github.com/web3-storage/web3.storage/issues/2000)) ([0374ac5](https://github.com/web3-storage/web3.storage/commit/0374ac53131166f8ceec521ef6c50c75fafdaba7)), closes [#1999](https://github.com/web3-storage/web3.storage/issues/1999)
+
+
+### Bug Fixes
+
+* add 'Complete' column to uploads table ([#1958](https://github.com/web3-storage/web3.storage/issues/1958)) ([0d463fb](https://github.com/web3-storage/web3.storage/commit/0d463fbc15316fa7efe57378946be6eb4f15acdf)), closes [#1787](https://github.com/web3-storage/web3.storage/issues/1787)
+* display proper breadcrumbs for product pages ([#1973](https://github.com/web3-storage/web3.storage/issues/1973)) ([2d58763](https://github.com/web3-storage/web3.storage/commit/2d587630edbb22537fbb3a1ccd29968db7172f97)), closes [#1926](https://github.com/web3-storage/web3.storage/issues/1926)
+* fix social media preview image URLs ([#1993](https://github.com/web3-storage/web3.storage/issues/1993)) ([4d14c1e](https://github.com/web3-storage/web3.storage/commit/4d14c1eb997a4508fe29782630bf64133a74144c))
+
+## [2.22.2](https://github.com/web3-storage/web3.storage/compare/website-v2.22.1...website-v2.22.2) (2022-10-03)
+
+
+### Bug Fixes
+
+* fix bug when saving payment method while paymentSettings.storage.subscription=null ([#1988](https://github.com/web3-storage/web3.storage/issues/1988)) ([b389146](https://github.com/web3-storage/web3.storage/commit/b389146b3a96ba8b8e2b1a81ebc3cec1776583c2))
+
+## [2.22.1](https://github.com/web3-storage/web3.storage/compare/website-v2.22.0...website-v2.22.1) (2022-09-30)
+
+
+### Bug Fixes
+
+* remove storage economics page ([#1977](https://github.com/web3-storage/web3.storage/issues/1977)) ([50c5eb4](https://github.com/web3-storage/web3.storage/commit/50c5eb47bca55d3917f954650d61ee2bff459bb3))
+* yank out faulty browser detection script ([#1974](https://github.com/web3-storage/web3.storage/issues/1974)) ([38aefeb](https://github.com/web3-storage/web3.storage/commit/38aefebec8c3ea053a41af1f8dfdd0895ceb9260))
+
+## [2.22.0](https://github.com/web3-storage/web3.storage/compare/website-v2.21.2...website-v2.22.0) (2022-09-29)
+
+
+### Features
+
+* /account/login?redirect_to=/final/url should redirect to /final/url after authn ([#1950](https://github.com/web3-storage/web3.storage/issues/1950)) ([2bbe6de](https://github.com/web3-storage/web3.storage/commit/2bbe6defaca22663437b9ce28ef8cd5529d5facb))
+* create page for service level agreement ([#1955](https://github.com/web3-storage/web3.storage/issues/1955)) ([6525845](https://github.com/web3-storage/web3.storage/commit/6525845bea1b79bb12870698b1f9f2c135f57109))
+* early adopter UI ([#1959](https://github.com/web3-storage/web3.storage/issues/1959)) ([1affae3](https://github.com/web3-storage/web3.storage/commit/1affae30271ba7a5bd6e2727922441680b9f291c))
+* homepage (index) copy for pricing changes ([#1942](https://github.com/web3-storage/web3.storage/issues/1942)) ([f2084a3](https://github.com/web3-storage/web3.storage/commit/f2084a375e7fc4034db7bd5fae194d3b597d89c8))
+* new users are initialized into free tier ([#1945](https://github.com/web3-storage/web3.storage/issues/1945)) ([ee67c35](https://github.com/web3-storage/web3.storage/commit/ee67c35c6b12a363140b79ea34835123ad76420c))
+* pricing page (for tiered pricing) ([#1894](https://github.com/web3-storage/web3.storage/issues/1894)) ([3f0db86](https://github.com/web3-storage/web3.storage/commit/3f0db86be270000f37c1d9b8ce49be70a90c8dfc))
+* revert "fix: rm menu item from global account menu" ([#1951](https://github.com/web3-storage/web3.storage/issues/1951)) ([2f84754](https://github.com/web3-storage/web3.storage/commit/2f84754a5e6deb72700f803eeae66aa079e4272a))
+* update preview summary metadata ([#1965](https://github.com/web3-storage/web3.storage/issues/1965)) ([a47949c](https://github.com/web3-storage/web3.storage/commit/a47949c10b4317902ed3cea3ad0cd177d33bdab0))
+* update terms of service ([#1964](https://github.com/web3-storage/web3.storage/issues/1964)) ([dd810b9](https://github.com/web3-storage/web3.storage/commit/dd810b93f752c987e3f1785ae0745e8154099bed))
+* update the web3storage product page (for tiered pricing) ([#1957](https://github.com/web3-storage/web3.storage/issues/1957)) ([03a6422](https://github.com/web3-storage/web3.storage/commit/03a642283d56e580436ff853bc2b3971a24875e1))
+
+## [2.21.2](https://github.com/web3-storage/web3.storage/compare/website-v2.21.1...website-v2.21.2) (2022-09-28)
+
+
+### Bug Fixes
+
+* add blog link with navigation fix ([#1960](https://github.com/web3-storage/web3.storage/issues/1960)) ([efaed67](https://github.com/web3-storage/web3.storage/commit/efaed6746b44cdbba4dbc0729f56a85858bfea70))
+
+## [2.21.1](https://github.com/web3-storage/web3.storage/compare/website-v2.21.0...website-v2.21.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* change verbiage on file manager legend ([#1893](https://github.com/web3-storage/web3.storage/issues/1893)) ([ab85aa2](https://github.com/web3-storage/web3.storage/commit/ab85aa246ccb65afb76d1b0c25605aa890258451)), closes [#1768](https://github.com/web3-storage/web3.storage/issues/1768)
+* revert "feat: add blog link ([#1952](https://github.com/web3-storage/web3.storage/issues/1952))" ([#1956](https://github.com/web3-storage/web3.storage/issues/1956)) ([481dcf0](https://github.com/web3-storage/web3.storage/commit/481dcf04cecee1b226f9da4a9c18d7ff323c745d))
+
+## [2.21.0](https://github.com/web3-storage/web3.storage/compare/website-v2.20.2...website-v2.21.0) (2022-09-26)
+
+
+### Features
+
+* add blog link ([#1952](https://github.com/web3-storage/web3.storage/issues/1952)) ([1289ac1](https://github.com/web3-storage/web3.storage/commit/1289ac1921fe832b81d0dfa9e464b19ea8969481))
+* add TOS agree before confirm ([#1919](https://github.com/web3-storage/web3.storage/issues/1919)) ([aacde20](https://github.com/web3-storage/web3.storage/commit/aacde202439ff5102bd89fabbaf48711bbc2f50b))
+* remove nft.storage banner ([#1940](https://github.com/web3-storage/web3.storage/issues/1940)) ([edceaa3](https://github.com/web3-storage/web3.storage/commit/edceaa35f03c83a7aa1f4ee3d9ec8ef34a862be9))
+
+## [2.20.2](https://github.com/web3-storage/web3.storage/compare/website-v2.20.1...website-v2.20.2) (2022-09-22)
+
+
+### Other Changes
+
+* rm unnecessary comment in packages/website to trigger release-please … ([#1932](https://github.com/web3-storage/web3.storage/issues/1932)) ([39969c2](https://github.com/web3-storage/web3.storage/commit/39969c27d4ba7b4b47069623dba670fd9470c952))
+
+## [2.20.1](https://github.com/web3-storage/web3.storage/compare/website-v2.20.0...website-v2.20.1) (2022-09-21)
+
+
+### Bug Fixes
+
+* rm menu item from global account menu ([#1916](https://github.com/web3-storage/web3.storage/issues/1916)) ([29fef57](https://github.com/web3-storage/web3.storage/commit/29fef57896c0772d4b3457a3cdb70bf05dfda42a))
+
+## [2.20.0](https://github.com/web3-storage/web3.storage/compare/website-v2.19.1...website-v2.20.0) (2022-09-21)
+
+
+### Features
+
+* I can choose a storage pricing tier (issue 1869) ([#1878](https://github.com/web3-storage/web3.storage/issues/1878)) ([58de180](https://github.com/web3-storage/web3.storage/commit/58de180300e72f7a79193657a7d995f0799bae28))
+
+
+### Bug Fixes
+
+* bugs saving credit card at /account/payment for the first time ([#1913](https://github.com/web3-storage/web3.storage/issues/1913)) ([724e3ab](https://github.com/web3-storage/web3.storage/commit/724e3abba4053dc18189942f84de81f0d6cdb083))
+* make browser update versions absolute ([#1887](https://github.com/web3-storage/web3.storage/issues/1887)) ([bca96fa](https://github.com/web3-storage/web3.storage/commit/bca96faaa2e9853d3e39ece54725edaed680139d))
+
+
+### Other Changes
+
+* **docs:** add curl CAR upload example to store howto ([#1735](https://github.com/web3-storage/web3.storage/issues/1735)) ([54e31d9](https://github.com/web3-storage/web3.storage/commit/54e31d9b76dcb85888a3a082384afe43c30f5159))
+
+## [2.19.1](https://github.com/web3-storage/web3.storage/compare/website-v2.19.0...website-v2.19.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* make website e2e tests more reliable on ci ([#1873](https://github.com/web3-storage/web3.storage/issues/1873)) ([a31ef04](https://github.com/web3-storage/web3.storage/commit/a31ef048575e944db2558e3ec26bfb3d28818e99))
+
+## [2.19.0](https://github.com/web3-storage/web3.storage/compare/website-v2.18.1...website-v2.19.0) (2022-09-09)
+
+
+### Features
+
+* add w3name http api swagger doc page ([#1727](https://github.com/web3-storage/web3.storage/issues/1727)) ([2a03748](https://github.com/web3-storage/web3.storage/commit/2a03748d70e4e8aa0764fec0538c26dbf84ae6e6))
+* issues/1779 - I can save my payment settings ([#1852](https://github.com/web3-storage/web3.storage/issues/1852)) ([a49e780](https://github.com/web3-storage/web3.storage/commit/a49e780a4c7c0a3680aa03239552b01f1fcf72ed))
+
+## [2.18.1](https://github.com/web3-storage/web3.storage/compare/website-v2.18.0...website-v2.18.1) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
+## [2.18.0](https://github.com/web3-storage/web3.storage/compare/website-v2.17.1...website-v2.18.0) (2022-09-07)
+
+
+### Features
+
+* reusable and accessible table component ([#1700](https://github.com/web3-storage/web3.storage/issues/1700)) ([a4643a0](https://github.com/web3-storage/web3.storage/commit/a4643a09f15aef465bda50836c311e06de9f2471))
+
+## [2.17.1](https://github.com/web3-storage/web3.storage/compare/website-v2.17.0...website-v2.17.1) (2022-09-02)
+
+
+### Bug Fixes
+
+* prevent tabnabbing and clickjacking ([#1826](https://github.com/web3-storage/web3.storage/issues/1826)) ([7c63d83](https://github.com/web3-storage/web3.storage/commit/7c63d83fdd161705389f8b011af162fbdc2f1351))
+* remove helix image that clashes with 'products' nav item ([#1825](https://github.com/web3-storage/web3.storage/issues/1825)) ([a90a264](https://github.com/web3-storage/web3.storage/commit/a90a264a8e0f23571261243bfb170134b10cd3d2))
+* update storage column header verbiage ([#1824](https://github.com/web3-storage/web3.storage/issues/1824)) ([5494d9d](https://github.com/web3-storage/web3.storage/commit/5494d9d0ecf0727adc5227d12286408971a76a31))
+
 ## [2.17.0](https://github.com/web3-storage/web3.storage/compare/website-v2.16.0...website-v2.17.0) (2022-08-31)
 
 

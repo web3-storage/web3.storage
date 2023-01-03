@@ -44,7 +44,7 @@ async function storeWithProgress (files) {
     console.log(`Uploading... ${pct.toFixed(2)}% complete`)
   }
 
-  // makeStorageClient returns an authorized Web3.Storage client instance
+  // makeStorageClient returns an authorized web3.storage client instance
   const client = makeStorageClient()
 
   // client.put will invoke our callbacks during the upload

@@ -27,10 +27,18 @@ export class Logging {
    * @param {string} opts.commithash
    * @param {import('toucan-js').default} opts.sentry
    * @param {boolean} [opts.debug]
+   * @param {boolean} [opts.sendToLogtail]
+   * @param {boolean} [opts.sendToSentry]
    */
-  constructor (request, ctx, opts) {
+  constructor (request, ctx,
+    { sendToLogtail = true, sendToSentry = true, ...opts }
+  ) {
     this.ctx = ctx
     this.opts = opts
+    this.sendToSentry = sendToSentry
+    this.sendToLogtail = sendToLogtail
+    /** @typedef {{ name: string, description?: string, start: number, end?: number, duration?: number, value?: number }} Timer */
+    /** @type {Map<string, Timer>} */
     this._times = new Map()
     /**
      * @type {string[]}
@@ -54,7 +62,7 @@ export class Logging {
     }
     this.metadata = {
       user: {
-        id: 0
+        id: '0'
       },
       request: {
         url: request.url,
@@ -79,12 +87,12 @@ export class Logging {
   /**
    * Set user
    *
-   * @param {Object} user
-   * @param {number} [user.id]
+   * @param {object} user
+   * @param {string} user.id
    */
   setUser (user) {
-    this.metadata.user.id = user.id || 0
-    this.opts.sentry && this.opts.sentry.setUser({
+    this.metadata.user.id = user.id
+    this.sendToSentry && this.opts.sentry.setUser({
       id: `${user.id}`
     })
   }
@@ -117,6 +125,10 @@ export class Logging {
   }
 
   async postBatch () {
+    if (process.env.NODE_ENV === 'development') {
+      return
+    }
+
     if (this.logEventsBatch.length > 0) {
       const batchInFlight = [...this.logEventsBatch]
       this.logEventsBatch = []
@@ -169,6 +181,7 @@ export class Logging {
         level: 'info',
         metadata: {
           ...this.metadata,
+          timers: this._timersMetadata(),
           response: {
             headers: buildMetadataFromHeaders(response.headers),
             status_code: response.status,
@@ -177,7 +190,9 @@ export class Logging {
         }
       }
       this._add(log)
-      await this.postBatch()
+      if (this.sendToLogtail) {
+        await this.postBatch()
+      }
     }
     this.ctx.waitUntil(run())
     return response
@@ -210,7 +225,8 @@ export class Logging {
         stack: message.stack,
         message: message.message
       }
-      if (this.opts.sentry && !skipForSentry.some((cls) => message instanceof cls)) {
+
+      if (this.sendToSentry && !skipForSentry.some((cls) => message instanceof cls)) {
         this.opts.sentry.captureException(message)
       }
       if (this.opts?.debug) {
@@ -307,6 +323,7 @@ export class Logging {
   _timersString () {
     const result = []
     for (const key of this._timesOrder) {
+      // @ts-expect-error
       const { name, duration, description } = this._times.get(key)
       result.push(
         description
@@ -316,5 +333,16 @@ export class Logging {
     }
 
     return result.join(',')
+  }
+
+  _timersMetadata () {
+    /** @type {Record<string, number>} */
+    const result = {}
+    for (const val of this._times.values()) {
+      if (val.duration !== undefined) {
+        result[val.name] = val.duration
+      }
+    }
+    return result
   }
 }

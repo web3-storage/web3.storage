@@ -47,6 +47,14 @@ BEGIN
         'AdminStorageExceeded'
       );
   END IF;
+
+  -- Types for terms of service versions
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'agreement_type') THEN
+    CREATE TYPE agreement_type AS ENUM
+      (
+        'web3.storage-tos-v1'
+      );
+  END IF;
 END
 $$;
 
@@ -269,6 +277,11 @@ CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 CREATE INDEX IF NOT EXISTS upload_user_id_deleted_at_idx ON upload (user_id) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_name_idx ON upload (name);
+CREATE INDEX IF NOT EXISTS upload_type_idx ON upload (type);
+CREATE INDEX IF NOT EXISTS upload_type_car_idx ON upload (type) WHERE type = 'Car';
+CREATE INDEX IF NOT EXISTS upload_type_upload_idx ON upload (type) WHERE type = 'Upload';
+CREATE INDEX IF NOT EXISTS upload_type_multipart_idx ON upload (type) WHERE type = 'Multipart';
+CREATE INDEX IF NOT EXISTS upload_type_blob_idx ON upload (type) WHERE type = 'Blob';
 CREATE INDEX IF NOT EXISTS upload_inserted_at_idx ON upload (inserted_at);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
 CREATE INDEX IF NOT EXISTS upload_source_cid_idx ON upload (source_cid);
@@ -310,8 +323,16 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
-CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
+CREATE INDEX IF NOT EXISTS psa_pin_request_search_idx ON psa_pin_request (auth_key_id) INCLUDE (content_cid, deleted_at);
+
+CREATE TABLE IF NOT EXISTS agreement (
+  id              BIGSERIAL PRIMARY KEY,
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
+  agreement  agreement_type                                                NOT NULL,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS agreement_user_id_idx ON agreement (user_id);
 
 -- Metric contains the current values of collected metrics.
 CREATE TABLE IF NOT EXISTS metric
@@ -347,3 +368,15 @@ select
 from public.user u
 full outer join auth_key ak on ak.user_id = u.id
 full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id;
+
+-- billing entities
+
+-- users have 0..1 customers
+CREATE TABLE IF NOT EXISTS user_customer
+(
+  id               BIGSERIAL PRIMARY KEY,
+  user_id          BIGINT NOT NULL UNIQUE REFERENCES public.user (id),
+  customer_id      TEXT NOT NULL UNIQUE
+);
+
+CREATE INDEX IF NOT EXISTS user_customer_user_id_idx ON public.user_customer (user_id);

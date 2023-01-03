@@ -1,4 +1,4 @@
-# A list of known IPFS peers that are hosting content uploaded to Web3.Storage.
+# A list of known IPFS peers that are hosting content uploaded to web3.storage.
 #
 # YOU DO NOT NEED THIS LIST. All peers that provide content on IPFS are
 # discoverable via the DHT. IPFS transfers content P2P from multiple sources
@@ -8,8 +8,7 @@
 # time without notice.
 
 # Elastic IPFS
-# NOTE: temporary domain
-/dns4/peer.ipfs-elastic-provider-aws.com/tcp/3000/ws/p2p/bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm
+/dns4/elastic.dag.house/tcp/443/wss/p2p/bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm
 # web3-storage-am6
 /ip4/147.75.33.191/tcp/4001/p2p/12D3KooWPySxxWQjBgX9Jp6uAHQfVmdq8HG1gVvS1fRawHNSrmqW
 # web3-storage-am6-3

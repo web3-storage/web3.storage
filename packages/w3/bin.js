@@ -2,6 +2,7 @@
 
 import 'hard-rejection/register.js' // throw on unhandled promise rejection in node 14.
 import sade from 'sade'
+import open from 'open'
 import { get, list, put, putCar, status, token } from './index.js'
 import * as Name from './name.js'
 import { getPkg } from './lib.js'
@@ -39,6 +40,10 @@ cli.command('list')
   .option('--cid', 'Only print the root CID per upload')
   .alias(['ls'])
   .action(list)
+
+cli.command('open <cid>')
+  .describe('open CID on https://w3s.link')
+  .action(cid => open(`https://w3s.link/ipfs/${cid}`))
 
 cli.command('get <cid>')
   .describe('Fetch and verify files from web3.storage')

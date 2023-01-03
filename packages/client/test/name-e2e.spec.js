@@ -10,7 +10,8 @@ import assert from 'assert'
 import * as Name from 'web3.storage/name'
 
 describe('w3name backward compatibility proxy', () => {
-  it('can publish and resolve name records', async () => {
+  it('can publish and resolve name records', async function () {
+    this.timeout(5 * 1000)
     // The `service` arg gets ignored by the proxy, but is required, as the function signatures
     // have remained the same to keep backwards compatibility
     const service = {}

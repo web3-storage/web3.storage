@@ -1,10 +1,13 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import fetch from '@web-std/fetch'
+import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
+import { userLoginPost } from '../src/user.js'
+import { Magic } from '@magic-sdk/admin'
+import { createMockCustomerService, createMockSubscriptionsService, createMockUserCustomerService, storagePriceNames } from '../src/utils/billing.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -30,7 +33,7 @@ describe('GET /user/account', () => {
     assert(res.ok)
     const data = await res.json()
     assert.strictEqual(data.usedStorage.uploaded, 32000)
-    assert.strictEqual(data.usedStorage.psaPinned, 10000)
+    assert.strictEqual(data.usedStorage.psaPinned, 710000)
   })
 })
 
@@ -308,6 +311,29 @@ describe('GET /user/uploads', () => {
   })
 })
 
+describe('GET /user/upload/:cid', () => {
+  it('gets a single upload', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL(`/user/uploads/${userUploads[0].cid}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const uploads = await res.json()
+    assert.deepStrictEqual(uploads, userUploads[0])
+  })
+
+  it('returns 404 when no upload is found', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads/notfound', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 404)
+  })
+})
+
 describe('DELETE /user/uploads/:cid', () => {
   it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
@@ -391,6 +417,211 @@ describe('GET /user/pins', () => {
 
     assert(res.ok)
     const body = await res.json()
-    assert.equal([...new Set(body.results.map(x => x.pin.authKey))].length, 2)
+    assert.equal(body.count, 8)
+  })
+})
+
+describe('userLoginPost', function () {
+  it('brand new users have a storageSubscription with price=free', async function () {
+    const user1Authentication = {
+      issuer: `user1-${Math.random().toString().slice(2)}`,
+      publicAddress: `user1-${Math.random().toString().slice(2)}`,
+      email: 'user1@example.com'
+    }
+    const env = {
+      MODE: /** @type {const} */ ('rw'),
+      db: getDBClient(),
+      magic: new Magic(process.env.MAGIC_SECRET_KEY),
+      authenticateRequest: async () => user1Authentication,
+      customers: createMockCustomerService(),
+      subscriptions: createMockSubscriptionsService()
+    }
+    const request = new Request(new URL('/user/login', endpoint).toString(), {
+      method: 'post',
+      body: JSON.stringify({
+        data: {}
+      })
+    })
+    const response = await userLoginPost(request, env)
+    assert.equal(response.status, 200, 'response.status is as expected')
+
+    // now ensure it has desired subscription
+    const gotUser = await env.db.getUser(user1Authentication.issuer, {})
+    const gotSubscription = await env.subscriptions.getSubscription(
+      (await env.customers.getOrCreateForUser({ id: gotUser._id })).id
+    )
+    assert.ok(!(gotSubscription instanceof Error), 'gotSubscription is not an error')
+    assert.ok(gotSubscription, 'gotSubscription is truthy')
+    assert.equal(gotSubscription.storage?.price, storagePriceNames.free)
+  })
+  it('login to email-originating user updates customer contact', async function () {
+    // we're going to create the user by doing userLoginPost the first time
+    // then on the second time we'll expect the customer to be updated
+    const user1Name1 = 'user1+1'
+    const user1Authentication1 = {
+      issuer: `user1-${Math.random().toString().slice(2)}`,
+      publicAddress: `user1-${Math.random().toString().slice(2)}`,
+      email: `${user1Name1}@example.com`
+    }
+    const userCustomerService = createMockUserCustomerService()
+    const env = {
+      MODE: /** @type {const} */ ('rw'),
+      db: getDBClient(),
+      magic: new Magic(process.env.MAGIC_SECRET_KEY),
+      customers: createMockCustomerService(userCustomerService),
+      subscriptions: createMockSubscriptionsService()
+    }
+    const getCustomerForUserIssuer = async (issuer) => {
+      const user = await env.db.getUser(issuer, {})
+      const customer = await userCustomerService.getUserCustomer(user._id)
+      return customer
+    }
+    const createUserLoginRequest = () => new Request(new URL('/user/login', endpoint).toString(), {
+      method: 'post',
+      body: JSON.stringify({
+        data: {}
+      })
+    })
+    // do first userLoginPost request, which should create the user for the first time
+    const response1 = await userLoginPost(createUserLoginRequest(), {
+      ...env,
+      authenticateRequest: async () => user1Authentication1
+    })
+    assert.equal(response1.status, 200, 'response.status is as expected')
+    // the user has been created
+
+    // after this first login, we expect the customer contact to have been set
+    const customer1 = await getCustomerForUserIssuer(user1Authentication1.issuer)
+    const contact1 = customer1 && await env.customers.getContact(customer1.id)
+    assert.deepEqual(contact1, {
+      name: user1Name1,
+      email: user1Authentication1.email
+    }, 'user1 contact saved based on request authentication in first userLoginPost')
+
+    // now we're going to make the same userLoginPost request again, logging in to that same user.issuer, but with a new email
+    const name2 = 'user1+2'
+    /** @type {import('../src/user.js').IssuedAuthentication} */
+    const user1Authentication2 = {
+      ...user1Authentication1,
+      email: `${name2}@example.com`
+    }
+    const response2 = await userLoginPost(
+      createUserLoginRequest(),
+      {
+        ...env,
+        // now request as same issuer with new email
+        authenticateRequest: async () => user1Authentication2
+      }
+    )
+    assert.equal(response2.status, 200, 'response.status is 200')
+
+    // after the second login request (using the user created in the first request)
+    // we expect the customer to have been updated with the new email
+    const user1Get1 = await env.db.getUser(user1Authentication1.issuer, {})
+    const user1Customer = await userCustomerService.getUserCustomer(user1Get1._id)
+    assert.ok(user1Customer, 'user1Customer is truthy')
+    const user1Get1CustomerContact = await env.customers.getContact(user1Customer.id)
+    assert.ok(!(user1Get1CustomerContact instanceof Error), 'user1Get1CustomerContact is not an error')
+    assert.equal(user1Get1CustomerContact.email, user1Authentication2.email, 'the customer contact has been updated to user the new email address')
+    // this works atm because the user handler will derrive the name from the email address
+    assert.equal(user1Get1CustomerContact.name, name2, 'the customer contact has been updated to user the new name')
+  })
+  it('login to github-originating user updates customer contact', async function () {
+    // we're going to create the user by doing userLoginPost the first time
+    // then on the second time we'll expect the customer to be updated
+    const user1Authentication1 = {
+      issuer: `user1-${Math.random().toString().slice(2)}`,
+      publicAddress: `user1-${Math.random().toString().slice(2)}`,
+      email: 'user1+1@example.com'
+    }
+    const userCustomerService = createMockUserCustomerService()
+    const env = {
+      MODE: /** @type {const} */ ('rw'),
+      db: getDBClient(),
+      magic: new Magic(process.env.MAGIC_SECRET_KEY),
+      customers: createMockCustomerService(userCustomerService),
+      subscriptions: createMockSubscriptionsService()
+    }
+    /**
+     * @typedef {object} GithubOauthFromMagicLink
+     * @property {string} userHandle
+     * @property {object} userInfo
+     * @property {string} userInfo.name
+     * @property {string} [userInfo.picture]
+     */
+    /**
+     * Create a request simulating the end of github authn flow
+     * @param {GithubOauthFromMagicLink} oauth
+     */
+    const createUserLoginViaGithubRequest = (oauth) => new Request(new URL('/user/login', endpoint).toString(), {
+      method: 'post',
+      body: JSON.stringify({
+        type: 'github',
+        data: {
+          oauth
+        }
+      })
+    })
+    /** @type {GithubOauthFromMagicLink} */
+    const githubUserOauth1 = {
+      userHandle: 'user1',
+      userInfo: {
+        name: 'User 1'
+      }
+    }
+    // do first userLoginPost request, which should create the user for the first time
+    const response1 = await userLoginPost(createUserLoginViaGithubRequest(githubUserOauth1), {
+      ...env,
+      authenticateRequest: async () => user1Authentication1
+    })
+    assert.equal(response1.status, 200, 'response.status is as expected')
+
+    // the user has been created
+    // let's make sure the customer contact was created based on the github oauth info
+    const getCustomerForUserIssuer = async (issuer) => {
+      const user = await env.db.getUser(issuer, {})
+      const customer = await userCustomerService.getUserCustomer(user._id)
+      return customer
+    }
+    const customer1 = await getCustomerForUserIssuer(user1Authentication1.issuer)
+    assert.ok(!(customer1 instanceof Error), 'no error finding customer for user after first login')
+    assert.ok(customer1, 'user has a customer after first login')
+    const contact1 = await env.customers.getContact(customer1.id)
+    assert.ok(!(contact1 instanceof Error), 'no error finding contact for customer after first login')
+    assert.deepEqual(contact1.email, user1Authentication1.email, 'customer contact has email from authentication after first login')
+    assert.deepEqual(contact1.name, githubUserOauth1.userInfo.name, 'customer contact has name from userLoginPost request body after first login')
+
+    // now we're going to make the same request again, logging in to that user, but with a new email and name
+    const name2 = {
+      emailLocalName: 'user1+2',
+      formatted: 'User 1+2'
+    }
+    /** @type {import('../src/user.js').IssuedAuthentication} */
+    const user1Authentication2 = {
+      ...user1Authentication1,
+      email: `${name2.emailLocalName}@example.com`
+    }
+    /** @type {GithubOauthFromMagicLink} */
+    const githubUserOauth2 = {
+      ...githubUserOauth1,
+      userInfo: {
+        name: name2.formatted
+      }
+    }
+    const response2 = await userLoginPost(
+      createUserLoginViaGithubRequest(githubUserOauth2),
+      {
+        ...env,
+        // now request as same issuer with new email
+        authenticateRequest: async () => user1Authentication2
+      }
+    )
+    assert.equal(response2.status, 200, 'response.status is 200')
+
+    // make sure the contact was updated after response2
+    const contact2 = await env.customers.getContact(customer1.id)
+    assert.ok(!(contact2 instanceof Error), 'no error getting contact')
+    assert.deepEqual(contact2.email, user1Authentication2.email, 'customer contact has email from authentication after second login')
+    assert.deepEqual(contact2.name, githubUserOauth2.userInfo.name, 'customer contact has name from userLoginPost request body after second login')
   })
 })

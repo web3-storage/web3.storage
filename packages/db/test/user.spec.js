@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index.js'
-import { createUpload, initialPinsNotPinned, pinsError, randomCid, token } from './utils.js'
+import { createUpload, token } from './utils.js'
 
 describe('user operations', () => {
   const name = 'test-name'
@@ -27,6 +27,7 @@ describe('user operations', () => {
     })
 
     assert(upsertUser, 'user created')
+    assert.strictEqual(upsertUser.inserted, true, 'upsertUser.inserted is truthy, indicating a new row was inserted')
     assert.strictEqual(upsertUser.issuer, issuer, 'user has correct issuer')
 
     // Get previously created user
@@ -60,6 +61,7 @@ describe('user operations', () => {
       publicAddress
     })
     assert(upsertUser, 'user updated')
+    assert.strictEqual(upsertUser.inserted, false, 'upsertUser.inserted is falsy, indicating a row was updated')
   })
 
   it('can update previously created user', async () => {
@@ -151,6 +153,68 @@ describe('user operations', () => {
     assert(error, 'should fail to delete auth key again')
   })
 
+  it('does not list deleted keys by default', async () => {
+    const name = 'test-key-name-2'
+    const secret = 'test-secret'
+    const authKey1 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey2 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey3 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const notDeletedKeys = [authKey1._id, authKey2._id]
+
+    await client.deleteKey(user._id, authKey3._id)
+
+    const keys = await client.listKeys(user._id)
+
+    assert.strictEqual(keys.length, 2, 'should list only not deleted by default')
+    assert(keys.every(item => notDeletedKeys.includes(item._id)))
+  })
+
+  it('lists deleted keys if requested', async () => {
+    const name = 'test-key-name-2'
+    const secret = 'test-secret'
+    const authKey1 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey2 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey3 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const notDeletedKeys = [authKey1._id, authKey2._id, authKey3._id]
+
+    await client.deleteKey(user._id, authKey3._id)
+
+    const keys = await client.listKeys(user._id, { includeDeleted: true })
+
+    assert.strictEqual(keys.length, 3, 'should list only not deleted by default')
+    assert(keys.every(item => notDeletedKeys.includes(item._id)))
+  })
+
   it('can track user used storage and has uploads', async () => {
     const authKey = await client.createKey({
       name: 'test-key-name-3',
@@ -181,23 +245,6 @@ describe('user operations', () => {
       dagSize: dagSize2
     })
 
-    // Create "Failed" Upload. It should not be counted.
-    const cid3 = await randomCid()
-    const dagSize3 = 100000
-    await createUpload(client, user._id, authKey._id, cid3, {
-      dagSize: dagSize3,
-      pins: pinsError
-    })
-
-    // Create Upload not pinned yet. It should not be counted yet.
-    await createUpload(client, user._id, authKey._id, await randomCid(), {
-      dagSize: 1000000,
-      pins: initialPinsNotPinned
-    })
-
-    const usedStorageWithFailed = await client.getStorageUsed(user._id)
-    assert.strictEqual(usedStorageWithFailed.uploaded, dagSize1 + dagSize2, 'used storage should not count unpinned')
-
     const secondUsedStorage = await client.getStorageUsed(user._id)
     assert.strictEqual(secondUsedStorage.uploaded, dagSize1 + dagSize2, 'used storage with second upload')
 
@@ -210,5 +257,12 @@ describe('user operations', () => {
 
     const thirdUsedStorage = await client.getStorageUsed(user._id)
     assert.strictEqual(thirdUsedStorage.uploaded, dagSize1, 'used storage with only first upload again')
+  })
+
+  it('can createUserAgreement of web3.storage terms of service', async () => {
+    const agreement = /** @type {const} */ ('web3.storage-tos-v1')
+    await client.createUserAgreement(user._id, agreement)
+    // can create a second time. it will append another record of the second agreement with its own timestamp
+    await client.createUserAgreement(user._id, agreement)
   })
 })

@@ -1,14 +1,15 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import analytics from 'lib/analytics';
+import { useUploads } from 'components/contexts/uploadsContext';
+import { useUser } from 'hooks/use-user';
 import StorageManager from '../../components/account/storageManager/storageManager';
 import FilesManager from '../../components/account/filesManager/filesManager';
 import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackground from '../../components/gradientbackground/gradientbackground.js';
-import countly from 'lib/countly';
 import AppData from '../../content/pages/app/account.json';
-import { useUploads } from 'components/contexts/uploadsContext';
-import { useUser } from 'hooks/use-user';
+import GeneralPageData from '../../content/pages/general.json';
 
 export const CTACardTypes = {
   API_TOKENS: 'API_TOKENS',
@@ -35,7 +36,7 @@ const Account = () => {
           disabled: user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText,
           href: cta.link,
           variant: cta.theme,
-          tracking: { ui: countly.ui[cta.ui], action: cta.action },
+          tracking: { ui: analytics.ui[cta.ui], action: cta.action },
           children: cta.text,
           tooltip:
             user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText
@@ -49,9 +50,9 @@ const Account = () => {
         ctas: dashboard.card_center.ctas.map(cta => ({
           href: cta.link,
           variant: cta.theme,
-          tracking: { ui: countly.ui[cta.ui], action: cta.action },
+          tracking: { ui: analytics.ui[cta.ui], action: cta.action },
           children: (
-            <a href={cta.link} target="_blank" rel="noreferrer">
+            <a href={cta.link} target="_blank" rel="noreferrer noopener">
               {cta.text}
             </a>
           ),
@@ -64,7 +65,7 @@ const Account = () => {
           disabled: user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText,
           onClick: onFileUpload,
           variant: cta.theme,
-          tracking: { ui: countly.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
+          tracking: { ui: analytics.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
           children: cta.text,
           tooltip:
             user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText
@@ -109,11 +110,13 @@ const Account = () => {
  * @returns {{ props: import('components/types').PageProps}}
  */
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: AppData.seo.title,
       redirectTo: '/login/',
       isRestricted: true,
+      breadcrumbs: [crumbs.index, crumbs.account],
     },
   };
 }

@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
-import { trackCustomLinkClick, events } from '../../lib/countly';
-import Link from '../link/link';
+import { events, saEvent } from '../../lib/analytics';
+import Link, { useIsExternalHref } from '../link/link';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';
 import Img from '../cloudflareImage.js';
@@ -25,10 +25,12 @@ export default function Footer({ isProductApp }) {
   const resources = GeneralPageData.footer.resources;
   const getStarted = GeneralPageData.footer.get_started;
   const copyright = GeneralPageData.footer.copyright;
+  const isExternalHref = useIsExternalHref();
+  const getLinkTarget = useCallback(href => (isExternalHref(href) ? '_blank' : undefined), [isExternalHref]);
 
   // ================================================================= Functions
   const onLinkClick = useCallback(e => {
-    trackCustomLinkClick(events.LINK_CLICK_FOOTER, e.currentTarget);
+    saEvent(events.LINK_CLICK_FOOTER, { target: e.currentTarget });
   }, []);
 
   const handleButtonClick = useCallback(
@@ -77,7 +79,13 @@ export default function Footer({ isProductApp }) {
             <div className="footer_resources">
               <div className="label">{resources.heading}</div>
               {resources.items.map(item => (
-                <Link href={item.url} key={item.text} className="footer-link" onClick={onLinkClick}>
+                <Link
+                  href={item.url}
+                  key={item.text}
+                  className="footer-link"
+                  onClick={onLinkClick}
+                  target={getLinkTarget(item.url)}
+                >
                   {item.text}
                 </Link>
               ))}
@@ -88,7 +96,13 @@ export default function Footer({ isProductApp }) {
             <div className="footer_get-started">
               <div className="label">{getStarted.heading}</div>
               {getStarted.items.map(item => (
-                <Link className="footer-link" href={item.url} key={item.text} onClick={onLinkClick}>
+                <Link
+                  className="footer-link"
+                  href={item.url}
+                  key={item.text}
+                  onClick={onLinkClick}
+                  target={getLinkTarget(item.url)}
+                >
                   {item.text}
                 </Link>
               ))}

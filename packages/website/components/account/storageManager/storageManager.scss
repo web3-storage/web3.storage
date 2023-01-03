@@ -1,10 +1,26 @@
 .storage-manager-container {
   display: flex;
   flex-direction: column;
+  position: relative;
   > * {
     width: 100%;
   }
-  padding: 2rem;
+  padding: 1.5rem 2rem 2rem;
+
+  > div:last-child {
+    margin-bottom: auto;
+  }
+}
+
+.storage-manager-payment-link {
+  font-size: 14px;
+  margin-bottom: auto;
+  text-align: right;
+  color: $moonRaker;
+  line-height: 1.5;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .storage-manager-info,
@@ -70,7 +86,6 @@
   width: 100%;
   gap: 1.1875rem;
   padding-right: 0;
-
   @include medium {
     gap: 0.78125rem;
   }
@@ -152,6 +167,11 @@
   }
   .storage-number {
     font-style: italic;
+  }
+  .Tooltip {
+    margin-left: 5px;
+    font-size: 10px; // The size of the svg icon.
+    vertical-align: super;
   }
 }
 

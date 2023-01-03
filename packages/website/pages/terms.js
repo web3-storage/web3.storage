@@ -5,6 +5,7 @@ import ImageHelix from '../public/images/illustrations/helix.png';
 import ImageCross from '../public/images/illustrations/cross.png';
 import ImageRing from '../public/images/illustrations/ring.png';
 import ImageCoil from '../public/images/illustrations/coil.png';
+import GeneralPageData from '../content/pages/general.json';
 
 export default function Home() {
   return (
@@ -36,10 +37,12 @@ export default function Home() {
 }
 
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: 'Terms - Web3 Storage - Simple file storage with IPFS & Filecoin',
-      description: 'Terms of service for using Web3.Storage.',
+      description: 'Terms of service for using web3.storage.',
+      breadcrumbs: [crumbs.index, crumbs.terms],
     },
   };
 }

@@ -64,7 +64,6 @@ export const ERROR_CODE = 400
 export const DATA_NOT_FOUND = 'Requested data was not found.'
 export const INVALID_CID = 'The CID provided is invalid.'
 export const INVALID_META = 'Meta should be an object with string values'
-export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
 export const INVALID_REQUEST_ID = 'Request id should be a string.'
 export const PINNING_FAILED = 'PSA_PINNING_FAILED'
 export const REQUIRED_REQUEST_ID = 'Request id is required.'
@@ -75,7 +74,7 @@ export const MAX_PIN_LISTING_LIMIT = 1000
 // Validation schemas
 const listPinsValidator = new Validator({
   type: 'object',
-  required: ['status'],
+  required: [],
   properties: {
     name: { type: 'string', maxLength: 255 },
     after: { type: 'string', format: 'date-time' },
@@ -235,7 +234,7 @@ export function validateSearchParams (queryString) {
 
   if (result.valid) {
     // Map statuses for DB compatibility.
-    opts.statuses = psaStatusesToDBStatuses(opts.status)
+    opts.statuses = opts.status && psaStatusesToDBStatuses(opts.status)
     data = opts
   } else {
     error = parseValidatorErrors(result.errors)

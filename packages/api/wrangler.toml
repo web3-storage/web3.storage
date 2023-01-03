@@ -1,6 +1,6 @@
 # web3.storage wrangler config.
 name = "web3-storage"
-main = "./dist/worker.mjs"
+main = "./dist/worker.js"
 compatibility_date = "2022-06-14"
 no_bundle = true
 
@@ -26,20 +26,38 @@ deleted_classes = ["NameRoom0"]
 [env.test]
 workers_dev = true
 vars = { DEBUG = "true", ENV= "test" }
+r2_buckets = [
+  # CAR files live here.
+  { binding = "CARPARK", bucket_name = "carpark-test-0" },
+  # Mapping root data CIDs to CAR CID(s).
+  { binding = "DUDEWHERE", bucket_name = "dudewhere-test-0" },
+  # CARv2 indexes - a mapping of block offsets within CAR files.
+  { binding = "SATNAV", bucket_name = "satnav-test-0" }
+]
 
 # PROD!
 [env.production]
 # name = "web3-storage-production"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "https://api.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
+route = { pattern = "https://api.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
+vars = { CARPARK_URL = "https://carpark.web3.storage", CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
+r2_buckets = [
+  { binding = "CARPARK", bucket_name = "carpark-prod-0" },
+  { binding = "DUDEWHERE", bucket_name = "dudewhere-prod-0" },
+  { binding = "SATNAV", bucket_name = "satnav-prod-0" }
+]
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "https://api-staging.web3.storage/*"
+route = { pattern = "https://api-staging.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
 # nft.storage.ipfscluster.io is the staging cluster
-vars = { CLUSTER_API_URL = "https://nft.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
+vars = { CARPARK_URL = "https://carpark-staging.web3.storage", CLUSTER_API_URL = "https://nft.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
+r2_buckets = [
+  { binding = "CARPARK", bucket_name = "carpark-staging-0" },
+  { binding = "DUDEWHERE", bucket_name = "dudewhere-staging-0" },
+  { binding = "SATNAV", bucket_name = "satnav-staging-0" }
+]
 
 [env.alan]
 workers_dev = true

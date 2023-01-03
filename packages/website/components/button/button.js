@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useCallback } from 'react';
 
 import ZeroButton from 'ZeroComponents/button/button';
-import { trackEvent, events } from 'lib/countly';
+import { events, saEvent } from 'lib/analytics';
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
 export const ButtonVariant = {
@@ -17,7 +17,7 @@ export const ButtonVariant = {
 };
 /**
  * @typedef {Object} TrackingProps
- * @prop {string} [ui] UI section id. One of countly.ui.
+ * @prop {string} [ui] UI section id. One of analytics.ui.
  * @prop {string} [action] Action id. used to uniquely identify an action within a ui section.
  * @prop {string} [event] Custom event name to be used instead of the default CTA_LINK_CLICK.
  * @prop {Record<string, any>} [data] The data attached to this tracking event
@@ -29,6 +29,7 @@ export const ButtonVariant = {
  * @prop {string} [className]
  * @prop {string} [href]
  * @prop {string} [tooltip]
+ * @prop {string} [tooltipPos]
  * @prop {TrackingProps} [tracking]
  * @prop {string} [variant]
  * @prop {React.ReactNode} [children]
@@ -40,11 +41,20 @@ export const ButtonVariant = {
  * @param {ButtonProps & Partial<Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'>>} props
  * @returns
  */
-const Button = ({ className, tooltip, onClick, tracking, variant = ButtonVariant.DARK, children, ...props }) => {
+const Button = ({
+  className,
+  tooltip,
+  tooltipPos,
+  onClick,
+  tracking,
+  variant = ButtonVariant.DARK,
+  children,
+  ...props
+}) => {
   const onClickHandler = useCallback(
     event => {
       tracking &&
-        trackEvent(tracking.event || events.CTA_LINK_CLICK, {
+        saEvent(tracking.event || events.CTA_LINK_CLICK, {
           ui: tracking.ui,
           action: tracking.action,
           link: props.href || '',
@@ -62,7 +72,13 @@ const Button = ({ className, tooltip, onClick, tracking, variant = ButtonVariant
     </ZeroButton>
   );
 
-  return tooltip ? <Tooltip content={tooltip}>{btn}</Tooltip> : btn;
+  return tooltip ? (
+    <Tooltip content={tooltip} position={tooltipPos}>
+      {btn}
+    </Tooltip>
+  ) : (
+    btn
+  );
 };
 
 export default Button;

@@ -1,55 +1,63 @@
 import { useState } from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
-import { API, getToken } from '../../../lib/api';
+import Loading from '../../../components/loading/loading';
+import { APIError, defaultErrorMessageForEndUser, saveDefaultPaymentMethod } from '../../../lib/api';
 import Button from '../../../components/button/button';
 
-export async function putPaymentMethod(pm_id) {
-  const putBody = { method: { id: pm_id } };
-  const res = await fetch(API + '/user/payment', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + (await getToken()),
-    },
-    body: JSON.stringify(putBody),
-  });
-  if (!res.ok) {
-    throw new Error(`failed to get storage info: ${await res.text()}`);
-  }
+/**
+ * @typedef {import('../../contexts/plansContext').Plan} Plan
+ */
 
-  return res.json();
-}
-
-const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
-  const stripe = useStripe();
+/**
+ * @param {object} obj
+ * @param {(v: boolean) => void} [obj.setHasPaymentMethods]
+ * @param {(v: boolean) => void} [obj.setEditingPaymentMethod]
+ * @param {Plan['id']} [obj.currentPlan]
+ * @returns
+ */
+const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
   const elements = useElements();
-  const [paymentMethodError, setPaymentMethodError] = useState('');
+  const stripe = useStripe();
+  const [isLoading, setIsLoading] = useState(false);
 
+  const [paymentMethodError, setPaymentMethodError] = useState(/** @type {Error|null} */ (null));
   const handlePaymentMethodAdd = async event => {
     event.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
+      console.warn('stripe or elements is not loaded, so handlePaymentMethodAdd cannot use it');
+      return;
+    }
+
+    if (typeof currentPlan === 'undefined') {
+      console.warn(
+        'handlePaymentMethodAdd called when currentPlan is undefined, which should mean its still being fetched. This is unexpected, so the payment method will not be saved.'
+      );
       return;
     }
 
     const cardElement = elements.getElement(CardElement);
     if (cardElement) {
       try {
+        setIsLoading(true);
         const { paymentMethod, error } = await stripe.createPaymentMethod({
           type: 'card',
           card: cardElement,
         });
         if (error) throw new Error(error.message);
-        await putPaymentMethod(paymentMethod.id);
-        setHasPaymentMethods(true);
-        setPaymentMethodError('');
+        if (!paymentMethod?.id) return;
+        await saveDefaultPaymentMethod(paymentMethod.id);
+        setHasPaymentMethods?.(true);
+        setEditingPaymentMethod?.(false);
+        setPaymentMethodError(null);
       } catch (error) {
-        let message;
-        if (error instanceof Error) message = error.message;
-        else message = String(error);
-        setPaymentMethodError(message);
+        if (!(error instanceof APIError)) {
+          console.warn('unexpected error adding payment method', error);
+        }
+        setPaymentMethodError(new Error(defaultErrorMessageForEndUser));
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -71,10 +79,13 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
           }}
         />
       </div>
-      <div className="billing-validation">{paymentMethodError}</div>
-      <Button onClick={handlePaymentMethodAdd} disabled={!stripe}>
-        Add Card
-      </Button>
+      <div className="billing-validation">{paymentMethodError ? paymentMethodError.message : <></>}</div>
+      <div className="billing-card-add-card-wrapper">
+        <Button onClick={handlePaymentMethodAdd} variant="outline-light" disabled={!stripe}>
+          Add Card
+        </Button>
+        {isLoading && <Loading size="medium" message="Adding card info..." />}
+      </div>
     </form>
   );
 };

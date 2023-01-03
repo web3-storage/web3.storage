@@ -47,7 +47,7 @@ export class UserNotFoundError extends HTTPError {
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
 export class PinningUnauthorizedError extends PinningServiceApiError {
-  constructor (msg = 'Pinning not authorized for this user, email support@web3.storage to request authorization.') {
+  constructor (msg = 'Pinning not authorized for this user, please visit https://web3.storage/docs/how-tos/pinning-services-api/ for instructions on how to request access.') {
     super(msg, 403)
     this.reason = PinningUnauthorizedError.CODE
   }
@@ -116,6 +116,19 @@ export class MagicTokenRequiredError extends HTTPError {
   }
 }
 MagicTokenRequiredError.CODE = 'ERROR_MAGIC_TOKEN_REQUIRED'
+
+export class AgreementsRequiredError extends HTTPError {
+  /**
+   * @param {import("./utils/billing-types").Agreement[]} agreements
+   * @param {string} message
+   */
+  constructor (agreements, message = `Missing required agreements ${agreements.join(', ')}`) {
+    super(message, 400)
+    this.name = 'AgreementRequired'
+    this.code = AgreementsRequiredError.CODE
+  }
+}
+AgreementsRequiredError.CODE = 'AGREEMENTS_REQUIRED'
 
 export class InvalidCidError extends Error {
   /**
@@ -214,3 +227,17 @@ export class RangeNotSatisfiableError extends HTTPError {
   }
 }
 RangeNotSatisfiableError.CODE = 'ERROR_RANGE_NOT_SATISFIABLE'
+
+export class LinkdexError extends Error {
+  /**
+   * @param {number} status
+   * @param {number} statusText
+   */
+  constructor (status, statusText) {
+    super(`linkdex-api not ok: ${status} ${statusText}`)
+    this.name = 'LinkdexError'
+    this.status = status
+    this.code = LinkdexError.CODE
+  }
+}
+LinkdexError.CODE = 'LINKDEX_NOT_OK'

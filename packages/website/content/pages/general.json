@@ -10,12 +10,12 @@
     "image": ""
   },
   "site_logo": {
-    "text": "Web3.Storage"
+    "text": "web3.storage"
   },
   "message_banner": {
-    "content": "Looking to store NFTs? Check out <span class='banner-gradient-text'>NFT.Storage</span>",
-    "url": "https://nft.storage/",
-    "maintenceAlert": "The Web3.Storage API is currently undergoing maintenance..."
+    "content": "",
+    "url": "",
+    "maintenceAlert": "The web3.storage API is currently undergoing maintenance..."
   },
   "navigation": {
     "links": [
@@ -25,7 +25,7 @@
         "links": [
           {
             "url": "/products/web3storage",
-            "text": "Web3.Storage"
+            "text": "web3.storage"
           },
           {
             "url": "/products/w3name",
@@ -44,6 +44,11 @@
       {
         "url": "/faq",
         "text": "FAQ"
+      },
+      {
+        "url": "https://blog.web3.storage",
+        "text": "Blog",
+        "target": "_blank"
       },
       {
         "url": "/docs",
@@ -66,8 +71,8 @@
             "url": "/tokens/?create=true"
           },
           {
-            "text": "Request More Storage",
-            "url": "request-more-storage"
+            "text": "Plans & Payment",
+            "url": "/account/payment"
           },
           {
             "text": "Status",
@@ -91,21 +96,74 @@
     }
   },
   "breadcrumbs": {
-    "index": "Home",
-    "about": "About",
-    "pricing": "Pricing",
-    "faq": "FAQ",
-    "docs": "Docs",
-    "terms": "ToS",
-    "contact": "Contact",
-    "login": "Login",
-    "callback": "Authenticating",
-    "account": "Account",
-    "tokens": "API Tokens"
+    "index": {
+      "text": "Home",
+      "url": "/"
+    },
+    "pricing": {
+      "text": "Pricing",
+      "url": "/pricing"
+    },
+    "faq": {
+      "text": "FAQ",
+      "url": "/faq"
+    },
+    "docs": {
+      "text": "Docs",
+      "url": "/docs"
+    },
+    "terms": {
+      "text": "ToS",
+      "url": "/terms"
+    },
+    "contact": {
+      "text": "Contact",
+      "url": "/contact"
+    },
+    "login": {
+      "text": "Login",
+      "url": "/login"
+    },
+    "callback": {
+      "text": "Authenticating",
+      "url": "/callback"
+    },
+    "account": {
+      "text": "Account",
+      "url": "/account"
+    },
+    "tokens": {
+      "text": "API Tokens",
+      "url": "/tokens"
+    },
+    "products": {
+      "text": "Products",
+      "url": "/products"
+    },
+    "payment": {
+      "text": "Payment",
+      "url": "/account/payment"
+    },
+    "w3name": {
+      "text": "w3name",
+      "url": "/products/w3name"
+    },
+    "web3storage": {
+      "text": "web3.storage",
+      "url": "/products/web3storage"
+    },
+    "w3link": {
+      "text": "w3link",
+      "url": "/products/w3link"
+    },
+    "sla": {
+      "text": "SLA",
+      "url": "/sla"
+    }
   },
   "footer": {
     "contact": {
-      "logo_text": "Web3.Storage",
+      "logo_text": "web3.storage",
       "prompt": "Sign up for free using your email address or GitHub.",
       "cta": {
         "url": "/login",
@@ -133,8 +191,12 @@
           "url": "/contact"
         },
         {
-          "text": "Terms of Use",
+          "text": "Terms of Service",
           "url": "/terms"
+        },
+        {
+          "text": "Service Level Agreement (SLA)",
+          "url": "/sla"
         },
         {
           "text": "Status",
@@ -160,14 +222,6 @@
         {
           "text": "HTTP API",
           "url": "/docs/reference/http-api/"
-        },
-        {
-          "text": "Web Apps",
-          "url": "/terms"
-        },
-        {
-          "text": "Login",
-          "url": "/login"
         }
       ]
     },

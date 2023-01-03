@@ -14,19 +14,18 @@ import Head from 'next/head';
  */
 const Metadata = ({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
-  description = 'With Web3.Storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast, open and it’s free.',
+  description = "With web3.storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast and it's open.",
 }) => (
   <Head>
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta property="image" content="/social-card-web3storage.jpg" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://web3.storage" />
-    <meta property="og:image" content="/social-card-web3storage.jpg" />
+    <meta property="og:image" content="https://web3.storage/social-card-web3storage.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/social-card-web3storage.jpg" />
+    <meta name="twitter:image" content="https://web3.storage/social-card-web3storage.jpg" />
     <meta name="twitter:site" content="@protocollabs" />
     <meta name="twitter:creator" content="@protocollabs" />
   </Head>

@@ -30,7 +30,7 @@ const PinningRequestModal = ({ isOpen, onClose }) => {
   }
 
   return (
-    <div className="user-request-modal">
+    <div className="user-request-modal kwes-form-web3-defaults">
       <Modal
         className=""
         closeIcon={<CloseIcon className="file-uploader-close" />}
@@ -41,9 +41,9 @@ const PinningRequestModal = ({ isOpen, onClose }) => {
           <GradientBackground variant="saturated-variant" />
           <h1 className="user-request-modal__heading">Request Bulk Pinning API Access</h1>
           <p className="user-request-modal__description">
-            Web3.Storage is capable of efficiently ingesting billions of records. Whether or not your data is already on
+            web3.storage is capable of efficiently ingesting billions of records. Whether or not your data is already on
             IPFS, we have simple API for bulk data import. You do not need to request bulk API access if you are just
-            looking to upload your data to Web3.Storage. Check out{' '}
+            looking to upload your data to web3.storage. Check out{' '}
             <Link href="/docs/how-tos/pinning-services-api/">the docs</Link> for more details.
           </p>
           <form onSubmit={handleCreateUserRequest}>

@@ -65,14 +65,6 @@
         "src": "concepts/content-addressing"
       },
       {
-        "name": "Decentralized storage",
-        "src": "concepts/decentralized-storage"
-      },
-      {
-        "name": "Web3.Storage economics",
-        "src": "concepts/storage-economics"
-      },
-      {
         "name": "IPFS Gateways",
         "src": "concepts/w3link"
       }
@@ -107,8 +99,12 @@
         "src": "reference/go-client-library"
       },
       {
-        "name": "HTTP API",
+        "name": "web3.storage HTTP API",
         "src": "reference/http-api"
+      },
+      {
+        "name": "w3name HTTP API",
+        "src": "reference/w3name-http-api"
       },
       {
         "name": "Peering with Web3.Storage",

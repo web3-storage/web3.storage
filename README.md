@@ -159,7 +159,7 @@ Our docs website is currently hosted in a [separate repo](https://github.com/web
 
 ## Learn more
 
-To learn more about the Web3.Storage service, upload a file through our friendly UI, or find detailed documentation for the JS client library, please head over to https://web3.storage
+To learn more about the web3.storage service, upload a file through our friendly UI, or find detailed documentation for the JS client library, please head over to https://web3.storage
 
 
 <p align="center">

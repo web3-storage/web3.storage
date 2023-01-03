@@ -1,14 +1,15 @@
 import clsx from 'clsx';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
-import GradientBackground from '../../gradientbackground/gradientbackground.js';
 import CloseIcon from 'assets/icons/close';
 import InfinityIcon from 'assets/icons/infinity';
 import GlobeIcon from 'assets/icons/globe';
-import { ReactComponent as FolderIcon } from '../../../assets/icons/folder.svg';
 import { STATUS, useUploads } from 'components/contexts/uploadsContext';
+import { ReactComponent as FolderIcon } from '../../../assets/icons/folder.svg';
+import GradientBackground from '../../gradientbackground/gradientbackground.js';
+import { usePayment } from '../../../hooks/use-payment';
 
 export const CTAThemeType = {
   LIGHT: 'light',
@@ -60,6 +61,8 @@ const uploadContentBlock = (heading, iconType, description) => {
 const FileUploader = ({ className = '', content, uploadModalState, background }) => {
   const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
   const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
+  const { hasPaymentMethod, currentPlan } = usePayment();
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
   // Mapped out file progress info
   const filesInfo = useMemo(
@@ -73,6 +76,19 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
       })),
     [uploadsProgress]
   );
+
+  const acceptedTerms = e => {
+    setHasAcceptedTerms(e.target.checked);
+    if (e.target.checked) {
+      localStorage.setItem('acceptedTerms', Date.now().toString());
+    } else {
+      localStorage.removeItem('acceptedTerms');
+    }
+  };
+  useEffect(() => {
+    const acceptedTermsLocalStorage = localStorage.getItem('acceptedTerms');
+    if (acceptedTermsLocalStorage) setHasAcceptedTerms(true);
+  }, []);
 
   return (
     <div className={'file-upload-modal'}>
@@ -95,8 +111,23 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
           </div>
           <h5>{!!filesToUpload.length ? content.heading.option_1 : content.heading.option_2}</h5>
           <div className={'file-upload-subheading'} dangerouslySetInnerHTML={{ __html: content.subheading }}></div>
+
+          {!hasPaymentMethod && currentPlan?.id === 'free' && (
+            <div className="billing-terms-toggle">
+              <input type="checkbox" id="agreeTerms" checked={hasAcceptedTerms} onChange={e => acceptedTerms(e)} />
+              <label htmlFor="agreeTerms">
+                I have read and agree to the{' '}
+                <a href="/terms/" rel="noreferrer" target="_blank">
+                  web3.storage Terms of Service
+                </a>
+              </label>
+            </div>
+          )}
+
           <Dropzone
-            className="file-uploader-dropzone"
+            className={`file-uploader-dropzone ${
+              !hasPaymentMethod && currentPlan?.id === 'free' && !hasAcceptedTerms && 'disabled'
+            }`}
             onChange={useCallback(
               files => {
                 uploadFiles(files);

@@ -1,14 +1,14 @@
 openapi: '3.0.2'
 info:
-  title: Web3.Storage API
+  title: web3.storage API
   description: |
-    This documentation describes the HTTP API for [**Web3.Storage**](https://web3.storage), which allows you to quickly and easily build applications using decentralized data storage persisted by [Filecoin](https://filecoin.io) and available over [IPFS](https://ipfs.io).
+    This documentation describes the HTTP API for [**web3.storage**](https://web3.storage), which allows you to quickly and easily build applications using decentralized data storage persisted by [Filecoin](https://filecoin.io) and available over [IPFS](https://ipfs.io).
 
-    You can also interact with this API using client libraries. See [**web3.storage/docs**](https://web3.storage/docs) for more information on using a client library, as well as a variety of other guides and how-tos for Web3.Storage as a whole.
+    You can also interact with this API using client libraries. See [**web3.storage/docs**](https://web3.storage/docs) for more information on using a client library, as well as a variety of other guides and how-tos for web3.storage as a whole.
 
     ## API endpoint URL
 
-    The main public API endpoint URL for Web3.Storage is `https://api.web3.storage`. All endpoints described in this document should be made relative to this root URL. For example, to post to the `/car` endpoint, send your request to `https://api.web3.storage/car`.
+    The main public API endpoint URL for web3.storage is `https://api.web3.storage`. All endpoints described in this document should be made relative to this root URL. For example, to post to the `/car` endpoint, send your request to `https://api.web3.storage/car`.
 
     ### Rate limits
 
@@ -20,12 +20,12 @@ servers:
   - url: https://api.web3.storage
 
 tags:
-  - name: Web3.Storage HTTP API
+  - name: web3.storage HTTP API
 paths:
   /car:
     post:
       tags:
-        - Web3.Storage HTTP API
+        - web3.storage HTTP API
       summary: Upload a CAR
       description: |
         Upload a [CAR](https://ipld.io/specs/transport/car/) (Content Addressable aRchive) file and store the [IPFS DAG](https://docs.ipfs.io/concepts/merkle-dag/)
@@ -69,7 +69,7 @@ paths:
   /car/{cid}:
     get:
       tags:
-        - Web3.Storage HTTP API
+        - web3.storage HTTP API
       summary: Retrieve a CAR
       description: Retrieve an [IPFS DAG](https://docs.ipfs.io/concepts/merkle-dag/) (Directed Acyclic Graph) packaged in a CAR file by using `/car/{cid}`, supplying the CID of the data you are interested in.
       operationId: get-car-cid
@@ -94,7 +94,7 @@ paths:
           $ref: '#/components/responses/internalServerError'
     head:
       tags:
-        - Web3.Storage HTTP API
+        - web3.storage HTTP API
       summary: Retrieve HTTP headers regarding a CAR
       description: |
         This method is useful for doing a dry run of a call to `/car/{cid}`. Because it only returns HTTP header information, it is far more lightweight and can be used to get only the metadata about the given CAR file without retrieving a whole payload in the body of the HTTP response.
@@ -116,7 +116,7 @@ paths:
   /status/{cid}:
     get:
       tags:
-        - Web3.Storage HTTP API
+        - web3.storage HTTP API
       summary: Retrieve information about an upload
       description: Retrieve metadata about a specific file by using `/status/{cid}`, supplying the CID of the file you are interested in. This metadata includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
       operationId: get-status-cid
@@ -141,10 +141,10 @@ paths:
   /upload:
     post:
       tags:
-        - Web3.Storage HTTP API
+        - web3.storage HTTP API
       summary: Upload and store one or more files
       description: |
-        Store files using Web3.Storage. You can upload either a single file or multiple files.
+        Store files using web3.storage. You can upload either a single file or multiple files.
 
         Send the POST request with one of the following:
         - a single file, with a single blob/file object as the body
@@ -184,7 +184,7 @@ paths:
   /user/uploads:
     get:
       tags:
-        - Web3.Storage HTTP API
+        - web3.storage HTTP API
       summary: List previous uploads
       description: |
         Lists all previous uploads for the account ordered by creation date, newest first. These results can be paginated by specifying `before` and `size` parameters in the query string, using the creation date associated with the oldest upload returned in each batch as the value of `before` in subsequent calls.
@@ -207,6 +207,33 @@ paths:
             'application/json':
               schema:
                 type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /user/uploads/{cid}:
+    get:
+      tags:
+        - web3.storage HTTP API
+      summary: Returns a single upload
+      description: |
+        Retrieve the upload metadata of as single upload.
+
+        The information returned includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
+      operationId: get-user-upload
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: object
                 items:
                   $ref: '#/components/schemas/Status'
         '400':
@@ -357,7 +384,7 @@ components:
   securitySchemes:
     bearerAuth:
       description: |
-        The Web3.Storage API uses *bearer tokens* to authenticate requests. You can view and manage these tokens on the [API Tokens page](https://web3.storage/tokens/) in your Web3.Storage account dashboard.
+        The web3.storage API uses *bearer tokens* to authenticate requests. You can view and manage these tokens on the [API Tokens page](https://web3.storage/tokens/) in your web3.storage account dashboard.
 
         Your tokens carry many privileges, so be sure to keep them secure! Do not share your *secret tokens* in publicly accessible locations such as a GitHub repository, client-side code, and so forth.
 

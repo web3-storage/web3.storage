@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError, RangeNotSatisfiableError } from './errors.js'
+import { HTTPError, PSAErrorInvalidData, PSAErrorRequiredData, PSAErrorResourceNotFound, RangeNotSatisfiableError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -11,11 +11,13 @@ import {
 } from './maintenance.js'
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
-import { validateSearchParams } from './utils/psa.js'
+import { INVALID_REQUEST_ID, REQUIRED_REQUEST_ID, validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
+import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
- * @typedef {{ _id: string, issuer: string }} User
+ * @typedef {string} UserId
+ * @typedef {{ _id: UserId, issuer: string, name?: string, email?: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User, authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
@@ -23,8 +25,35 @@ import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
  */
 
 /**
+ * @typedef {object} IssuedAuthentication
+ * @property {string} issuer
+ * @property {string} publicAddress
+ * @property {string} [email]
+ */
+
+/**
+ * @typedef {(req: Request) => Promise<null|IssuedAuthentication>} RequestAuthenticator
+ */
+
+/**
+ * Context needed to perform new user registration
+ * @typedef {object} UserRegistrationContext
+ * @property {object} magic
+ * @property {object} magic.utils
+ * @property {import('./env').Env['magic']['utils']['parseAuthorizationHeader']} magic.utils.parseAuthorizationHeader
+ * @property {import('./env').Env['MODE']} MODE
+ * @property {object} db
+ * @property {import('./env').Env['db']['upsertUser']} db.upsertUser
+ * @property {import('./env').Env['db']['getUser']} db.getUser
+ * @property {import('./env').Env['DANGEROUSLY_BYPASS_MAGIC_AUTH']} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {RequestAuthenticator} authenticateRequest
+ * @property {import('../src/utils/billing-types').CustomersService} customers
+ * @property {import('../src/utils/billing-types').SubscriptionsService} subscriptions
+ */
+
+/**
  * @param {Request} request
- * @param {import('./env').Env} env
+ * @param {UserRegistrationContext} env
  * @returns {Promise<Response>}
  */
 export async function userLoginPost (request, env) {
@@ -62,15 +91,54 @@ function createMagicLoginController (env, testModeBypass = magicLinkBypassForE2E
 }
 
 /**
+ * @param {UserRegistrationContext} env
+ * @returns {RequestAuthenticator}
+ */
+const createMagicLinkRequestAuthenticator = (env) => async (request) => {
+  const auth = request.headers.get('Authorization') || ''
+  const token = env.magic.utils.parseAuthorizationHeader(auth)
+  const metadata = await (createMagicLoginController(env).authenticate({ token }))
+  /** @type {IssuedAuthentication} */
+  const authentication = {
+    ...metadata,
+    issuer: metadata.issuer,
+    publicAddress: metadata.publicAddress
+  }
+  return authentication
+}
+
+/**
+ * Initialize a new user that just registered.
+ * @param {object} ctx
+ * @param {object} user
+ * @param {string} user.id
+ * @param {string} user.issuer
+ * @param {import('../src/utils/billing-types').UserCreationOptions} [userCreationOptions]
+ */
+async function initializeNewUser (ctx, user, userCreationOptions) {
+  await initializeBillingForNewUser(
+    {
+      customers: ctx.customers,
+      subscriptions: ctx.subscriptions,
+      user: { ...user, id: user.id.toString() },
+      userCreationOptions
+    }
+  )
+}
+
+/**
  * @param {Request} request
- * @param {import('./env').Env} env
+ * @param {UserRegistrationContext} env
+ * @returns {Promise<{ issuer: string }>}
  */
 async function loginOrRegister (request, env) {
   const data = await request.json()
-  const auth = request.headers.get('Authorization') || ''
 
-  const token = env.magic.utils.parseAuthorizationHeader(auth)
-  const metadata = await (createMagicLoginController(env).authenticate({ token }))
+  const authenticateRequest = env.authenticateRequest || createMagicLinkRequestAuthenticator(env)
+  const metadata = await authenticateRequest(request)
+  if (!metadata) {
+    throw new Error('unable to authenticate request')
+  }
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')
@@ -86,8 +154,18 @@ async function loginOrRegister (request, env) {
   if (env.MODE === NO_READ_OR_WRITE) {
     return maintenanceHandler()
   } else if (env.MODE === READ_WRITE) {
-    // @ts-ignore
     user = await env.db.upsertUser(parsed)
+    // initialize billing, etc, but only if the user was newly inserted
+    if (user.inserted) {
+      await initializeNewUser(
+        env,
+        { ...user, id: user.id },
+        { name: parsed.name, email: parsed.email }
+      )
+    } else {
+      // previously existing user. Update their customer record
+      await updateUserCustomerContact(env, user, parsed)
+    }
   } else if (env.MODE === READ_ONLY) {
     user = await env.db.getUser(parsed.issuer, {})
   } else {
@@ -98,32 +176,42 @@ async function loginOrRegister (request, env) {
 }
 
 /**
+ * @param {object} context
+ * @param {import('../src/utils/billing-types').CustomersService} context.customers
+ * @param {Pick<import('../src/utils/billing-types').BillingUser, 'id'>} user
+ * @param {import('../src/utils/billing-types').CustomerContact} contact
+ */
+async function updateUserCustomerContact (context, user, contact) {
+  const customer = await context.customers.getOrCreateForUser(user)
+  await context.customers.updateContact(customer.id, contact)
+}
+
+/**
  * @param {import('@magic-ext/oauth').OAuthRedirectResult} data
- * @param {import('@magic-sdk/admin').MagicUserMetadata} magicMetadata
- * @returns {User}
+ * @param {IssuedAuthentication} magicMetadata
+ * @returns {import('@web3-storage/db/db-client-types').UpsertUserInput}
  */
 function parseGitHub ({ oauth }, { issuer, email, publicAddress }) {
   return {
-    // @ts-ignore
     name: oauth.userInfo.name || '',
     picture: oauth.userInfo.picture || '',
     issuer: issuer ?? '',
-    email,
+    email: email ?? '',
     github: oauth.userHandle,
     publicAddress
   }
 }
 
 /**
- * @param {import('@magic-sdk/admin').MagicUserMetadata & { email: string, issuer: string }} magicMetadata
+ * @param {IssuedAuthentication} magicMetadata
+ * @returns {import('@web3-storage/db/db-client-types').UpsertUserInput}
  */
 function parseMagic ({ issuer, email, publicAddress }) {
-  const name = email.split('@')[0]
+  const name = email?.split('@')[0]
   return {
-    name,
-    picture: '',
+    name: name ?? '',
     issuer,
-    email,
+    email: email ?? '',
     publicAddress
   }
 }
@@ -164,7 +252,7 @@ export async function userTokensPost (request, env) {
  */
 export async function userAccountGet (request, env) {
   const [usedStorage, storageLimitBytes] = await Promise.all([
-    // @ts-ignore
+    // @ts-ignore user used storage object
     env.db.getStorageUsed(request.auth.user._id),
     // @ts-ignore
     env.db.getUserTagValue(request.auth.user._id, 'StorageLimitBytes')
@@ -242,7 +330,6 @@ export async function userRequestPost (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userTokensGet (request, env) {
-  // @ts-ignore
   const tokens = await env.db.listKeys(request.auth.user._id)
 
   return new JSONResponse(tokens)
@@ -363,6 +450,26 @@ function getLinkHeader ({ url, pageRequest, items, count }) {
 }
 
 /**
+ * Retrieve a single user upload.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userUploadGet (request, env) {
+  // @ts-ignore
+  const cid = request.params.cid
+  let res
+  try {
+    // @ts-ignore
+    res = await env.db.getUpload(cid, request.auth.user._id)
+  } catch (error) {
+    return notFound()
+  }
+
+  return new JSONResponse(res)
+}
+
+/**
  * Delete an user upload. This actually raises a tombstone rather than
  * deleting it entirely.
  *
@@ -421,8 +528,7 @@ export async function userPinsGet (request, env) {
     throw psaParams.error
   }
 
-  // @ts-ignore
-  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+  const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
 
   let pinRequests
 
@@ -474,6 +580,42 @@ export async function userPinsGet (request, env) {
     results: pins
   // @ts-ignore
   }, { headers })
+}
+
+/**
+ *  List a user's pins regardless of the token used.
+ *  As we don't want to scope the Pinning Service API to users
+ *  we need a new endpoint as an umbrella.
+ *
+ * @param {import('./user').AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
+ */
+export async function userPinDelete (request, env, ctx) {
+  // @ts-ignore
+  const requestId = request.params?.requestId
+
+  if (!requestId) {
+    throw new PSAErrorRequiredData(REQUIRED_REQUEST_ID)
+  }
+
+  if (typeof requestId !== 'string') {
+    throw new PSAErrorInvalidData(INVALID_REQUEST_ID)
+  }
+
+  // TODO: Improve me, it is un-optimal to get the tokens in a separate request to the db.
+  const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
+
+  try {
+    // Update deleted_at (and updated_at) timestamp for the pin request.
+    await env.db.deletePsaPinRequest(requestId, tokens)
+  } catch (e) {
+    console.error(e)
+    throw new PSAErrorResourceNotFound()
+  }
+
+  return new JSONResponse({}, { status: 202 })
 }
 
 /**
@@ -540,40 +682,97 @@ const notifySlack = async (
  * Get a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {import('./env').Env} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentGet (request, env) {
-  const { searchParams } = new URL(request.url)
-  const paramMethodId = searchParams.get('method.id')
-  const userPaymentGetResponse = {
-    method: paramMethodId ? { id: paramMethodId } : null
+  const userPaymentSettings = await getPaymentSettings({
+    billing: env.billing,
+    customers: env.customers,
+    subscriptions: env.subscriptions,
+    user: { ...request.auth.user, id: request.auth.user._id }
+  })
+  if (userPaymentSettings instanceof Error) {
+    switch (userPaymentSettings.code) {
+      case (new CustomerNotFound().code):
+        return new JSONResponse({
+          message: `Unexpected error fetching payment settings: ${userPaymentSettings.code}`
+        }, { status: 500 })
+      default: // unexpected error
+        throw userPaymentSettings
+    }
   }
-  return new JSONResponse(userPaymentGetResponse)
+  return new JSONResponse({
+    ...userPaymentSettings,
+    subscription: userPaymentSettings.subscription
+  })
 }
+
+/**
+ * @typedef {import('./utils/billing-types.js').BillingEnv} BillingEnv
+ */
 
 /**
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {import('./env').Env} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'|'agreements'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
-  const method = requestBody?.method?.id
-    ? { id: requestBody?.method?.id }
+  const paymentMethodId = requestBody?.paymentMethod?.id
+  if (typeof paymentMethodId !== 'string') {
+    throw Object.assign(new Error('Invalid payment method'), { status: 400 })
+  }
+  const subscriptionInput = requestBody?.subscription
+  if (!['object', 'undefined'].includes(typeof subscriptionInput)) {
+    throw Object.assign(new Error(`subscription must be of type object or undefined, but got ${typeof subscriptionInput}`), { status: 400 })
+  }
+  const subscriptionStorageInput = subscriptionInput?.storage
+  if (subscriptionInput && !(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
+    throw Object.assign(new Error('subscription.storage must be an object or null'), { status: 400 })
+  }
+  if (subscriptionStorageInput && typeof subscriptionStorageInput.price !== 'string') {
+    throw Object.assign(new Error('subscription.storage.price must be a string'), { status: 400 })
+  }
+  const storagePrice = subscriptionStorageInput?.price
+  if (storagePrice && !isStoragePriceName(storagePrice)) {
+    return new JSONResponse(new Error('invalid .subscription.storage.price'), {
+      status: 400
+    })
+  }
+  /** @type {import('../src/utils/billing-types').W3PlatformSubscription|undefined} */
+  const subscription = (typeof subscriptionInput === 'undefined')
+    ? undefined
     : {
-      // stubbing this for now with the value from the docs.
-      //   https://stripe.com/docs/api/payment_methods/object
-        id: env.mockStripePaymentMethodId,
-        warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
+        storage: storagePrice ? { price: storagePrice } : null
       }
+  const paymentMethod = { id: paymentMethodId }
+  await savePaymentSettings(
+    {
+      billing: env.billing,
+      customers: env.customers,
+      user: { ...request.auth.user, id: request.auth.user._id },
+      subscriptions: env.subscriptions,
+      agreements: env.agreements
+    },
+    {
+      paymentMethod,
+      subscription,
+      agreement: requestBody.agreement
+    },
+    {
+      name: request.auth.user.name,
+      email: request.auth.user.email
+    }
+  )
+  const userPaymentSettingsUrl = '/user/payment'
   const savePaymentSettingsResponse = {
-    method
+    location: userPaymentSettingsUrl
   }
   return new JSONResponse(savePaymentSettingsResponse, {
     status: 202,
     headers: {
-      location: `/user/payment?method.id=${method.id}`
+      location: userPaymentSettingsUrl
     }
   })
 }

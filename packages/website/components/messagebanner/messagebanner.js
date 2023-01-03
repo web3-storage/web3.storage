@@ -95,7 +95,10 @@ export default function MessageBanner() {
   );
 
   return (
-    <section id="section_message-banner" style={{ height: bannerHeight }}>
+    <section
+      id="section_message-banner"
+      style={{ height: bannerHeight, display: !bannerContent.html.length ? 'none' : undefined }}
+    >
       <div ref={messageBannerRef} className={clsx('message-banner-wrapper', bannerHeight === '0px' ? 'mb-hidden' : '')}>
         <div className="grid-noGutter">
           <div className="col">
@@ -112,7 +115,7 @@ export default function MessageBanner() {
                 dangerouslySetInnerHTML={{ __html: bannerContent.html }}
                 onClick={() => messageBannerClick(marketingPrompt)}
                 onKeyPress={() => messageBannerClick(marketingPrompt)}
-                rel="noreferrer"
+                rel="noreferrer noopener"
               ></a>
             </div>
           </div>

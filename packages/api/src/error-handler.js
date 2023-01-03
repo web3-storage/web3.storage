@@ -8,7 +8,7 @@ import { HTTPError, PinningServiceApiError } from './errors.js'
  * @param {Request} request
  */
 export function errorHandler (err, { log }, request) {
-  console.error(err.stack)
+  console.error(err)
 
   let status = err.status || 500
   if (status >= 500) {

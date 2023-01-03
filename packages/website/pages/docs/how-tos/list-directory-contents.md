@@ -8,9 +8,9 @@ import AccordionSingle from 'components/accordionsingle/accordionsingle';
 
 # Listing the contents of an IPFS directory
 
-When [storing data][howto-store] using the default options, Web3.Storage will wrap your uploaded files in an IPFS directory listing. This preserves the original filenames and provides a nicer user experience when downloading files.
+When [storing data][howto-store] using the default options, web3.storage will wrap your uploaded files in an IPFS directory listing. This preserves the original filenames and provides a nicer user experience when downloading files.
 
-The [Retrieval guide][howto-retrieve] shows several ways to fetch your data from IPFS using the CID returned by Web3.Storage and the original filenames. However, you may want to simply list the contents of an IPFS directory without downloading all the data inside.
+The [Retrieval guide][howto-retrieve] shows several ways to fetch your data from IPFS using the CID returned by web3.storage and the original filenames. However, you may want to simply list the contents of an IPFS directory without downloading all the data inside.
 
 This simple how-to guide will show a few ways to list the contents of an IPFS directory:
 
@@ -127,7 +127,6 @@ curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloy
     }
   ]
 }
-
 ```
 
 To format the response for display, you can install the [jq tool](https://stedolan.github.io/jq/) and add `| jq` to the end of the command above.
@@ -214,7 +213,6 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
     }
   ]
 }
-
 ```
 
 To format the response for display, you can add ` | ConvertFrom-Json | ConvertTo-Json -Depth 100` to the end of the final command.

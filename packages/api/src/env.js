@@ -9,6 +9,8 @@ import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
 import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
+import { createStripeBillingContext } from './utils/stripe.js'
+import { createMockBillingContext } from './utils/billing.js'
 
 /**
  * @typedef {object} Env
@@ -35,6 +37,14 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {string} [ELASTIC_IPFS_PEER_ID]
+ * @property {string} [ENABLE_ADD_TO_CLUSTER]
+ * @property {string} [LINKDEX_URL] dag completeness checking service for the S3 Bucket configured in `S3_BUCKET_NAME`
+ * @property {string} [STRIPE_SECRET_KEY]
+ * @property {string} CARPARK_URL the public url prefix for CARs stored in R2
+ * @property {R2Bucket} CARPARK the bound R2 Bucket interface
+ * @property {R2Bucket} SATNAV
+ * @property {R2Bucket} DUDEWHERE
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -45,7 +55,9 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion
- * @property {string} mockStripePaymentMethodId
+ * @property {import('./utils/billing-types').BillingService} billing
+ * @property {import('./utils/billing-types').CustomersService} customers
+ * @property {string} stripeSecretKey
  */
 
 /**
@@ -79,8 +91,8 @@ export function envAll (req, env, ctx) {
     allowedSearchParams: /(.*)/,
     debug: env.DEBUG === 'true',
     rewriteFrames: {
-      // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
-      iteratee: (frame) => ({ ...frame, filename: frame.filename?.substring(1) })
+      // sourcemaps only work if stack filepath are absolute like `/worker.js`
+      root: '/'
     },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,
@@ -91,6 +103,8 @@ export function envAll (req, env, ctx) {
   // the logs to LogTail. This must be a new instance per request.
   // Note that we pass `ctx` as the `event` param here, because it's kind of both:
   // https://developers.cloudflare.com/workers/runtime-apis/fetch-event/#syntax-module-worker
+  const cloudLoggingEnabled = env.ENV === 'production' || env.ENV === 'staging'
+
   // @ts-ignore
   env.log = new Logging(req, ctx, {
     token: env.LOGTAIL_TOKEN,
@@ -98,7 +112,9 @@ export function envAll (req, env, ctx) {
     sentry: env.sentry,
     version: env.VERSION,
     branch: env.BRANCH,
-    commithash: env.COMMITHASH
+    commithash: env.COMMITHASH,
+    sendToLogtail: cloudLoggingEnabled,
+    sendToSentry: cloudLoggingEnabled
   })
 
   env.magic = new Magic(env.MAGIC_SECRET_KEY, {
@@ -120,8 +136,29 @@ export function envAll (req, env, ctx) {
   // @ts-ignore
   env.MODE = env.MAINTENANCE_MODE || DEFAULT_MODE
 
+  env.ELASTIC_IPFS_PEER_ID = env.ELASTIC_IPFS_PEER_ID ?? 'bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm'
+
+  if (!env.LINKDEX_URL && env.ENV !== 'dev') {
+    throw new Error('Missing ENV. Please set LINKDEX_URL')
+  }
+
+  if (!env.CARPARK_URL) {
+    if (env.ENV === 'dev') {
+      env.CARPARK_URL = 'https://carpark-dev.web3.storage'
+    } else {
+      throw new Error('Missing ENV. Please set CARPARK_URL')
+    }
+  }
+
+  ['CARPARK', 'SATNAV', 'DUDEWHERE'].forEach(bucketName => {
+    if (!env[bucketName]) {
+      throw new Error(`Missing ENV. R2 Bucket \`${bucketName}\` not found. Update \`r2_bucket\` config in wrangler.toml or add \`--r2 ${bucketName}\` flag to miniflare cmd`)
+    }
+  })
+
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
+
   // @ts-ignore
   env.cluster = new Cluster(env.CLUSTER_API_URL, { headers })
 
@@ -155,7 +192,7 @@ export function envAll (req, env, ctx) {
       secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID
     }
   })
-  if (env.ENV === 'dev') {
+  if (env.ENV === 'dev' && env.DEBUG === 'true') {
     // show me what s3 sdk is up to.
     env.s3Client.middlewareStack.add(
       (next, context) => async (args) => {
@@ -168,8 +205,17 @@ export function envAll (req, env, ctx) {
     )
   }
 
-  // via https://stripe.com/docs/api/payment_methods/object
-  // this can be used to mock realistic values of a stripe.com paymentMethod id
-  // after fulls tripe integration, this may not be needed on the env
-  env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
+  const stripeSecretKey = env.STRIPE_SECRET_KEY
+  if (!stripeSecretKey && !['test', 'dev'].includes(env.ENV)) {
+    throw new Error(`Stripe secret key is required for env ${env.ENV}`)
+  } else if (stripeSecretKey) {
+    // if we have a stripeSecretKey, use stripe.com-powered BillingEnv services
+    Object.assign(env, createStripeBillingContext({
+      ...env,
+      STRIPE_SECRET_KEY: stripeSecretKey
+    }))
+  } else {
+    // use mock BillingEnv as a placeholder for test/dev
+    Object.assign(env, createMockBillingContext())
+  }
 }

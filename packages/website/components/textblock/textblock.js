@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
 import Button from '../button/button';
-import countly from '../../lib/countly';
+import analytics from '../../lib/analytics';
 
 // ====================================================================== Params
 /**
@@ -16,15 +16,27 @@ export default function TextBlock({ block }) {
   const format = block.format || 'medium';
   const hasDescription = typeof block.description === 'string' || Array.isArray(block.description);
   const tracking = {};
+  const tracking2 = {};
   if (typeof block.cta === 'object') {
     if (block.cta.event) {
-      tracking.event = countly.events[block.cta.event];
+      tracking.event = analytics.events[block.cta.event];
     }
     if (block.cta.ui) {
-      tracking.ui = countly.ui[block.cta.ui];
+      tracking.ui = analytics.ui[block.cta.ui];
     }
     if (block.cta.action) {
       tracking.action = block.cta.action;
+    }
+  }
+  if (typeof block.cta22 === 'object') {
+    if (block.cta2.event) {
+      tracking2.event = analytics.events[block.cta2.event];
+    }
+    if (block.cta2.ui) {
+      tracking2.ui = analytics.ui[block.cta2.ui];
+    }
+    if (block.cta2.action) {
+      tracking2.action = block.cta2.action;
     }
   }
 
@@ -88,6 +100,17 @@ export default function TextBlock({ block }) {
           onKeyPress={() => handleButtonClick(block.cta)}
         >
           {block.cta.text}
+        </Button>
+      )}
+      {typeof block.cta2 === 'object' && (
+        <Button
+          className={'cta cta2'}
+          variant={block.cta2.theme}
+          tracking={tracking2}
+          onClick={() => handleButtonClick(block.cta2)}
+          onKeyPress={() => handleButtonClick(block.cta2)}
+        >
+          {block.cta2.text}
         </Button>
       )}
     </div>

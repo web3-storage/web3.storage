@@ -1,6 +1,6 @@
 ---
 title: JavaScript client library reference
-description: Integrate Web3.Storage into your code using the JavaScript client library.
+description: Integrate web3.storage into your code using the JavaScript client library.
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
@@ -11,11 +11,11 @@ import dagJsonSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag
 
 # JavaScript client library reference
 
-To use the JavaScript client library for Web3.Storage, you must first [obtain a free API token](/docs/how-tos/generate-api-token).
+To use the JavaScript client library for web3.storage, you must first [obtain a free API token](/docs/how-tos/generate-api-token).
 
-The client library automatically packs your uploads into a content addressible archive (CAR) for uploading to the Web3.Storage service, which [stores](#store-files) data as blocks prefixed with the [_content identifier_ (CID)](/docs/concepts/content-addressing#cids-location-independent-globally-unique-keys) derived from a cryptographic hash of the data. You can then use a file's CID to [retrieve](#retrieve-files) it.
+The client library automatically packs your uploads into a content addressible archive (CAR) for uploading to the web3.storage service, which [stores](#store-files) data as blocks prefixed with the [_content identifier_ (CID)](/docs/concepts/content-addressing#cids-location-independent-globally-unique-keys) derived from a cryptographic hash of the data. You can then use a file's CID to [retrieve](#retrieve-files) it.
 
-This page covers the core functionality of the JavaScript client. See the [JavaScript utility libraries page](/docs/reference/js-utilities) for some additional packages that may be useful when working with Web3.Storage.
+This page covers the core functionality of the JavaScript client. See the [JavaScript utility libraries page](/docs/reference/js-utilities) for some additional packages that may be useful when working with web3.storage.
 
 <Callout type="warning">
 ##### Minimum requirements
@@ -29,7 +29,7 @@ While we recommend that you install the latest _stable_ version of the following
 
 ## Constructor
 
-The constructor for Web3.Storage is simple; all you need is your API token.
+The constructor for web3.storage is simple; all you need is your API token.
 
 ```javascript
 import { Web3Storage } from 'web3.storage';
@@ -90,12 +90,12 @@ Method parameters are supplied in positional order.
 | Number | Type        | Description                                                                                                                                         |
 | ------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1      | `file[]`    | An iterable collection of [Files](https://developer.mozilla.org/en-US/docs/Web/API/File) to be packed into a CAR and uploaded.                      |
-| 2      | `{options}` | _Optional._ An object whose properties define certain Web3.Storage options and metadata about the files being uploaded. See below for more details. |
+| 2      | `{options}` | _Optional._ An object whose properties define certain web3.storage options and metadata about the files being uploaded. See below for more details. |
 
 An `{options}` object has the following properties that can be used as parameters when calling `put()`:
 
 <AccordionSingle heading="name">
-_String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
+_String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the web3.storage site.
 
 ```js
 const cid = await client.put(files, { name: 'cat pics' });
@@ -113,7 +113,7 @@ const cid = await client.put(files, { maxRetries: 3 });
 </AccordionSingle>
 
 <AccordionSingle heading="wrapWithDirectory">
-_Boolean._ The `wrapWithDirectory` parameter controls whether the files will be wrapped in an IPFS directory when added to Web3.Storage. With the default value of `true`, all files provided to the `put` method will be wrapped in an IPFS directory listing.
+_Boolean._ The `wrapWithDirectory` parameter controls whether the files will be wrapped in an IPFS directory when added to web3.storage. With the default value of `true`, all files provided to the `put` method will be wrapped in an IPFS directory listing.
 
 For example, when adding a file called `hello.txt` using the default behavior, the root CID returned by the `put` method identifies a directory containing a file named `hello.txt`, rather than the `hello.txt` file itself, which is accessible at `<rootCID>/hello.txt`.
 
@@ -154,7 +154,7 @@ bafybeiebez7epbidb7f6fcurnd5ukpokrpq5wkrsuakynukpxxo4y4ewvi/
 </AccordionSingle>
 
 <AccordionSingle heading="onRootCidReady">
-_Function._ Because the data is formatted for IPFS and Filecoin on the client, the root CID for the data is generated before the data is uploaded to Web3.Storage. If you want to display the CID to the user before the upload is complete, pass in an `onRootCidReady` function that accepts a CID string:
+_Function._ Because the data is formatted for IPFS and Filecoin on the client, the root CID for the data is generated before the data is uploaded to web3.storage. If you want to display the CID to the user before the upload is complete, pass in an `onRootCidReady` function that accepts a CID string:
 
 ```js
 const onRootCidReady = rootCid => console.log('root cid:', rootCid);
@@ -197,7 +197,7 @@ for (const file of files) {
 
 Returns `undefined` if there are no matches for the given CID.
 
-If found, the method returns a `Web3Response` object, which extends the [Fetch API response object](https://developer.mozilla.org/en-US/docs/Web/API/Response) to add two iterator methods unique to the Web3.Storage client library: `files()` and `unixFsIterator()`.
+If found, the method returns a `Web3Response` object, which extends the [Fetch API response object](https://developer.mozilla.org/en-US/docs/Web/API/Response) to add two iterator methods unique to the web3.storage client library: `files()` and `unixFsIterator()`.
 
 <Tabs groupId="return">
 <TabItem value="file" label="Using File objects">
@@ -317,7 +317,7 @@ Parameters are supplied in positional order.
 
 Returns `undefined` if there are no matches for the given CID.
 
-If found, the `status()` method returns a `{Status}` object that contains the metadata for your object's storage deal on the Web3.Storage network, with the following properties:
+If found, the `status()` method returns a `{Status}` object that contains the metadata for your object's storage deal on the web3.storage network, with the following properties:
 
 <AccordionSingle heading="cid">
 _String._ The `cid` property is the content identifier of the data for which you are retrieving status information.
@@ -496,12 +496,12 @@ Method parameters are supplied in positional order.
 | Number | Type        | Description                                                                                                                                         |
 | ------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1      | `car`       | The CAR file to be uploaded.                                                                                                                        |
-| 2      | `{options}` | _Optional._ An object whose properties define certain Web3.Storage options and metadata about the files being uploaded. See below for more details. |
+| 2      | `{options}` | _Optional._ An object whose properties define certain web3.storage options and metadata about the files being uploaded. See below for more details. |
 
 An `{options}` object has the following properties that can be used as parameters when calling `putCar()`:
 
 <AccordionSingle heading="name">
-_String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
+_String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the web3.storage site.
 
 ```js
 const cid = await client.putCar(files, { name: 'cat pics' });

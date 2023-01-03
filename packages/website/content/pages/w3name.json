@@ -101,7 +101,7 @@
             "heading": "How does w3name work?",
             "description": [
               "w3name is a service and client library that implements IPNS, which is a protocol that uses public key cryptography to allow for updatable naming in an atomically verifiable way. This means the service is trustless, since all updates can be verified to have come from the associated keypair.",
-              "Because updates just point to a CID, it can be used with IPFS regardless of where your data is stored - Web3.Storage, elsewhere, or all of the above!"
+              "Because updates just point to a CID, it can be used with IPFS regardless of where your data is stored - web3.storage, elsewhere, or all of the above!"
             ],
             "cta": {
               "url": "https://docs.ipfs.tech/concepts/ipns/",
@@ -124,7 +124,7 @@
                   "num": "col"
                 },
                 "format": "small",
-                "heading": "Why not just use IPNS Directly with IPFS?",
+                "heading": "Why not just use IPNS directly with IPFS?",
                 "description": [
                   "IPNS is baked into most IPFS implementations, but has trouble with performance, since updates are broadcasted to the network but not guaranteed to be resolved quickly or even correctly. This is an issue for production use cases, where users will want the data associated with the latest update at lightning speeds. Further, IPNS records generally have to be rebroadcast every 24 hours.",
                   "w3name is a service layer that handles this broadcasting and performant resolution for you."
@@ -168,7 +168,7 @@
               "push_left": ""
             },
             "description": [
-                "Your data model should be immutable and hash-linked, but you’re building for users that are anything but static. Harness w3name, magnifying the power of IPFS content IDs for real-world use cases to bring both dynamicity and security all the way up and down your stack."
+              "Your data model should be immutable and hash-linked, but you’re building for users that are anything but static. Harness w3name, magnifying the power of IPFS content IDs for real-world use cases to bring both dynamicity and security all the way up and down your stack."
             ]
           }
         ]

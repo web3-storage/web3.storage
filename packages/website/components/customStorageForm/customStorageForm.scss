@@ -1,0 +1,77 @@
+.custom-storage-form.kwes-form {
+  .fields {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 100%;
+    grid-gap: 1rem;
+
+    @media screen and (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      grid-gap: 2rem 3rem;
+    }
+  }
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    &.full {
+      @media screen and (min-width: 768px) {
+        grid-column: span 2;
+      }
+    }
+  }
+
+  label {
+    // text-transform: uppercase;
+    line-height: 1.6;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+    font-family: inherit;
+    margin: 4px 0px;
+  }
+
+  small {
+    margin: 0px;
+  }
+
+  input,
+  textarea {
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: rgba(117, 122, 155, 0.15);
+    border: 1px solid rgba(117, 122, 155, 0.35);
+  }
+
+  button {
+    min-width: 100px;
+    margin-top: 2rem;
+    font-size: 1rem;
+    &:hover {
+      color: #000;
+    }
+  }
+
+  p {
+    max-width: 60ch;
+  }
+
+  .kw-alert {
+    background-color: transparent;
+    border: 1px solid;
+  }
+
+  .kw-alert-error {
+    border: 1px solid;
+    color: rgb(192, 111, 111);
+    background-color: transparent;
+    display: none;
+  }
+
+  .fields .kw-border-success,
+  .kw-alert-success {
+    border: 1px solid $malibu;
+  }
+}

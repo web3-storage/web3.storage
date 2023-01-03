@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.7.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.6.1...cron-v1.7.0) (2023-01-03)
+
+
+### Features
+
+* increase timeout for pins cron ([#2174](https://github.com/web3-storage/web3.storage/issues/2174)) ([43a8708](https://github.com/web3-storage/web3.storage/commit/43a8708cd39e55c5875f7bf5fc6896edb41026e2))
+* put write to cluster behind a flag ([#1785](https://github.com/web3-storage/web3.storage/issues/1785)) ([eae75d2](https://github.com/web3-storage/web3.storage/commit/eae75d2366d59b0cf16143723a5af6513d891f9e))
+* split pins cron by environments ([#1903](https://github.com/web3-storage/web3.storage/issues/1903)) ([2c81055](https://github.com/web3-storage/web3.storage/commit/2c81055c6f0f9dfb3b9aa908e34db700d6f41b45))
+
+## [1.6.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.6.0...cron-v1.6.1) (2022-09-16)
+
+
+### Bug Fixes
+
+* cron not counting pin statuses ([#1899](https://github.com/web3-storage/web3.storage/issues/1899)) ([2be52cd](https://github.com/web3-storage/web3.storage/commit/2be52cdd216805596540383df08e6122d7eb6e75))
+
+## [1.6.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.7...cron-v1.6.0) (2022-08-31)
+
+
+### Features
+
+* drop name table & IPNS migration cron ([#1719](https://github.com/web3-storage/web3.storage/issues/1719)) ([0cdfad9](https://github.com/web3-storage/web3.storage/commit/0cdfad9f6baf4a1a356b8c6c8291e4bceb45aa17))
+
+
+### Bug Fixes
+
+* add retry to fetch during IPNS record migration ([#1759](https://github.com/web3-storage/web3.storage/issues/1759)) ([b7b9802](https://github.com/web3-storage/web3.storage/commit/b7b98024c3cc9fe95b29d475927341625651601b))
+* only log user IDs, not names or email addresses ([#1584](https://github.com/web3-storage/web3.storage/issues/1584)) ([d7d7f75](https://github.com/web3-storage/web3.storage/commit/d7d7f757d36bfcb6df777e357ab70245a2321a3b))
+* upload list pagination headers ([#1739](https://github.com/web3-storage/web3.storage/issues/1739)) ([2ffe6d7](https://github.com/web3-storage/web3.storage/commit/2ffe6d749628095a93d957836c6b4e8ad3b6acf9))
+
 ## [1.5.7](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.6...cron-v1.5.7) (2022-08-16)
 
 

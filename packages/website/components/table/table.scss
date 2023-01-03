@@ -1,0 +1,592 @@
+@use 'sass:math';
+
+//TODO: We should make styles for the table general and reusable.
+// ATM they have been copied from old file table, and haven't been refactored.
+// As it stands they are tightly coupled with the file table in the Account Page.
+
+$base-row-width: 75.125rem;
+$cell-select: calculateWidthPercentage(3.5rem, $base-row-width);
+$file-name: calculateWidthPercentage(20rem, $base-row-width);
+$file-cid: calculateWidthPercentage(16rem, $base-row-width);
+$file-availability: calculateWidthPercentage(0rem, $base-row-width);
+$file-pin-status: calculateWidthPercentage(10rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(11rem, $base-row-width);
+$file-size: calculateWidthPercentage(8rem, $base-row-width);
+$file-date: auto;
+
+.storage-table {
+  &__header-divider {
+    border-bottom: 0.078125rem solid rgba($white, 0.05);
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 10.1875rem;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    padding: 1.875rem 2.5rem 0;
+    padding-bottom: 0rem;
+    flex-wrap: wrap;
+
+    @include medium {
+      padding: 1.25rem;
+      padding-bottom: 0rem;
+      .Pagination .pageList {
+        justify-content: center;
+      }
+    }
+
+    .storage-table__result-dropdown .dropdownContent {
+      right: -0.9375rem;
+    }
+
+    .storage-table__pagination {
+      @include medium {
+        flex-basis: 100%;
+        order: 3;
+      }
+    }
+  }
+
+  &__content {
+    > div {
+      &:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+    }
+    &--loading {
+      display: flex;
+      flex-direction: column;
+      min-height: 23.4375rem;
+    }
+  }
+  &__cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    word-break: break-word;
+    height: 100%;
+    @include fontWeight_Regular;
+    @include medium {
+      padding: 0.5rem 1rem;
+      justify-content: flex-start;
+      border-bottom: 0.078125rem solid rgba(white, 0.05);
+      &.file-name {
+        padding-top: 1.75rem;
+      }
+      &:last-child {
+        padding-bottom: 1.75rem;
+      }
+
+      .file-row-label {
+        @include fontWeight_Semibold;
+        width: 8.5rem;
+        flex-shrink: 0;
+        margin-right: 0.5em;
+      }
+      .Tooltip {
+        padding-left: 0.625rem;
+      }
+    }
+    .Tooltip {
+      line-height: 1;
+
+      .tooltip-content {
+        font-size: inherit;
+        line-height: 1.5;
+      }
+
+      svg {
+        display: block;
+        vertical-align: middle;
+        width: 0.75rem;
+        height: 0.75rem;
+        color: #c4c4c7;
+        fill: currentColor;
+      }
+    }
+  }
+
+  &__row {
+    @include fontSize_Tiny;
+    @include fontWeight_Semibold;
+    @include leading_Tiny;
+    letter-spacing: 0;
+    display: grid;
+    position: relative;
+    grid-template-columns: $cell-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date;
+    align-items: flex-start;
+    padding: 0.75rem 2rem;
+    transition: all 0.2s ease-in-out;
+    border-bottom: 0.078125rem solid rgba(white, 0.05);
+
+    .Tooltip {
+      margin-left: 0.3em;
+    }
+
+    @include medium {
+      grid-template-columns: auto;
+      border-bottom: 0;
+      padding: 0;
+      margin-top: 1.5625rem;
+      @include border_Background_Waterloo_White;
+
+      &--active {
+        border: 1px solid $pictonBlue;
+      }
+    }
+
+    &-header {
+      padding-bottom: 1.5625rem;
+      min-height: initial;
+      border-bottom: 0.15625rem solid rgba(white, 0.15);
+    }
+    .th-content {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      grid-gap: 0.625rem;
+      gap: 0.625rem;
+      span,
+      .Tooltip {
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      .Tooltip {
+        margin-right: 1.25rem;
+      }
+    }
+    a {
+      padding-bottom: 0;
+      border-bottom: 0.0390625rem solid rgba(255, 255, 255, 0.25);
+      line-height: 1.6;
+      transition: all $transitionDuration linear;
+      &:hover {
+        border-bottom-color: rgba(255, 255, 255, 0.75);
+      }
+    }
+
+    .file {
+      &-select-container {
+        @include medium {
+          justify-content: space-between;
+          order: 6;
+        }
+      }
+      &-select {
+        @include border_Background_Waterloo_White;
+        width: 0.9375rem;
+        height: 0.9375rem;
+        border-radius: 0.15625rem;
+        cursor: pointer;
+        position: relative;
+        margin: 1px 0;
+        input {
+          cursor: pointer;
+          opacity: 0;
+        }
+        svg.check {
+          color: $cyan;
+          top: -0.6875rem;
+          left: -0.3125rem;
+          position: absolute;
+          pointer-events: none;
+          width: 1.875rem;
+          .tick {
+            stroke-dashoffset: -100;
+            stroke-dasharray: 1000;
+            transition: stroke-dashoffset $transitionDuration 0s ease-out;
+          }
+        }
+        input:checked ~ svg.check {
+          .tick {
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset $transitionDuration 0s ease-in;
+          }
+        }
+      }
+      &-date {
+        white-space: nowrap;
+        @include medium {
+          padding-right: 1.25rem;
+        }
+      }
+      &-size {
+        padding-right: 2rem;
+        justify-content: flex-end;
+        @include medium {
+          justify-content: flex-start;
+        }
+      }
+      &-name {
+        padding-right: 2.75rem;
+        @include medium {
+          padding-right: 1.25rem;
+        }
+        svg.pencil-icon {
+          flex-shrink: 0;
+          @include hoverSvg;
+          @include medium {
+            display: none;
+          }
+        }
+        &.isEditingName {
+          height: 100%;
+          .textarea-container {
+            display: flex;
+            position: relative;
+            width: 100%;
+            height: calc(100% + 0.625rem);
+            margin-top: -0.8125rem;
+            margin-left: -0.875rem;
+          }
+          svg.pencil-icon {
+            color: $pictonBlue;
+          }
+        }
+      }
+      &-cid {
+        padding-right: 2rem;
+        margin-top: -0.1rem;
+        justify-content: flex-start;
+        align-items: center;
+        .cid-truncate,
+        .cid-full {
+          @include monospace_Text;
+          word-break: break-all;
+          margin-right: 0.625rem;
+        }
+        @include medium {
+          justify-content: flex-start;
+          padding-right: 1.25rem;
+        }
+        svg {
+          @include hoverSvg;
+          @include medium {
+            display: none;
+          }
+        }
+      }
+      &-availability {
+        padding-right: 2rem;
+        @include medium {
+          padding-right: 1.25rem;
+        }
+      }
+      &-pin-status {
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.625rem;
+        @include medium {
+          gap: 0;
+        }
+      }
+      &-storage-providers {
+        justify-content: flex-start;
+        align-items: center;
+        padding-right: 2rem;
+        flex-wrap: wrap;
+        gap: 0.625rem;
+        @include medium {
+          gap: 0;
+        }
+
+        a[href*='filfox'] {
+          @include monospace_Text;
+        }
+
+        &-content {
+          button {
+            margin-top: 0.40625rem;
+            transition: color $transitionDuration;
+            &:hover {
+              color: $cyan;
+              transition: color $transitionDuration;
+            }
+            &:before {
+              content: '❯ ';
+              margin-right: 0.78125rem;
+              display: inline-block;
+              transform: rotate(270deg);
+              transition: transform $transitionDuration;
+            }
+          }
+          .content {
+            overflow: hidden;
+            max-height: 1250px;
+            @include monospace_Text;
+            transition: max-height $transitionDuration ease-in;
+          }
+          &.show-all {
+            .content {
+              max-height: 6.25rem;
+              transition: max-height $transitionDuration ease-out;
+              @include medium {
+                max-height: auto;
+              }
+            }
+            button {
+              &:before {
+                transform: rotate(90deg);
+                transition: transform $transitionDuration;
+              }
+            }
+          }
+        }
+
+        @include medium {
+          padding-right: 1.25rem;
+          flex-wrap: nowrap;
+          > span {
+            &:not(:last-child) {
+              margin-right: 0.375rem;
+              @include medium {
+                margin-right: 0;
+              }
+            }
+          }
+        }
+        > span {
+          flex-shrink: none;
+        }
+      }
+    }
+
+    &.storage-table-row-active {
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    // Header overrides
+    &.storage-table-row-header {
+      align-items: end;
+      height: auto;
+      background: transparent;
+      > span {
+        @include fontWeight_Semibold;
+      }
+      .file {
+        &-storage-providers {
+          padding-right: 2rem;
+          flex-direction: row;
+          flex-wrap: nowrap;
+        }
+        &-name {
+          align-items: end;
+        }
+        &-cid {
+          span {
+            font-family: $font_Primary, sans-serif;
+          }
+        }
+      }
+      @include medium {
+        display: none;
+      }
+    }
+    mark {
+      color: $white;
+    }
+    .highlight {
+      @include gradient_Background_PinkBlue;
+    }
+  }
+
+  &__header {
+    padding: 1 2.5rem;
+    flex-wrap: wrap;
+    align-items: end;
+    > div {
+      @include fontWeight_Semibold;
+    }
+
+    @include medium {
+      padding: 0;
+      justify-content: space-between;
+    }
+
+    .upload-button {
+      margin-left: auto;
+    }
+
+    // Title
+    .storage-table-title {
+      display: flex;
+      flex-direction: row;
+      .button {
+        @include fontSize_Atom;
+        transform: translateY(1px);
+        @include tiny {
+          button {
+            padding: 0.25rem 0.75rem;
+          }
+        }
+      }
+      @include medium {
+        padding-left: 1.75rem;
+        margin-right: initial;
+      }
+    }
+
+    .storage-table-search {
+      @include medium {
+        flex-basis: 100%;
+        order: 4;
+        margin-top: 0.625rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .storage-table-controls {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      align-items: center;
+      justify-content: flex-end;
+      grid-gap: 3rem;
+    }
+
+    .refresh {
+      @include label_5;
+      position: relative;
+      top: 0.125rem;
+      cursor: pointer;
+      @include medium {
+        margin-right: 3rem;
+        margin-left: auto;
+      }
+      svg {
+        transition: transform $transitionDuration;
+        color: $cyan;
+        margin-right: 0.8125rem;
+      }
+      span {
+        display: inline-block;
+        transition: transform $transitionDuration ease-in-out;
+      }
+      &:hover {
+        svg {
+          transform: rotate(90deg);
+          transition: transform $transitionDuration;
+        }
+        span {
+          // transform: scale(1.1);
+          color: $cyan;
+          transition: transform $transitionDuration ease-in-out;
+        }
+      }
+    }
+
+    .Sortable {
+      @include medium {
+        padding-right: 1.25rem;
+      }
+    }
+  }
+
+  &__mobile-actions {
+    display: flex;
+    justify-content: right;
+    padding: 0.5rem 0.75rem 0.5rem 1.5rem;
+  }
+
+  &__mobile-delete {
+    padding-right: 1.25rem;
+    width: 7.5rem;
+    flex-shrink: 0;
+  }
+}
+
+.delete {
+  @include fontWeight_Semibold;
+  color: $cyan;
+  transition: opacity $transitionDuration;
+  @include label_5;
+  &.disabled {
+    color: $gray600;
+  }
+}
+
+.cid-cell {
+  > a {
+    @include monospace_Text;
+    word-break: break-all;
+    margin-right: 0.625rem;
+  }
+  .copy-icon {
+    border-radius: 5px;
+    padding: 5px;
+    > svg {
+      transition: transform 300ms ease-in-out;
+      overflow: visible;
+    }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      > svg {
+        transform: scale(1.1);
+      }
+    }
+    &:active {
+      color: #3effe9;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+// safari hack since it does not support negative stroke-dashoffset
+// transition is opacity instead of tick drawing behaviour
+@include Safari7Plus('.storage-table-row .cell-select svg.check .tick') {
+  // unchecked
+  stroke-dashoffset: 1000;
+  opacity: 0;
+  transition: opacity $transitionDuration 0s ease-out;
+}
+@include Safari7Plus('.storage-table-row .cell-select input:checked ~ svg.check .tick') {
+  // checked
+  opacity: 1;
+  transition: opacity $transitionDuration 0s ease-in;
+}
+
+.file-name {
+  width: 100%;
+  &__container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  &__action-button-container {
+    padding-left: 0.5em;
+  }
+  &__action-buttons {
+    padding: 0.5em;
+    margin: 0;
+    width: 100%;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    &--save {
+      color: $pictonBlue;
+    }
+    &--save,
+    &--cancel {
+      padding: 0.5em 0;
+    }
+  }
+  &__textarea {
+    position: relative;
+    resize: none;
+    @include border_Background_Waterloo_White;
+    @include hoverInput;
+    padding: 0.8125rem 0 0.8125rem 0.8125rem;
+    height: calc(100% + 0.625rem);
+    width: 100%;
+    &--error {
+      border-color: rgb(192, 111, 111);
+    }
+  }
+  &__textarea-hint-text--error {
+    color: rgb(192, 111, 111);
+  }
+}

@@ -6,7 +6,8 @@ import {
   normalizePins,
   normalizeDeals,
   normalizePsaPinRequest,
-  parseTextToNumber
+  parseTextToNumber,
+  safeNumber
 } from './utils.js'
 import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
 
@@ -106,29 +107,22 @@ export class DBClient {
   async upsertUser (user) {
     /** @type {{ data: definitions['user'], error: PostgrestError }} */
     const { data, error } = await this._client
-      .from('user')
-      .upsert(
-        {
-          id: user.id,
-          name: user.name,
-          picture: user.picture,
-          email: user.email,
-          issuer: user.issuer,
-          github: user.github,
-          public_address: user.publicAddress
-        },
-        {
-          onConflict: 'issuer'
-        }
-      )
-      .single()
-
+      .rpc('upsert_user', {
+        _name: user.name,
+        _picture: user.picture ?? '',
+        _email: user.email,
+        _issuer: user.issuer,
+        _github: user.github ?? '',
+        _public_address: user.publicAddress
+      })
     if (error) {
       throw new DBError(error)
     }
-
+    const userData = data[0]
     return {
-      issuer: data.issuer
+      id: userData.id,
+      inserted: userData.inserted,
+      issuer: userData.issuer
     }
   }
 
@@ -323,19 +317,28 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').StorageUsedOutput>}
    */
   async getStorageUsed (userId) {
-    /** @type {{ data: { uploaded: string, psa_pinned: string, total: string }, error: PostgrestError }} */
-    const { data, error } = await this._client
-      .rpc('user_used_storage', { query_user_id: userId })
-      .single()
+    const [userUploadedResponse, psaPinnedResponse] = await Promise.all([
+      this._client
+        .rpc('user_uploaded_storage', { query_user_id: userId })
+        .single(),
+      this._client
+        .rpc('user_psa_storage', { query_user_id: userId })
+        .single()
+    ])
 
-    if (error) {
-      throw new DBError(error)
+    if (userUploadedResponse.error) {
+      throw new DBError(userUploadedResponse.error)
+    } else if (psaPinnedResponse.error) {
+      throw new DBError(psaPinnedResponse.error)
     }
 
+    const uploaded = parseTextToNumber(userUploadedResponse.data)
+    const psaPinned = parseTextToNumber(psaPinnedResponse.data)
+
     return {
-      uploaded: parseTextToNumber(data.uploaded),
-      psaPinned: parseTextToNumber(data.psa_pinned),
-      total: parseTextToNumber(data.total)
+      uploaded,
+      psaPinned,
+      total: safeNumber(uploaded + psaPinned)
     }
   }
 
@@ -1011,13 +1014,15 @@ export class DBClient {
   /**
    * List auth keys of a given user.
    *
-   * @param {number} userId
+   * @param {string} userId
+   * @param {import('./db-client-types').ListKeysOptions} opts
    * @return {Promise<Array<import('./db-client-types').AuthKeyItemOutput>>}
    */
-  async listKeys (userId) {
+  async listKeys (userId, { includeDeleted } = { includeDeleted: false }) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
     const { data, error } = await this._client.rpc('user_auth_keys_list', {
-      query_user_id: userId
+      query_user_id: userId,
+      include_deleted: includeDeleted
     })
 
     if (error) {
@@ -1165,6 +1170,10 @@ export class DBClient {
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
+    /**
+     * @type {Array.<string>|undefined}
+     */
+    let statuses
 
     let query = this._client
       .from(psaPinRequestTableName)
@@ -1187,12 +1196,17 @@ export class DBClient {
       query = query.range(rangeFrom, rangeTo - 1)
     }
 
-    if (!opts.cid && !opts.name && !opts.statuses) {
-      query = query.eq('content.pins.status', 'Pinned')
+    // If not specified we default to pinned only if no other filters are provided.
+    // While slightly inconsistent, that's the current expectation.
+    // This is being discussed in https://github.com/ipfs-shipyard/pinning-service-compliance/issues/245
+    if (!opts.cid && !opts.name && !opts.meta && !opts.statuses) {
+      statuses = ['Pinned']
+    } else {
+      statuses = opts.statuses
     }
 
-    if (opts.statuses) {
-      query = query.in('content.pins.status', opts.statuses)
+    if (statuses) {
+      query = query.in('content.pins.status', statuses)
     }
 
     if (opts.cid) {
@@ -1251,9 +1265,9 @@ export class DBClient {
    * Delete a user PA pin request.
    *
    * @param {number} requestId
-   * @param {string} authKey
+   * @param {string[]} authKeys
    */
-  async deletePsaPinRequest (requestId, authKey) {
+  async deletePsaPinRequest (requestId, authKeys) {
     const date = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
@@ -1262,7 +1276,8 @@ export class DBClient {
         deleted_at: date,
         updated_at: date
       })
-      .match({ auth_key_id: authKey, id: requestId })
+      .match({ id: requestId })
+      .in('auth_key_id', authKeys)
       .filter('deleted_at', 'is', null)
       .single()
 
@@ -1273,5 +1288,71 @@ export class DBClient {
     return {
       _id: data.id
     }
+  }
+
+  /**
+   * Set the customerId that corresponds to a particular userId.
+   * The Customer ID may be a stripe.com customer id (not a foreign key within this db)
+   * @param {string} userId
+   * @param {string} customerId
+   */
+  async upsertUserCustomer (userId, customerId) {
+    const { data, error } = await this._client
+      .from('user_customer')
+      .upsert(
+        {
+          user_id: userId,
+          customer_id: customerId
+        },
+        {
+          onConflict: 'user_id'
+        }
+      )
+      .single()
+    if (error) {
+      throw new DBError(error)
+    }
+    return {
+      _id: data.id
+    }
+  }
+
+  /**
+   * @param {string} userId
+   * @param {import('./db-client-types').AgreementKind} agreement
+   * @returns {Promise<void>}
+   */
+  async createUserAgreement (userId, agreement) {
+    const { error } = await this._client
+      .from('agreement')
+      .insert({
+        user_id: userId,
+        agreement
+      })
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+  }
+
+  /**
+   * Get the Customer for a user
+   * @param {string} userId
+   * @returns {null|{ id: string }} customer
+   */
+  async getUserCustomer (userId) {
+    const { data, error } = await this._client
+      .from('user_customer')
+      .select(['customer_id'].join(','))
+      .eq('user_id', userId)
+    if (error) {
+      throw new DBError(error)
+    }
+    if (Array.isArray(data) && data.length === 0) {
+      return null
+    }
+    const customer = { id: data[0].customer_id }
+    return customer
   }
 }

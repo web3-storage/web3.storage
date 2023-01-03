@@ -3,7 +3,6 @@ import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, PinningServiceApiError } from './errors.js'
 import {
-  INVALID_REPLACE,
   INVALID_REQUEST_ID,
   PINNING_FAILED,
   REQUIRED_REQUEST_ID,
@@ -188,7 +187,7 @@ export async function pinsGet (request, env, ctx) {
 /**
  * Transform a PinRequest into a PinStatus
  *
- * @param { Object } pinRequest
+ * @param { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } pinRequest
  * @returns { PsaPinStatusResponse }
  */
 export function toPinStatusResponse (pinRequest) {
@@ -198,9 +197,10 @@ export function toPinStatusResponse (pinRequest) {
     created: pinRequest.created,
     pin: {
       cid: pinRequest.sourceCid,
-      ...pinRequest
+      ...pinRequest.name && { name: pinRequest.name },
+      ...pinRequest.origins && { origins: pinRequest.origins },
+      ...pinRequest.meta && { meta: pinRequest.meta }
     },
-    // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []
   }
 }
@@ -226,7 +226,7 @@ export async function pinDelete (request, env, ctx) {
 
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.
-    await env.db.deletePsaPinRequest(requestId, authToken._id)
+    await env.db.deletePsaPinRequest(requestId, [authToken._id])
   } catch (e) {
     console.error(e)
     throw new PSAErrorResourceNotFound()
@@ -244,16 +244,10 @@ export async function pinDelete (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 async function replacePin (normalizedCid, newPinData, requestId, authTokenId, env, ctx) {
-  let existingPinRequest
   try {
-    existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
+    await env.db.getPsaPinRequest(authTokenId, requestId)
   } catch (e) {
     throw new PSAErrorResourceNotFound()
-  }
-
-  const existingCid = existingPinRequest.sourceCid
-  if (newPinData.cid === existingCid) {
-    throw new PSAErrorInvalidData(INVALID_REPLACE)
   }
 
   let pinStatus
@@ -265,7 +259,7 @@ async function replacePin (normalizedCid, newPinData, requestId, authTokenId, en
   }
 
   try {
-    await env.db.deletePsaPinRequest(requestId, authTokenId)
+    await env.db.deletePsaPinRequest(requestId, [authTokenId])
   } catch (e) {
     console.error(e)
     throw new PSAErrorDB()

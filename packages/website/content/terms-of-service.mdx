@@ -1,33 +1,98 @@
-# [Terms of service](#terms-of-service)
+# **[Terms of service](https://web3.storage/terms/#terms-of-service)**
 
-The following terms and conditions govern all use of the Web3.Storage website (“Web3.Storage” or the “Website”) and all content, services and products available at or through the Website. The Website is offered subject to your acceptance without modification of all of the terms and conditions contained herein. As all data uploaded to Web3.Storage will be stored on IPFS, this Website incorporates the [Terms of Service of IPFS.io](https://discuss.ipfs.io/tos) and [Privacy Policy of IPFS.io](https://discuss.ipfs.io/privacy).
+The following terms and conditions govern all use of the web3.storage website (“web3.storage” or the “Website”), the w3link/w3s.link gateway (“Gateway”) and all content, services and products available at or through the Website or Gateway (collectively, “Services”). The Services are offered subject to your acceptance without modification of all of the terms and conditions contained herein. As all data uploaded to web3.storage will be available via IPFS, the Services are also subject to the [Terms of Service of IPFS.io](https://discuss.ipfs.io/tos) and [Privacy Policy of IPFS.io](https://discuss.ipfs.io/privacy).
 
-If you do not agree to all the terms and conditions of this agreement, then you may not access the Website or use any of its services.
+If you do not agree to all the terms and conditions of this agreement (“Agreement” or “TOS”), then you may not access the Website or use any of the Services.
 
-Protocol Labs, Inc. (“Protocol Labs,” “we,” “us”) may make changes to this Agreement and pricing from time to time. If you do not agree to these revisions, you may stop using the Website.
+Nitro Data LLC (“we,” “us”) may make changes to this Agreement and pricing from time to time. If you do not agree to these revisions, you may stop using the Services.
 
-#### [Storage term](#storage-term)
 
-Data stored via the Website will be stored on IPFS, and on Filecoin until the expiry of the respective deals (see “Filecoin deals” below for details).
+#### **[Storage term](https://web3.storage/terms/#storage-term)**
 
-Protocol Labs, Inc. reserves the right to terminate the Website at its sole discretion or to transfer operation of the Website to a third party or smart contract. Prior to termination or transfer, Protocol Labs, Inc. will provide 90 days’ notice to users via email to allow users enough time to make arrangements if any (e.g. remote pinning to their own IPFS node, remote pinning to another service, or preparing to manage the renewal of their Filecoin deals on their own).
+Data stored via the Services will be available via IPFS and stored on Filecoin until the expiry of the respective deals (see “Filecoin deals” below for details).
 
-In rare situations where exceptionally high read volume has an adverse impact on other users’ service levels, we reserve the right to block access to those CIDs. We will attempt to give notice to users whose uploaded CIDs are negatively impacting service levels before blocking access to CIDs.  
+We reserve the right to terminate the Services at our sole discretion or to transfer operation of the Services to a third party or smart contract. Prior to termination or transfer, we will provide 90 days’ notice to users via email to allow users enough time to make arrangements if any (e.g. remote pinning to their own IPFS node, remote pinning to another service, or preparing to manage the renewal of their Filecoin deals on their own).
 
-All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Users should not store any private or sensitive information in an unencrypted form using Web3.Storage. Further, deleting files from Web3.Storage via the site's Files page or API will remove them from the file listing for a user's account, but nodes on the IPFS network may retain copies of the data indefinitely. Users should not use Web3.Storage for data that may need to be permanently deleted in the future.
+In rare situations where exceptionally high read/write volume and/or excessive number of uploaded blocks has an adverse impact on other users’ service levels, we reserve the right to block access to those CIDs and/or block uploads without notice. To the extent possible, we will attempt to give notice to users whose uploaded CIDs are negatively impacting service levels before blocking access to CIDs.
 
-#### [Data limits](#data-limits)
+All data uploaded to web3.storage is available to anyone who requests it using the correct CID. **Users should not store any private or sensitive information in an unencrypted form using web3.storage.** Further, deleting files from web3.storage via the site's Files page or API will remove them from the file listing for a user's account, but nodes on the IPFS network may retain copies of the data indefinitely. **Users should not use web3.storage to store data that may need to be permanently deleted in the future.**
 
-Web3.Storage supports uploads up to 31GiB in size per request, and currently has a cap of 1TiB of storage per account.
 
-#### [Filecoin deals](#filecoin-deals)
+#### **[Data limits](https://web3.storage/terms/#data-limits)**
 
-Data stored via the Website is guaranteed to be available in IPFS upon completion of a successful upload. Please note that once replication in IPFS is complete (at a minimum of 3 copies being stored), data is also pushed to be stored on Filecoin. Content is batched into deals on Filecoin and it is expected that there may be a delay between the content being uploaded to the Website and being stored on Filecoin through a deal. You may query the status of any CID uploaded through Web3.Storage using the Status API (updated every five minutes) for the latest information regarding an individual CID's pin status or deal status.
+web3.storage supports upload requests up to the per-request size limit described in the [web3.storage API documentation](https://web3.storage/docs/reference/http-api/). Account data caps are described in the Tier Overview page ([https://web3.storage/account/payment/](https://web3.storage/account/payment/)).  
 
-For reference, the following parameters and strategies are used to ensure highly redundant storage on the Filecoin network:
 
-- Deals with storage providers are set to last 18 months; deal renewals are managed by Web3.Storage.
+#### **[Filecoin deals](https://web3.storage/terms/#filecoin-deals)**
 
-- Each piece of content is stored with a minimum of 5 storage providers, typically exceeding this minimum (the specific list of storage providers being provided via the Status API).
+Data stored via the Services will be available and persisted via IPFS upon completion of a successful upload. Data stored with web3.storage is also pushed to storage on Filecoin, where the data is batched into deals. There may be a delay between content being uploaded via the Services and being stored on Filecoin through a deal. You may query the status of any CID uploaded through web3.storage using the Status API (updated every five minutes) for the latest information regarding an individual CID's pin status or deal status.
 
-- Each piece of content is stored with a minimum of 5 storage providers, typically exceeding this minimum (the specific list of storage providers being provided via the Status API).
+web3.storage will manage backup storage deals and deal renewals to ensure highly redundant storage on the Filecoin network.
+
+
+#### **Paid Accounts**
+
+<u>Billing.  </u>
+
+You can increase your storage limit and add paid features to your account by signing up for a paid subscription plan (“Paid Plan”). To do so, you will need to provide us with one or more Payment Methods. "Payment Method" means a current, valid method of payment, which may involve a third party or payment processing vendor.  
+
+You agree that you’ll pay the amounts set forth in [https://web3.storage/account/payment/](https://web3.storage/account/payment/) for your chosen tier (“Subscription Charge”) plus any charges for additional usage beyond the storage limit of your selected tier during the previous month (“Overages”) (collectively, “Subscription Charge” and “Overages” are referred to as (the “Fees”) for each billing cycle.
+
+You authorize us to charge any Payment Method associated with your account in case your primary Payment Method is declined or no longer available to us for payment of Fees you owe us. You remain responsible for any uncollected Fees. If a payment is not successfully settled, due to expiration, insufficient funds, or otherwise, and you do not cancel your account, we may suspend your access to the Paid Plan until we have successfully charged a valid Payment Method. For some Payment Methods, the issuer may charge you additional fees, such as foreign transaction fees or other fees relating to the processing of your Payment Method. 
+
+<u>Cancellation.  </u>
+
+You can cancel your Paid Plan at any time, and you will be able to upload new Data to web3.storage through the end of your billing period. Payments are nonrefundable and there are no refunds or credits for partially used membership periods. After cancellation, data uploaded via a Paid Plan may not be available through our hosted IPFS infrastructure after the end of your billing period.
+
+<u>Plan Adjustments.  </u>
+
+You may change your chosen tier at any point. Upgrades in tier (Free → Lite → Expert → Pro) will be effective upon receipt of payment for the new Subscription Charge. Downgrades in tier (Pro → Expert → Lite → Free) will be effective immediately. Both upgrades and downgrades in tier will be backdated to the start of your current billing cycle. After a downgrade becomes effective, you may be charged an Overage fee until you remove stored data from your account. Moreover, we reserve the right to delete previously-uploaded data beyond your downgraded monthly storage cap from our hosted IPFS infrastructure. By selecting your tier, you consent to the limits associated with your chosen tier (as set forth in [https://web3.storage/account/payment/](https://web3.storage/account/payment/)); you also consent to the Overages described in this Agreement. 
+
+<u>Changes.  </u>
+
+We reserve the right to change our Paid Plans or adjust pricing for our service or any components thereof in any manner and at any time, in our sole discretion and without notice. If we adjust the pricing of your Paid Plan, we will provide you with at least fourteen (14) days’ notice before these changes take effect. By continuing to use the Services, you agree to terms of this Agreement (including any updated terms). 
+
+<u>Taxes.  </u>
+
+The Fees do not include any taxes, levies, duties, or similar governmental assessments, including value-added, sales, use, or withholding taxes assessable by any domestic or foreign jurisdiction (“Taxes”).  You agree that you’re responsible for any applicable Taxes, and that you will provide us with any applicable tax identification information that we may require by law to ensure our compliance with applicable tax regulations and authorities in applicable jurisdictions.
+
+<u>Overages. </u>
+
+You agree to pay the following Overages fees for storage amounts exceeding your selected tier (for more information on tiers, see [https://web3.storage/account/payment/](https://web3.storage/account/payment/)). Overages will be billed to you at the beginning of your next billing cycle.
+
+
+#### **Acceptable Use**
+
+You are entirely responsible for all data you upload or cause to be uploaded using the Services (“Content”) - and you’re also responsible for any harm resulting from that Content.  For your own protection and the protection of our network & community, you may not use the Services for activities such as:  
+
+<u>Scams, Spam, and Server Misuse:</u>
+
+
+
+* Posting or distributing Content that contains any viruses, malware, worms, Trojan horses, malicious code, or other harmful or destructive Content;
+* Tricking users into revealing sensitive information to an unauthorized party (e.g., phishing) or misleading users as to the source of Content (e.g., spoofing);
+* Naming your Content in a manner that misleads readers into thinking you are another person or company;
+* Posting or distributing spam, including Content advertised via unwanted electronic messages on newsgroups, email lists, blogs, websites, and other unsolicited promotional materials;
+* Unethical or unwanted commercial Content designed to drive traffic to third party sites or boost the search engine rankings of third party sites;
+* Interfering with or disrupting the Services, or creating an undue burden on the Services or the networks or services connected to the Services, including (a) activity impacting the service level of other web3.storage users or (b) via a distributed denial of service attack.
+
+<u>Infringement of Others’ Rights:</u>
+
+
+
+* Infringing the proprietary rights, including but not limited to the copyright, patent, trademark or trade secret rights, of any third party;
+* Failing to comply with any third-party licenses relating to Content or failing to complete all necessary steps to pass any required license terms to end users;
+* Violating the privacy or publicity rights of any third party.
+
+<u>Other Restricted Purposes:</u>
+
+
+
+* Using the Services for solicitation of unlawful services or posting obscene material that is unlawful under applicable law;
+* Inciting violence or threatening others, directly or indirectly;
+* Posting or distributing child sexual abuse material or Content encouraging or inciting terrorism;
+* Using the Services in a way that is reasonably likely to cause or increase the risk of harm to any person(s) or group(s).
+
+We have the right (though not the obligation) to, in our sole discretion (i) refuse or remove any Content; (ii) block uploads, or (iii) temporarily or permanently suspend access to your account if, in our reasonable opinion, there has been a breach of this TOS in any way for any reason. We will have no obligation to provide any compensation or a refund of any amounts previously paid.
+
+In order to use the Services you must be 13 years of age or older. If you are 13 or older but under 18 years of age, you must have your parent or legal guardian’s permission to use web3.storage and to accept the terms of this TOS.

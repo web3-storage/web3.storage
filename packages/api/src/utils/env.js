@@ -22,7 +22,7 @@ export function maybeJsonParseable (value) {
 }
 
 /**
- * @param {Record<string,string>} env
+ * @param {Record<string,any>} env
  * @param {string} [varName] - environment variable name to use, defaults to NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED
  * @returns {boolean} whether magic.link testMode should be enabled
  */

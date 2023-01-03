@@ -62,13 +62,6 @@
     "copyright": {
       "left": {
         "text": "2022 Protocol Labs"
-      },
-      "right": {
-        "text": "Want more free storage?",
-        "link": {
-          "text": "Submit a request",
-          "url": "https://web3.storage/account"
-        }
       }
     }
   }

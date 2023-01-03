@@ -1,11 +1,11 @@
 ---
 title: Content addressing
-description: A conceptual overview of content-based addressing for storing and locating files on a decentralized network with Web3.storage.
+description: A conceptual overview of content-based addressing for storing and locating files on a decentralized network with web3.storage.
 ---
 
 # Content addressing in brief
 
-Web3.Storage's free, decentralized file storage relies on _content addressing_ to find, reference, and retrieve your files on the network. Content addressing is a technique for organizing and locating data in a system in which **the key used to locate content is derived from the content itself, rather than its location.** While you don't need to understand content addressing to be able to incorporate Web3.Storage in your apps and services, if you're curious about what's going on under the hood, read on.
+web3.storage's decentralized file storage relies on _content addressing_ to find, reference, and retrieve your files on the network. Content addressing is a technique for organizing and locating data in a system in which **the key used to locate content is derived from the content itself, rather than its location.** While you don't need to understand content addressing to be able to incorporate web3.storage in your apps and services, if you're curious about what's going on under the hood, read on.
 
 ## The basic problem
 
@@ -15,11 +15,11 @@ The problem is, components of an address like `web3.storage/docs/concepts/conten
 
 ## CIDs: Location-independent, globally unique keys
 
-However, thanks to content addressing, link rot may become a thing of the past. A content-addressed system such as Web3.Storage is like our key-value-based DNS, with one significant difference: You no longer get to choose the keys. Instead, the keys are derived directly from the file contents using an algorithm that will always generate the same key for the same content.
+However, thanks to content addressing, link rot may become a thing of the past. A content-addressed system such as web3.storage is like our key-value-based DNS, with one significant difference: You no longer get to choose the keys. Instead, the keys are derived directly from the file contents using an algorithm that will always generate the same key for the same content.
 
 As a result, we no longer need to coordinate among multiple writers to our store by splitting the key space into domains and locations on file systems. There's now one universal domain: the domain of all possible values. If multiple people add the same value, there's no collision in the key space. They just each get the same key back from the `put` method, with one additional benefit: The availability and performance of retrievals on the network is increased. This gives our keys _location independence_. There's one other important result: Each individual key is a unique signature for the data itself, ensuring _verifiability_ that the key matches the content and the content hasn't been altered.
 
-This type of key is called a _content identifier (CID)_. Once you know the CID of a file on the Web3.Storage network, you have all you need for the network to locate and return the file back to you. Here's a JavaScript example of a complete storage and retrieval round trip using Web3.Storage:
+This type of key is called a _content identifier (CID)_. Once you know the CID of a file on the web3.storage network, you have all you need for the network to locate and return the file back to you. Here's a JavaScript example of a complete storage and retrieval round trip using web3.storage:
 
 ```javascript
 // get uploaded files from a form
@@ -36,13 +36,13 @@ for (const file of files) {
 }
 ```
 
-## Web3.Storage CIDs under the hood
+## web3.storage CIDs under the hood
 
-Web3.Storage uses CIDs to make its free, decentralized file storage work, with help from [IPFS](https://ipfs.io) and [Filecoin](https://filecoin.io/) for locating files and making sure they're always available.
+web3.storage uses CIDs to make its free, decentralized file storage work, with help from [IPFS](https://ipfs.io) and [Filecoin](https://filecoin.io/) for locating files and making sure they're always available.
 
-Content addressing is the basis of the peer-to-peer hypermedia protocol IPFS (the InterPlanetary File System), which Web3.Storage uses to locate files. When Web3.Storage stores your data on IPFS, it can be retrieved from any IPFS node that has a copy of that data. This can make data transfers more efficient and reduce the load on any single node. As each user fetches a piece of data, they keep a local copy around to help other users who might request it later.
+Content addressing is the basis of the peer-to-peer hypermedia protocol IPFS (the InterPlanetary File System), which web3.storage uses to locate files. When web3.storage stores your data on IPFS, it can be retrieved from any IPFS node that has a copy of that data. This can make data transfers more efficient and reduce the load on any single node. As each user fetches a piece of data, they keep a local copy around to help other users who might request it later.
 
-In addition to Web3.Storage making it easy to get your data onto the content-addressed IPFS network, it also provides long-term persistence for your files using the decentralized Filecoin storage network. The Filecoin network incentivizes participants to provide storage space for files on the network — for more details, see the [concept guide to decentralized storage](/docs/concepts/decentralized-storage/). **By combining IPFS and Filecoin storage into one easy-to-use service, Web3.Storage makes it simple to store, locate, and retrieve your files on the decentralized web.**
+In addition to web3.storage making it easy to get your data onto the content-addressed IPFS network, it also provides long-term persistence for your files using the decentralized Filecoin storage network. The Filecoin network incentivizes participants to provide storage space for files on the network. **By combining IPFS and Filecoin storage into one easy-to-use service, web3.storage makes it simple to store, locate, and retrieve your files on the decentralized web.**
 
 ## Summary
 

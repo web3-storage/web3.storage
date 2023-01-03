@@ -3,6 +3,14 @@
   text-align: center;
 }
 
+.message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cebcf4;
+  font-size: 14px;
+}
+
 .spinner-small {
   height: 0.625rem;
 }

@@ -49,7 +49,7 @@ const Dropdown = ({
   }, [queryParam, setQueryValue, setDropdownValue, isOpen, setIsOpen])
 
   useEffect(() => {
-    if(!currentItem || !currentItem.value) return
+    if (!currentItem || !currentItem.value) return
     const selectEl = selectElRef.current
     selectEl.value = currentItem.value
     onChange && onChange(currentItem.value)
@@ -59,30 +59,30 @@ const Dropdown = ({
     const selectEl = selectElRef.current
     const currentIndex = options.findIndex(option => option.value === selectEl.value)
 
-    if(event.key === 'Escape') {
+    if (event.key === 'Escape') {
       setIsOpen(false)
     }
-    if(event.key === 'Enter') {
+    if (event.key === 'Enter') {
       setCurrentItem(options[currentIndex].value)
     }
-    else if(event.key === 'ArrowUp') {
-      if(!isOpen)
+    else if (event.key === 'ArrowUp') {
+      if (!isOpen)
         setIsOpen(true)
-      else if(currentIndex > 0)
+      else if (currentIndex > 0)
         setCurrentItem(options[currentIndex - 1].value, false)
     }
-    else if(event.key === 'ArrowDown') {
-      if(!isOpen)
+    else if (event.key === 'ArrowDown') {
+      if (!isOpen)
         setIsOpen(true)
-      else if(currentIndex < options.length - 1)
+      else if (currentIndex < options.length - 1)
         setCurrentItem(options[currentIndex + 1].value, false)
     }
-    else if(event.key === 'ArrowLeft') {
-      if(currentIndex > 0)
+    else if (event.key === 'ArrowLeft') {
+      if (currentIndex > 0)
         setCurrentItem(options[currentIndex - 1].value)
     }
-    else if(event.key === 'ArrowRight') {
-      if(currentIndex < options.length - 1)
+    else if (event.key === 'ArrowRight') {
+      if (currentIndex < options.length - 1)
         setCurrentItem(options[currentIndex + 1].value)
     }
   }, [options, setIsOpen, setCurrentItem])
@@ -106,7 +106,7 @@ const Dropdown = ({
       </button>
 
       <div className="dropdownContent">
-        <div className={clsx('dropdownItemList')} role="listbox" tabIndex={-1}>
+        <div className={clsx('dropdownItemList')} role="listbox" aria-label='dropdown' tabIndex={-1}>
           {options.map((option) => (
             <div
               key={`item-${option.value}`}

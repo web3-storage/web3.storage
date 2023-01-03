@@ -2,67 +2,228 @@
  * @fileoverview Account Payment Settings
  */
 
-import { useState } from 'react';
+import { parse as queryParse } from 'querystring';
+
+import { useState, useEffect, useMemo } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+import Loading from '../../components/loading/loading.js';
+import PaymentCustomPlan from '../../components/account/paymentCustomPlan.js/paymentCustomPlan.js';
+import PaymentTable from '../../components/account/paymentTable.js/paymentTable.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
-import AccountPageData from '../../content/pages/app/account.json';
-// import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
-// import CurrentBillingPlanCard from '../../components/account/currentBillingPlanCard/currentBillingPlanCard.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
+import { earlyAdopterPlan, plans, plansEarly } from '../../components/contexts/plansContext';
+import { userBillingSettings } from '../../lib/api';
+import GeneralPageData from '../../content/pages/general.json';
+import constants from '../../lib/constants.js';
+
+/**
+ * @typedef {import('../../components/contexts/plansContext').Plan} Plan
+ * @typedef {import('../../components/contexts/plansContext').StorageSubscription} StorageSubscription
+ * @typedef {import('../../components/contexts/plansContext').StoragePrice} StoragePrice
+ * @typedef {import('../../components/contexts/plansContext').EarlyAdopterPlanId} EarlyAdopterPlanId
+ */
+
+/**
+ * @typedef {object} PaymentSettings
+ * @property {null|{id: string}} paymentMethod
+ * @property {object} subscription
+ * @property {StorageSubscription} subscription.storage
+ */
+
+/**
+ * @typedef {Object} PaymentMethodCard
+ * @property {string} brand
+ * @property {string} country
+ * @property {string} exp_month
+ * @property {string} exp_year
+ * @property {string} last4
+ */
+
+/**
+ * @typedef {Object} PaymentMethod
+ * @property {string} id
+ * @property {PaymentMethodCard} card
+ */
+
+function removePlanQueryParam() {
+  window.history.pushState({}, '', window.location.href.replace(/plan=[^&]+&?/, ''));
+}
 
 const PaymentSettingsPage = props => {
-  const { dashboard } = AccountPageData.page_content;
+  const planQueryParam = queryParse(window.location.search.substring(1))?.plan;
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
-  const stripePromise = loadStripe(props.stripeKey);
-  const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
+  const stripePromise = loadStripe(props.stripePublishableKey);
+  const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
+  const [, setIsFetchingPaymentSettings] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(/** @type {undefined|PaymentSettings} */ (undefined));
+  const [planSelection, setPlanSelection] = useState(/** @type {Plan|undefined} */ (undefined));
+  const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
+  // subcomponents that save a new plan can set this, which will trigger a re-fetch but the
+  // ui can optimistically show the new value while the refetch happens.
+  const [optimisticCurrentPlan, setOptimisticCurrentPlan] = useState(/** @type {Plan|undefined} */ (undefined));
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+
+  useEffect(() => {
+    if (planQueryParam) {
+      const desiredPlanFromQueryParam = plans.find(plan => plan.id === planQueryParam);
+      if (desiredPlanFromQueryParam) {
+        setPlanSelection(desiredPlanFromQueryParam);
+        setIsPaymentPlanModalOpen(true);
+      } else {
+        removePlanQueryParam();
+      }
+    }
+  }, [planQueryParam]);
+
+  // fetch payment settings whenever needed
+  useEffect(() => {
+    async function loadPaymentSettings() {
+      if (!needsFetchPaymentSettings) {
+        return;
+      }
+      setIsFetchingPaymentSettings(true);
+      setNeedsFetchPaymentSettings(false);
+      try {
+        setPaymentSettings(await userBillingSettings(constants.TERMS_OF_SERVICE_VERSION));
+        setOptimisticCurrentPlan(undefined); // no longer use previous optimistic value
+      } finally {
+        setIsFetchingPaymentSettings(false);
+      }
+    }
+    loadPaymentSettings();
+  }, [needsFetchPaymentSettings]);
+
+  // When storageSubscription is null, user sees a version of planList that contains 'Early Adopter' instead of 'free'
+  /** @type {Array<Plan>} */
+  const planList = useMemo(() => {
+    if (typeof paymentSettings === 'undefined') {
+      return plans;
+    }
+    const storageSubscription = paymentSettings.subscription.storage;
+    if (storageSubscription === null) {
+      return plansEarly;
+    }
+    return plans;
+  }, [paymentSettings]);
+
+  // whenever the optimisticCurrentPlan is set, enqueue a fetch of actual payment settings
+  useEffect(() => {
+    if (optimisticCurrentPlan) {
+      setNeedsFetchPaymentSettings(true);
+    }
+  }, [optimisticCurrentPlan]);
+
+  const currentPlan = useMemo(() => {
+    if (typeof optimisticCurrentPlan !== 'undefined') {
+      return optimisticCurrentPlan;
+    }
+    if (typeof paymentSettings === 'undefined') {
+      // haven't fetched paymentSettings yet.
+      return undefined;
+    }
+    const storageSubscription = paymentSettings.subscription.storage;
+    if (!storageSubscription) {
+      // user has no storage subscription, show early adopter plan
+      return earlyAdopterPlan;
+    }
+    return planList.find(plan => {
+      return plan.id === storageSubscription.price;
+    });
+  }, [planList, paymentSettings, optimisticCurrentPlan]);
+  const savedPaymentMethod = useMemo(() => {
+    return paymentSettings?.paymentMethod;
+  }, [paymentSettings]);
+
   return (
     <>
       <>
         <div className="page-container billing-container">
-          <h1 className="table-heading">{dashboard.heading}</h1>
+          <div className="">
+            <h1 className="table-heading">Payment</h1>
+          </div>
           <div className="billing-content">
-            <div className="billing-settings-layout">
-              {/* <div>
-                <div className="billing-plan-header">
-                  <h4>Your Current Plan</h4>
-                  <Button variant="dark" onClick={() => setIsPaymentPlanModalOpen(true)}>
-                    Change Plan
-                  </Button>
-                </div>
-                <CurrentBillingPlanCard />
-                <small>Billing Cycle: Aug 18 - Sept 18</small>
-              </div> */}
-              <div>
-                <h4>Add A Payment Method</h4>
-                <Elements stripe={stripePromise}>
-                  <ElementsConsumer>
-                    {({ stripe, elements }) => (
-                      <AddPaymentMethodForm
-                        // @ts-ignore
-                        stripe={stripe}
-                        elements={elements}
-                        setHasPaymentMethods={setHasPaymentMethods}
-                      />
-                    )}
-                  </ElementsConsumer>
-                </Elements>
+            {currentPlan?.id === 'free' && !savedPaymentMethod && (
+              <div className="add-billing-cta">
+                <p>
+                  You don&apos;t have a paid plan. Please add a credit/debit card and select a plan to prevent storage
+                  issues beyond your plan limits below.
+                </p>
               </div>
+            )}
+
+            {typeof paymentSettings === 'undefined' ? (
+              <Loading message="Fetching user info..." />
+            ) : (
+              <PaymentTable
+                plans={planList}
+                currentPlan={currentPlan}
+                setPlanSelection={setPlanSelection}
+                setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
+              />
+            )}
+
+            <div className="billing-settings-layout">
               <div>
-                <h4>Saved Payment Methods</h4>
-                {hasPaymentMethods ? <PaymentMethodCard /> : <p className="payments-none">No payment methods saved</p>}
+                <h4>Payment Methods</h4>
+                {savedPaymentMethod && !editingPaymentMethod ? (
+                  <>
+                    <PaymentMethodCard
+                      savedPaymentMethod={savedPaymentMethod}
+                      setEditingPaymentMethod={setEditingPaymentMethod}
+                    />
+                  </>
+                ) : (
+                  <div className="add-payment-method-cta">
+                    <Elements stripe={stripePromise}>
+                      <ElementsConsumer>
+                        {({ stripe, elements }) => {
+                          return (
+                            <AddPaymentMethodForm
+                              setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
+                              setEditingPaymentMethod={setEditingPaymentMethod}
+                              currentPlan={currentPlan?.id}
+                            />
+                          );
+                        }}
+                      </ElementsConsumer>
+                    </Elements>
+                  </div>
+                )}
+              </div>
+
+              <div className="payment-history-layout">
+                <h4>Enterprise user?</h4>
+                <PaymentCustomPlan />
               </div>
             </div>
-
-            {/* <div className="payment-history-layout">
-              <h3>Payment History &amp; Invoices</h3>
-              <PaymentHistoryTable />
-            </div> */}
           </div>
         </div>
-        <AccountPlansModal isOpen={isPaymentPlanModalOpen} onClose={() => setIsPaymentPlanModalOpen(false)} />
+        {planSelection && (
+          <>
+            <AccountPlansModal
+              isOpen={isPaymentPlanModalOpen}
+              onClose={() => {
+                setIsPaymentPlanModalOpen(false);
+                setHasAcceptedTerms(false);
+                if (planQueryParam) {
+                  removePlanQueryParam();
+                }
+              }}
+              planList={planList}
+              planSelection={planSelection}
+              setCurrentPlan={setOptimisticCurrentPlan}
+              savedPaymentMethod={savedPaymentMethod}
+              stripePromise={stripePromise}
+              setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
+              setEditingPaymentMethod={setEditingPaymentMethod}
+              setHasAcceptedTerms={setHasAcceptedTerms}
+              hasAcceptedTerms={hasAcceptedTerms}
+            />
+          </>
+        )}
       </>
     </>
   );
@@ -72,16 +233,20 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PK;
-  if (!stripeKey) {
-    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_TEST_PK`);
+  const crumbs = GeneralPageData.breadcrumbs;
+  const STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
+  const stripePublishableKey = process.env[STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME];
+  if (!stripePublishableKey) {
+    throw new Error(
+      `account payment page requires truthy stripePublishableKey, but got ${stripePublishableKey}. Did you set env.${STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME}?`
+    );
   }
   return {
     props: {
-      title: AccountPageData.seo.title,
-      isRestricted: true,
-      redirectTo: '/login/',
-      stripeKey: stripeKey ?? '',
+      title: 'Payment',
+      requiresAuth: true,
+      stripePublishableKey,
+      breadcrumbs: [crumbs.index, crumbs.payment],
     },
   };
 }

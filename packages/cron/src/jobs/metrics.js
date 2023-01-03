@@ -2,8 +2,7 @@ import debug from 'debug'
 import settle from 'p-settle'
 
 import {
-  UPLOAD_TYPES,
-  PIN_STATUSES
+  UPLOAD_TYPES
 } from '../../../api/src/constants.js'
 
 import { MAX_CONCURRENT_QUERIES } from '../lib/utils.js'
@@ -21,12 +20,6 @@ const SUM_CONTENT_DAG_SIZE = 'SELECT SUM(c.dag_size) AS "total" FROM content c'
 const COUNT_UPLOADS = 'SELECT COUNT(*) AS total FROM upload'
 
 const COUNT_UPLOADS_PER_TYPE = 'SELECT COUNT(*) AS total FROM upload WHERE type = $1'
-
-const COUNT_PINS =
-  'SELECT COUNT(*) AS total FROM pin'
-
-const COUNT_PINS_PER_STATUS =
-  'SELECT COUNT(*) AS total FROM pin WHERE status = $1'
 
 const COUNT_PIN_REQUESTS = 'SELECT COUNT(*) AS total FROM psa_pin_request'
 
@@ -52,12 +45,6 @@ export async function updateMetrics ({ roPg, rwPg }) {
     ...UPLOAD_TYPES.map((t) =>
       withTimeLog(`updateUploadsCount[${t}]`, () =>
         updateUploadsCount(roPg, rwPg, { type: t })
-      )
-    ),
-    withTimeLog('updatePinsCount', () => updatePinsCount(roPg, rwPg)),
-    ...PIN_STATUSES.map((s) =>
-      withTimeLog(`updatePinsCount[${s}]`, () =>
-        updatePinsCount(roPg, rwPg, { status: s })
       )
     ),
     withTimeLog('updatePinRequestsCount', () => updatePinRequestsCount(roPg, rwPg)),
@@ -115,34 +102,6 @@ async function updateUploadsCount (roPg, rwPg, { type } = {}) {
   if (!rows.length) throw new Error('no rows returned counting uploads')
   return rwPg.query(UPDATE_METRIC, [
     'uploads_total',
-    rows[0].total
-  ])
-}
-
-/**
- * @param {Client} roPg
- * @param {Client} rwPg
- * @param {Object} [options]
- * @param {string} [options.status]
- */
-async function updatePinsCount (roPg, rwPg, { status } = {}) {
-  if (status) {
-    const { rows } = await roPg.query(COUNT_PINS_PER_STATUS, [status])
-    if (!rows.length) {
-      throw new Error(`no rows returned counting ${status} pins`)
-    }
-    await rwPg.query(UPDATE_METRIC, [
-      `pins_${status.toLowerCase()}_total`,
-      rows[0].total
-    ])
-  }
-
-  const { rows } = await roPg.query(COUNT_PINS)
-  if (!rows.length) {
-    throw new Error('no rows returned counting pins')
-  }
-  await rwPg.query(UPDATE_METRIC, [
-    'pins_total',
     rows[0].total
   ])
 }

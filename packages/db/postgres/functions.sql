@@ -4,9 +4,12 @@ DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
 DROP FUNCTION IF EXISTS upsert_pins;
+DROP FUNCTION IF EXISTS user_uploaded_storage;
+DROP FUNCTION IF EXISTS user_psa_storage;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
+DROP FUNCTION IF EXISTS upsert_user;
 
 -- transform a JSON array property into an array of SQL text elements
 CREATE OR REPLACE FUNCTION json_arr_to_text_arr(_json json)
@@ -41,6 +44,61 @@ $$;
 
 -- Creates a content table, with relative pins and pin_requests
 CREATE OR REPLACE FUNCTION create_content(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  pin json;
+  pin_result_id BIGINT;
+  inserted_cid TEXT;
+BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
+  -- Add to content table if new
+  insert into content (cid, dag_size, updated_at, inserted_at)
+  values (data ->> 'content_cid',
+          (data ->> 'dag_size')::BIGINT,
+          (data ->> 'updated_at')::timestamptz,
+          (data ->> 'inserted_at')::timestamptz)
+    ON CONFLICT ( cid ) DO NOTHING
+  returning cid into inserted_cid;
+
+  -- Iterate over received pins
+  foreach pin in array json_arr_to_json_element_array(data -> 'pins')
+  loop
+        INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
+          SELECT * FROM (
+            SELECT pin -> 'location' ->> 'peer_id' AS peer_id,
+                   pin -> 'location' ->> 'peer_name' AS peer_name,
+                   pin -> 'location' ->> 'ipfs_peer_id' AS ipfs_peer_id,
+                   pin -> 'location' ->> 'region' AS region
+          ) AS tmp
+          WHERE NOT EXISTS (
+            SELECT 42 FROM pin_location WHERE peer_id = pin -> 'location' ->> 'peer_id'
+          );
+
+        INSERT INTO pin (content_cid, status, pin_location_id, updated_at, inserted_at)
+          SELECT data ->> 'content_cid' AS content_cid,
+                 (pin ->> 'status')::pin_status_type AS status,
+                 id AS pin_location_id,
+                 (data ->> 'updated_at')::timestamptz AS updated_at,
+                 (data ->> 'inserted_at')::timestamptz AS inserted_at
+            FROM pin_location
+           WHERE peer_id = pin -> 'location' ->> 'peer_id'
+        -- Force update on conflict to get result, otherwise needs a follow up select
+        ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
+          SET "updated_at" = (data ->> 'updated_at')::timestamptz
+        returning id into pin_result_id;
+  end loop;
+
+  return (inserted_cid);
+END
+$$;
+
+CREATE OR REPLACE FUNCTION create_content_with_pin_sync_request(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -162,7 +220,7 @@ BEGIN
   -- Set timeout as imposed by heroku
   SET LOCAL statement_timeout = '30s';
 
-  PERFORM create_content(data);
+  PERFORM create_content_with_pin_sync_request(data);
 
   insert into psa_pin_request (
                       auth_key_id,
@@ -232,6 +290,61 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION user_uploaded_storage(query_user_id BIGINT)
+  RETURNS text
+  LANGUAGE plpgsql
+AS
+$$
+DECLARE
+  total         BIGINT;
+BEGIN
+  total :=
+    (
+      SELECT COALESCE((
+        SELECT SUM(dag_size)
+        FROM (
+          SELECT  c.cid,
+                  c.dag_size
+          FROM upload u
+          JOIN content c ON c.cid = u.content_cid
+          WHERE u.user_id = query_user_id::BIGINT
+          AND u.deleted_at is null
+          GROUP BY c.cid,
+                  c.dag_size
+        ) AS uploaded_content), 0)
+    );
+  return (total)::TEXT;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION user_psa_storage(query_user_id BIGINT)
+  RETURNS text
+  LANGUAGE plpgsql
+AS
+$$
+DECLARE
+  total         BIGINT;
+BEGIN
+  total :=
+    (
+      SELECT COALESCE((
+        SELECT SUM(dag_size)
+        FROM (
+          SELECT  psa_pr.content_cid,
+                  c.dag_size
+          FROM psa_pin_request psa_pr
+          JOIN content c ON c.cid = psa_pr.content_cid
+          JOIN auth_key a ON a.id = psa_pr.auth_key_id
+          WHERE a.user_id = query_user_id::BIGINT
+          AND psa_pr.deleted_at is null
+          GROUP BY psa_pr.content_cid,
+                  c.dag_size
+        ) AS pinned_content), 0)
+    );
+  return (total)::TEXT;
+END
+$$;
+
 CREATE TYPE stored_bytes AS (uploaded TEXT, psa_pinned TEXT, total TEXT);
 
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT)
@@ -241,47 +354,10 @@ AS
 $$
 DECLARE
   used_storage  stored_bytes;
-  uploaded      BIGINT;
-  psa_pinned    BIGINT;
+  uploaded      BIGINT := (user_uploaded_storage(query_user_id))::BIGINT;
+  psa_pinned    BIGINT := (user_psa_storage(query_user_id))::BIGINT;
   total         BIGINT;
 BEGIN
-  uploaded :=
-    (
-      SELECT COALESCE((
-        SELECT SUM(dag_size)
-        FROM (
-          SELECT  c.cid,
-                  c.dag_size
-          FROM upload u
-          JOIN content c ON c.cid = u.content_cid
-          JOIN pin p ON p.content_cid = u.content_cid
-          WHERE u.user_id = query_user_id::BIGINT
-          AND u.deleted_at is null
-          AND p.status = 'Pinned'
-          GROUP BY c.cid,
-                  c.dag_size
-        ) AS uploaded_content), 0)
-    );
-
-  psa_pinned :=
-    (
-      SELECT COALESCE((
-        SELECT SUM(dag_size)
-        FROM (
-          SELECT  psa_pr.content_cid,
-                  c.dag_size
-          FROM psa_pin_request psa_pr
-          JOIN content c ON c.cid = psa_pr.content_cid
-          JOIN pin p ON p.content_cid = psa_pr.content_cid
-          JOIN auth_key a ON a.id = psa_pr.auth_key_id
-          WHERE a.user_id = query_user_id::BIGINT
-          AND psa_pr.deleted_at is null
-          AND p.status = 'Pinned'
-          GROUP BY psa_pr.content_cid,
-                  c.dag_size
-        ) AS pinned_content), 0)
-    );
-
   total := uploaded + psa_pinned;
 
   SELECT  uploaded::TEXT,
@@ -363,7 +439,7 @@ BEGIN
 END
 $$;
 
-CREATE OR REPLACE FUNCTION user_auth_keys_list(query_user_id BIGINT)
+CREATE OR REPLACE FUNCTION user_auth_keys_list(query_user_id BIGINT, include_deleted BOOLEAN default false)
   RETURNS TABLE
           (
               "id"                text,
@@ -381,7 +457,8 @@ SELECT (ak.id)::TEXT AS id,
        ak.inserted_at AS created,
        EXISTS(SELECT 42 FROM upload u WHERE u.auth_key_id = ak.id) AS has_uploads
   FROM auth_key ak
- WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
+ WHERE ak.user_id = query_user_id AND 
+  (include_deleted OR ak.deleted_at IS NULL)
 $$;
 
 CREATE OR REPLACE FUNCTION find_deals_by_content_cids(cids text[])
@@ -422,4 +499,38 @@ FROM cargo.aggregate_entries ae
          LEFT JOIN cargo.deals de USING (aggregate_cid)
 WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
+$$;
+
+
+-- a custom UPSERT operation for user account, so that we can distinguish between
+-- newly inserted users and updated ones.
+CREATE OR REPLACE FUNCTION upsert_user(_name TEXT, _picture TEXT, _email TEXT, _issuer TEXT, _github TEXT, _public_address TEXT)
+RETURNS TABLE (
+  "id" TEXT,
+  "issuer" TEXT,
+  "inserted" BOOLEAN
+)
+LANGUAGE plpgsql
+AS
+$$
+#variable_conflict use_column
+DECLARE
+  inserted BOOLEAN;
+
+BEGIN
+  SELECT (COUNT(id) = 0) into inserted FROM public.user WHERE issuer = _issuer;
+
+  RETURN QUERY
+  INSERT INTO public.user AS u (name, picture, email, issuer, github, public_address) 
+  VALUES (_name, _picture, _email, _issuer, _github, _public_address)
+  ON CONFLICT (issuer) DO UPDATE
+  SET 
+    name = EXCLUDED.name,
+    picture = EXCLUDED.picture,
+    email = EXCLUDED.email,
+    github = EXCLUDED.github,
+    public_address = EXCLUDED.public_address
+  RETURNING u.id::TEXT, u.issuer, inserted;
+
+END
 $$;
