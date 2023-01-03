@@ -182,6 +182,11 @@ BEGIN
 
   returning id into inserted_pin_request_id;
 
+  -- Create a Pin Sync Request
+  INSERT INTO pin_sync_request (pin_id, inserted_at)
+  VALUES (data ->> 'source_cid', (data ->> 'inserted_at')::TIMESTAMPTZ)
+  ON CONFLICT (pin_id) DO NOTHING;
+
 -- TODO - Validate and use UUID type
   return (inserted_pin_request_id)::TEXT;
 END
