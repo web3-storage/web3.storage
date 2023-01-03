@@ -164,7 +164,91 @@ Now that you've registered a space, you're ready to upload files!
 </TabItem>
 
 <TabItem value='web' label='Web'>
-Coming soon!
+
+To create and register a space using w3ui, import the `useKeyring` hook from the `@w3ui/react-keyring` package.
+
+The `useKeyring` hook provides access to the current authentication state and functions to create and register spaces.
+
+The example below creates a `W3Auth` React component that will show a form to register an email address.
+
+In the `handleRegisterSubmit` callback, we call the `createSpace` and `registerSpace` functions returned by the `useKeyring` hook.
+
+Once the space is registered, the uploader component will automatically use it when uploading files.
+
+```js
+import React, { useEffect, useState } from 'react';
+import { useKeyring } from '@w3ui/react-keyring';
+
+export default function W3Auth() {
+  const [{ space }, { loadAgent, unloadAgent, createSpace, registerSpace, cancelRegisterSpace }] = useKeyring();
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    loadAgent();
+  }, []); // load the agent - once.
+
+  if (space?.registered()) {
+    return (
+      <div>
+        <h1>Welcome!</h1>
+        <p>You are logged in!!</p>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            unloadAgent();
+          }}
+        >
+          <button type="submit">Sign Out</button>
+        </form>
+      </div>
+    );
+  }
+
+  if (submitted) {
+    return (
+      <div>
+        <h1>Verify your email address!</h1>
+        <p>Click the link in the email we sent to {email} to sign in.</p>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            cancelRegisterSpace();
+          }}
+        >
+          <button type="submit">Cancel</button>
+        </form>
+      </div>
+    );
+  }
+
+  const handleRegisterSubmit = async e => {
+    e.preventDefault();
+    setSubmitted(true);
+    try {
+      await createSpace();
+      await registerSpace(email);
+    } catch (err) {
+      throw new Error('failed to register', { cause: err });
+    } finally {
+      setSubmitted(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleRegisterSubmit}>
+      <div>
+        <label htmlFor="email">Email address:</label>
+        <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+      </div>
+      <button type="submit" disabled={submitted}>
+        Register
+      </button>
+    </form>
+  );
+}
+```
+
 </TabItem>
 </Tabs>
 
@@ -223,6 +307,50 @@ In the example above, `directoryCid` resolves to an IPFS directory with the foll
 </TabItem>
 
 <TabItem value='web' label='Web'>
+
+The `useUploader` hook from the `@w3ui/react-uploader` package provides an API for uploading files and directories to web3.storage.
+
+In the example below, the `W3Upload` component renders a simple file input form and calls the `uploadFile` method on the `uploader` object returned by the `useUploader` hook.
+
+```js
+import React, { useState } from 'react';
+import { useUploader } from '@w3ui/react-uploader';
+
+export default function W3Upload() {
+  const [, uploader] = useUploader();
+  const [file, setFile] = useState(null);
+  const [dataCid, setDataCid] = useState('');
+
+  const handleUploadSubmit = async e => {
+    e.preventDefault();
+    const cid = await uploader.uploadFile(file);
+    setDataCid(cid);
+  };
+
+  if (dataCid) {
+    return (
+      <div>
+        <h1>Done!</h1>
+        <p>{dataCid.toString()}</p>
+        <p>
+          <a href={`https://${dataCid}.ipfs.w3s.link`}>View {file.name} on IPFS Gateway.</a>
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleUploadSubmit}>
+      <div>
+        <label htmlFor="file">File:</label>
+        <input id="file" type="file" onChange={e => setFile(e.target.files[0])} required />
+      </div>
+      <button type="submit">Upload</button>
+    </form>
+  );
+}
+```
+
 </TabItem>
 </Tabs>
 
