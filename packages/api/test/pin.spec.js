@@ -9,7 +9,13 @@ import {
   INVALID_CID,
   getEffectivePinStatus
 } from '../src/utils/psa.js'
-import { PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
+import { PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, PSACodecNotSupported } from '../src/errors.js'
+import * as raw from 'multiformats/codecs/raw'
+import * as pb from '@ipld/dag-pb'
+import * as dagJson from '@ipld/dag-json'
+import * as dagCbor from '@ipld/dag-cbor'
+import { sha256 } from 'multiformats/hashes/sha2'
+import { CID } from 'multiformats/cid'
 
 const REQUEST_EXPECTED_PROPERTIES = ['requestid', 'status', 'created', 'delegates', 'info', 'pin']
 const PIN_EXPECTED_PROPERTIES = ['cid', 'name', 'origins', 'meta']
@@ -560,6 +566,53 @@ describe('Pinning APIs endpoints', () => {
       const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, INVALID_CID)
+    })
+
+    it('throws error if not supported codec', async () => {
+      const hash = await sha256.digest(Buffer.from(Math.random().toString()))
+      const cid = CID.create(1, 72, hash).toString()
+
+      const res = await fetch(new URL('pins', endpoint), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          cid
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, ERROR_CODE)
+      const { error } = await res.json()
+      assert.strictEqual(error.reason, PSACodecNotSupported.CODE)
+    })
+
+    it('does not throw for supported codec', async () => {
+      const SUPPORTED_CODECS = [
+        raw.code,
+        pb.code,
+        dagCbor.code,
+        dagJson.code
+      ]
+
+      const hash = await sha256.digest(Buffer.from(Math.random().toString()))
+
+      SUPPORTED_CODECS.forEach(async (code) => {
+        const cid = CID.create(1, code, hash).toString()
+        const res = await fetch(new URL('pins', endpoint), {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            cid: cid.toString()
+          })
+        })
+
+        assert(res, 'Server responded')
+        assert(res.ok, 'Not an error')
+      })
     })
 
     it('should receive pin data containing cid, name, origin, meta', async () => {
