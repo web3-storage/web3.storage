@@ -1,5 +1,4 @@
 import { StripePriceId } from "./stripe";
-import Stripe from 'stripe';
 
 export type StripePaymentMethodId = string;
 export type CustomerId = string;
