@@ -38,7 +38,7 @@ export const formatAsStorageAmount = amountInGiB => {
 export const formatCurrency = (amount, shouldTruncateToDollar = false) => {
   if (isNaN(amount)) return '';
 
-  const formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: shouldTruncateToDollar ? 0 : 2,

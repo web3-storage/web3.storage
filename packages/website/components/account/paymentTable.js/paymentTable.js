@@ -23,7 +23,7 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
       {currentPlan && (
         <p className="billing-content-intro" data-testid="currentPlanIndicator">
           <span>
-            Your current plan is: <strong data-testid="currentPlan.label">{currentPlan?.label ?? 'Custom'}</strong>
+            Your current plan is: <strong data-testid="currentPlan.label">{currentPlan.label}</strong>
           </span>
         </p>
       )}
