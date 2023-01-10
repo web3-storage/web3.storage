@@ -19,8 +19,15 @@ export const formatTimestamp = timestamp => {
  * @param {number} amountInGiB
  * @returns {string}
  */
-export const formatAsStorageAmount = amountInGiB =>
-  amountInGiB % 1024 === 0 ? `${amountInGiB / 1024} TiB` : `${amountInGiB} GiB`;
+export const formatAsStorageAmount = amountInGiB => {
+  if (amountInGiB % 1024 === 0) {
+    return `${amountInGiB / 1024} TiB`;
+  } else if (amountInGiB > 1024) {
+    return `${(amountInGiB / 1024).toFixed(2)} TiB`;
+  } else {
+    return `${amountInGiB} GiB`;
+  }
+};
 
 /**
  * Formats an amount (in dollars) as a currency
