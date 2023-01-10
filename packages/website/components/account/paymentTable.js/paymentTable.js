@@ -52,7 +52,7 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
             {plans.map(plan => (
               <div
                 key={plan.id}
-                className={`billing-card card-transparent ${currentPlan?.id === plan?.id ? 'current' : ''}`}
+                className={`billing-card card-transparent ${currentPlan?.id === plan.id ? 'current' : ''}`}
               >
                 <div className="billing-plan">
                   <h4 className="billing-plan-title">{plan.label}</h4>
@@ -74,7 +74,7 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
                     </div>
                   )}
 
-                  {currentPlan?.id !== plan?.id && (
+                  {currentPlan?.id !== plan.id && (
                     <Button
                       variant="light"
                       disabled={currentPlan?.isPreferred}
@@ -88,7 +88,7 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
                     </Button>
                   )}
 
-                  {currentPlan.id === plan.id && (
+                  {currentPlan?.id === plan.id && (
                     <Button variant="light" disabled={true} className="">
                       Current Plan
                     </Button>
