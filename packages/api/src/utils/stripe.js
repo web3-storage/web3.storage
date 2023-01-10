@@ -758,16 +758,10 @@ export class StripeSubscriptionsService {
       }
     }
 
-    const expandedStripePriceResponse = await this.getStripePrice(stripePrice.id)
+    const expandedStripePrice = await this.getStripePrice(stripePrice.id)
 
-    if (!expandedStripePriceResponse) {
+    if (!expandedStripePrice) {
       throw new Error(`there was an error fetching price for price id ${stripePrice.id}}`)
-    }
-
-    const expandedStripePrice = {
-      id: expandedStripePriceResponse.id,
-      metadata: expandedStripePriceResponse.metadata,
-      tiers: expandedStripePriceResponse.tiers
     }
 
     /** @type {import('./billing-types').W3PlatformSubscription['storage']} */
@@ -794,6 +788,12 @@ export class StripeSubscriptionsService {
     return storageStripeSubscription
   }
 
+  /**
+   * Fetches a price from stripe and maps it to our custom price type
+   *
+   * @param {string} priceId
+   * @returns {Promise<import('./billing-types').CustomStoragePrice>}
+   */
   async getStripePrice (priceId) {
     const price = await this.stripe.prices.retrieve(priceId, {
       expand: ['tiers']
@@ -803,7 +803,18 @@ export class StripeSubscriptionsService {
       throw new Error(`price with id ${priceId} is not active`)
     }
 
-    return price
+    return {
+      id: price.id,
+      label: price.metadata['UI Label'] ?? 'Custom',
+      description: price.metadata?.Description,
+      bandwidth: price.metadata?.Bandwidth,
+      isPreferred: price.metadata?.Preferred === 'true',
+      tiers: price.tiers?.map((tier) => ({
+        flatAmount: tier.flat_amount,
+        unitAmount: tier.unit_amount,
+        upTo: tier.up_to
+      })) ?? null
+    }
   }
 
   /**

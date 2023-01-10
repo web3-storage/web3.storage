@@ -59,7 +59,22 @@ export interface CustomersService {
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'
 
-export type StoragePrice = StoragePriceName | Pick<Stripe.Response<Stripe.Price>, 'id'|'metadata'|'tiers'>
+export interface PriceTier {
+  flatAmount: number | null;
+  unitAmount: number | null;
+  upTo: number | null;
+}
+
+export interface CustomStoragePrice {
+  id: string;
+  bandwidth?: string;
+  label: string;
+  isPreferred: boolean;
+  description?: string;
+  tiers: Array<PriceTier> | null;
+}
+
+export type StoragePrice = StoragePriceName | CustomStoragePrice;
 
 /**
  * A subscription to the web3.storage platform.

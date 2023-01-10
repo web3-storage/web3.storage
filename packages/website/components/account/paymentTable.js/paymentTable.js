@@ -23,17 +23,18 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
       {currentPlan && (
         <p className="billing-content-intro" data-testid="currentPlanIndicator">
           <span>
-            Your current plan is:{' '}
-            <strong data-testid="currentPlan.metadata['UI Label']">
-              {currentPlan?.metadata['UI Label'] ?? 'Custom'}
-            </strong>
+            Your current plan is: <strong data-testid="currentPlan.label">{currentPlan?.label ?? 'Custom'}</strong>
           </span>
         </p>
       )}
 
       <div>
         <div>
-          <div className={`billing-plans-table ${currentPlan?.id === 'earlyAdopter' && 'early-adopter'}`}>
+          <div
+            className={`billing-plans-table ${currentPlan?.isPreferred && 'preferred'} ${
+              !currentPlan?.tiers?.length ? 'no-tiers' : ''
+            }`}
+          >
             <div className="billing-play-key">
               <div></div>
               <div></div>
@@ -50,39 +51,33 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
             </div>
             {plans.map(plan => (
               <div
-                key={plan.metadata['UI Label']}
+                key={plan.id}
                 className={`billing-card card-transparent ${currentPlan?.id === plan?.id ? 'current' : ''}`}
               >
-                <div key={plan.metadata['UI Label']} className="billing-plan">
-                  <h4 className="billing-plan-title">{plan.metadata['UI Label']}</h4>
+                <div className="billing-plan">
+                  <h4 className="billing-plan-title">{plan.label}</h4>
                   <div>
                     <div className="billing-plan-amount">
-                      {formatCurrency((plan?.tiers?.[0]?.flat_amount ?? 0) / 100, true)}/mo
+                      {formatCurrency((plan?.tiers?.[0]?.flatAmount ?? 0) / 100, true)}/mo
                     </div>
                   </div>
 
-                  {currentPlan.id === 'earlyAdopter' && plan.id === 'earlyAdopter' ? (
+                  {!currentPlan?.tiers?.length && plan.id === currentPlan.id ? (
                     <div className="billing-plan-details">
-                      <p className="early-adopter-desc">
-                        As an Early Adopter, you already get our lowest storage rate.
-                      </p>
+                      <p className="preferred-desc">{currentPlan.description}</p>
                     </div>
                   ) : (
                     <div className="billing-plan-details">
-                      <p>{formatAsStorageAmount(plan.tiers?.[0]?.up_to)}</p>
-                      <p>{getAdditionalStoragePrice(plan.tiers?.[1]?.unit_amount)}</p>
-                      <p>
-                        {plan.metadata['Bandwidth']
-                          ? `${formatAsStorageAmount(plan.metadata['Bandwidth'])} / month`
-                          : 'N/A'}
-                      </p>
+                      <p>{formatAsStorageAmount(plan.tiers?.[0]?.upTo)}</p>
+                      <p>{getAdditionalStoragePrice(plan.tiers?.[1]?.unitAmount)}</p>
+                      <p>{plan.bandwidth ? `${formatAsStorageAmount(plan.bandwidth)} / month` : 'N/A'}</p>
                     </div>
                   )}
 
-                  {currentPlan?.id !== plan?.id && plan?.id !== 'earlyAdopter' && (
+                  {currentPlan?.id !== plan?.id && (
                     <Button
                       variant="light"
-                      disabled={currentPlan?.id === 'earlyAdopter'}
+                      disabled={currentPlan?.isPreferred}
                       className=""
                       onClick={() => {
                         setPlanSelection(plans.find(p => p.id === plan.id));
@@ -93,8 +88,7 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
                     </Button>
                   )}
 
-                  {(currentPlan.id === plan.id ||
-                    (currentPlan.id === 'earlyAdopter' && plan.id === 'earlyAdopter')) && (
+                  {currentPlan.id === plan.id && (
                     <Button variant="light" disabled={true} className="">
                       Current Plan
                     </Button>
@@ -102,7 +96,7 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
                 </div>
               </div>
             ))}
-            {currentPlan?.id === 'earlyAdopter' && <p className="early-adopter-ui-block"></p>}
+            {currentPlan?.isPreferred && <p className="preferred-ui-block"></p>}
           </div>
         </div>
       </div>

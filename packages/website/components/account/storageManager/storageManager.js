@@ -36,9 +36,7 @@ const StorageManager = ({ className = '', content }) => {
     if (currentPlan?.id === 'earlyAdopter') {
       return data?.storageLimitBytes || defaultStorageLimit;
     } else {
-      const byteConversion = currentPlan?.tiers?.[0].up_to
-        ? gibibyte * currentPlan.tiers[0].up_to
-        : defaultStorageLimit;
+      const byteConversion = currentPlan?.tiers?.[0].upTo ? gibibyte * currentPlan.tiers[0].upTo : defaultStorageLimit;
       return byteConversion;
     }
   }, [data, currentPlan]);
@@ -103,7 +101,7 @@ const StorageManager = ({ className = '', content }) => {
           Want more storage? Upgrade your plan here!
         </a>
       </Link>
-      <h6>Your Plan: {currentPlan?.metadata['UI Label']}</h6>
+      <h6>Your Plan: {currentPlan?.label}</h6>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
           {isLoading ? (
@@ -126,7 +124,7 @@ const StorageManager = ({ className = '', content }) => {
                 <>
                   &nbsp;of{' '}
                   <span className="storage-number">
-                    {currentPlan?.tiers?.[0].up_to ? formatAsStorageAmount(currentPlan?.tiers?.[0].up_to) : ''}
+                    {currentPlan?.tiers?.[0].upTo ? formatAsStorageAmount(currentPlan?.tiers?.[0].upTo) : ''}
                   </span>{' '}
                   used
                 </>
