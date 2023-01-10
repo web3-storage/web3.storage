@@ -98,7 +98,7 @@ const StorageManager = ({ className = '', content }) => {
     <div ref={storageManagerRef} className={clsx('section storage-manager-container', className)}>
       <Link href={'account/payment'} passHref>
         <a href={'account/payment'} className="storage-manager-payment-link">
-          Want more storage? Upgrade your plan here!
+          {currentPlan?.isPreferred ? 'View your plan details here.' : 'Want more storage? Upgrade your plan here!'}
         </a>
       </Link>
       <h6>Your Plan: {currentPlan?.label}</h6>

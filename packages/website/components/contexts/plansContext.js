@@ -28,6 +28,7 @@
  * @typedef {object} Plan
  * @property {string} id
  * @property {string} label
+ * @property {boolean} isPreferred
  * @property {string|null} description
  * @property {string|null} bandwidth
  * @property {StripeTier[]} [tiers]
@@ -39,6 +40,7 @@ export const sharedPlans = [
     description: 'For those that want to take advantage of more storage',
     label: 'Lite',
     bandwidth: '60',
+    isPreferred: false,
     tiers: [
       {
         flatAmount: 300,
@@ -57,6 +59,7 @@ export const sharedPlans = [
     description: 'Our lowest price per GiB stored. For those with use cases that require scale.',
     label: 'Expert',
     bandwidth: '24',
+    isPreferred: false,
     tiers: [
       {
         flatAmount: 1000,
@@ -77,6 +80,7 @@ export const freePlan = {
   description: 'You are currently on the free tier. You can use our service up to 5GiB/mo without being charged.',
   label: 'Free',
   bandwidth: '10',
+  isPreferred: false,
   tiers: [
     {
       flatAmount: 0,
@@ -94,6 +98,7 @@ export const freePlan = {
 export const earlyAdopterPlan = {
   id: /** @type {const} */ ('earlyAdopter'),
   isPreferred: true,
+  bandwidth: null,
   description:
     'As an early adopter we appreciate your support and can continue to use the storage you are already accustomed to.',
   label: 'Early Adopter',
