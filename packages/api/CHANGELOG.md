@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.13.1](https://github.com/web3-storage/web3.storage/compare/api-v7.13.0...api-v7.13.1) (2023-01-04)
+
+
+### Bug Fixes
+
+* reject not supported codecs ([#2159](https://github.com/web3-storage/web3.storage/issues/2159)) ([811c1b1](https://github.com/web3-storage/web3.storage/commit/811c1b169d4833e2bb116fd869abb263fa833c02)), closes [#2154](https://github.com/web3-storage/web3.storage/issues/2154)
+
 ## [7.13.0](https://github.com/web3-storage/web3.storage/compare/api-v7.12.0...api-v7.13.0) (2022-11-30)
 
 
