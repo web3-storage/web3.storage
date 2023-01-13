@@ -40,7 +40,7 @@ r2_buckets = [
 # name = "web3-storage-production"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 route = { pattern = "https://api.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
-vars = { CARPARK_URL = "https://carpark.web3.storage", CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
+vars = { CARPARK_URL = "https://carpark.web3.storage", CLUSTER_API_URL = "https://pickup.dag.haus", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 r2_buckets = [
   { binding = "CARPARK", bucket_name = "carpark-prod-0" },
   { binding = "DUDEWHERE", bucket_name = "dudewhere-prod-0" },
@@ -52,7 +52,7 @@ r2_buckets = [
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 route = { pattern = "https://api-staging.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
 # nft.storage.ipfscluster.io is the staging cluster
-vars = { CARPARK_URL = "https://carpark-staging.web3.storage", CLUSTER_API_URL = "https://nft.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
+vars = { CARPARK_URL = "https://carpark-staging.web3.storage", CLUSTER_API_URL = "https://staging.pickup.dag.haus", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 r2_buckets = [
   { binding = "CARPARK", bucket_name = "carpark-staging-0" },
   { binding = "DUDEWHERE", bucket_name = "dudewhere-staging-0" },
