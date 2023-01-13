@@ -68,6 +68,7 @@ export interface CustomStoragePrice {
   id: string;
   bandwidth?: string;
   label: string;
+  // True if price is prioritized.  It could be used to disable selection of alternative prices.
   isPreferred: boolean;
   description?: string;
   tiers: Array<PriceTier> | null;
