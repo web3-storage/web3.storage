@@ -11,7 +11,6 @@ const env = {
   DEBUG: '*',
   ENV: 'dev',
   CLUSTER_API_URL: 'http://localhost:9094',
-  CLUSTER_IPFS_PROXY_API_URL: 'http://127.0.0.1:9095/api/v0/',
   CLUSTER_BASIC_AUTH_TOKEN: 'dGVzdDp0ZXN0',
   DATABASE: 'postgres',
   PG_REST_URL: 'http://localhost:3000',
