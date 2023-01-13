@@ -75,9 +75,15 @@ export const usePayment = () => {
       // user has no storage subscription, show early adopter plan
       return earlyAdopterPlan;
     }
-    return planList.find(plan => {
+    const matchingStandardPlan = planList.find(plan => {
       return plan.id === storageSubscription.price;
     });
+
+    if (!matchingStandardPlan && typeof storageSubscription.price !== 'string') {
+      return storageSubscription.price;
+    }
+
+    return matchingStandardPlan;
   }, [planList, paymentSettings, optimisticCurrentPlan]);
 
   const savedPaymentMethod = useMemo(() => {

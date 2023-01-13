@@ -1,6 +1,7 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
 import { CustomerNotFound, hasOwnProperty, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
+import { stringToNumber } from './number.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
@@ -20,6 +21,7 @@ import { CustomerNotFound, hasOwnProperty, isStoragePriceName, randomString, sto
  * @property {Pick<StripeInterface['paymentMethods'], 'attach'>} paymentMethods
  * @property {Pick<StripeInterface['setupIntents'], 'create'>} setupIntents
  * @property {Pick<StripeInterface['customers'], 'retrieve'|'update'>} customers
+ * @property {Pick<StripeInterface['prices'], 'retrieve'>} prices
  */
 
 /**
@@ -349,12 +351,29 @@ export function createMockStripeForCustomersService () {
 /**
  * @param {object} [options]
  * @param {(id: string) => Promise<undefined|Stripe.Customer|Stripe.DeletedCustomer>} [options.retrieveCustomer]
+ * @param {(id: string) => Promise<undefined|Stripe.Price>} [options.retrievePrice]
  * @param {() => void} [options.onCreateSetupintent]
  * @returns {StripeComForBillingService}
  */
 export function createMockStripeForBilling (options = {}) {
   const retrieveCustomer = options.retrieveCustomer || async function (id) {
     throw new Error(`no customer found with id=${id}`)
+  }
+  const retrievePrice = options.retrievePrice || async function (id) {
+    throw new Error(`no price found with id=${id}`)
+  }
+  /** @type {StripeComForBillingService['prices']} */
+  const prices = {
+    async retrieve (id, params) {
+      const price = await retrievePrice(id)
+      /** @type {Stripe.Response<Stripe.Price>} */
+      const response = {
+        ...price,
+        // @ts-ignore
+        lastResponse: undefined
+      }
+      return response
+    }
   }
   const paymentMethods = {
     /**
@@ -421,7 +440,7 @@ export function createMockStripeForBilling (options = {}) {
       return response
     }
   }
-  return { paymentMethods, customers, setupIntents }
+  return { paymentMethods, customers, prices, setupIntents }
 }
 
 /**
@@ -556,7 +575,7 @@ export class NamedStripePrices {
   }
 
   /**
-   * @param {StripePriceId} priceId
+   * @param {string} priceId
    * @returns {StoragePriceName|undefined}
    */
   priceToName (priceId) {
@@ -585,6 +604,7 @@ export const stagingStripePrices = new NamedStripePrices({
  * @property {Pick<Stripe['subscriptions'], 'cancel'|'create'>} subscriptions
  * @property {Pick<Stripe['subscriptionItems'], 'update'|'del'>} subscriptionItems
  * @property {Pick<Stripe['customers'], 'retrieve'>} customers
+ * @property {Pick<Stripe['prices'], 'retrieve'>} prices
  */
 
 /**
@@ -709,11 +729,48 @@ export class StripeSubscriptionsService {
   async getSubscription (customerId) {
     const storageStripeSubscription = await this.getStorageStripeSubscription(customerId)
     if (storageStripeSubscription instanceof CustomerNotFound) { return storageStripeSubscription }
-    /** @returns {import('./billing-types').W3PlatformSubscription} */
-    const subscription = {
-      storage: createW3StorageSubscription(storageStripeSubscription, this.priceNamer)
+
+    if (!storageStripeSubscription) {
+      return {
+        storage: null
+      }
     }
-    return subscription
+
+    if (storageStripeSubscription.items.data.length > 1) {
+      throw new Error(
+        `subscription ${storageStripeSubscription.id} has ${storageStripeSubscription.items.data?.length} items, but we only expect to ever see one.`
+      )
+    }
+
+    // @todo - be more clever in ensuring this came from correct subscription item
+    // or consider throwing if there is more than one subscription item
+    const stripePrice = /** @type {Stripe.Response<Stripe.Price>} */ (
+      storageStripeSubscription.items.data[0].price
+    )
+
+    const storagePriceName = this.priceNamer.priceToName(stripePrice.id)
+
+    if (storagePriceName) {
+      /** @type {import('./billing-types').W3PlatformSubscription['storage']} */
+      return {
+        storage: {
+          price: storagePriceName
+        }
+      }
+    }
+
+    const expandedStripePrice = await this.getStripePrice(stripePrice.id)
+
+    if (!expandedStripePrice) {
+      throw new Error(`there was an error fetching price for price id ${stripePrice.id}}`)
+    }
+
+    /** @type {import('./billing-types').W3PlatformSubscription['storage']} */
+    return {
+      storage: {
+        price: expandedStripePrice
+      }
+    }
   }
 
   async getStorageStripeSubscription (customerId) {
@@ -730,6 +787,35 @@ export class StripeSubscriptionsService {
     }
     const storageStripeSubscription = selectStorageStripeSubscription(customerId, stripeSubscriptions)
     return storageStripeSubscription
+  }
+
+  /**
+   * Fetches a price from stripe and maps it to our custom price type
+   *
+   * @param {string} priceId
+   * @returns {Promise<import('./billing-types').CustomStoragePrice>}
+   */
+  async getStripePrice (priceId) {
+    const price = await this.stripe.prices.retrieve(priceId, {
+      expand: ['tiers']
+    })
+
+    if (!price.active) {
+      throw new Error(`price with id ${priceId} is not active`)
+    }
+
+    return {
+      id: price.id,
+      label: price.metadata['UI Label'] ?? 'Custom',
+      description: price.metadata?.Description,
+      bandwidth: stringToNumber(price.metadata?.Bandwidth),
+      isPreferred: price.metadata?.Preferred === 'true',
+      tiers: price.tiers?.map((tier) => ({
+        flatAmount: tier.flat_amount,
+        unitAmount: tier.unit_amount,
+        upTo: tier.up_to
+      })) ?? null
+    }
   }
 
   /**
@@ -759,7 +845,7 @@ export class StripeSubscriptionsService {
       return null
     }
     const priceName = storageSubscription.price
-    const desiredPriceId = this.priceNamer.nameToPrice(priceName)
+    const desiredPriceId = typeof priceName === 'string' ? this.priceNamer.nameToPrice(priceName) : null
     if (!desiredPriceId) {
       throw new Error(`invalid price name: ${priceName}`)
     }
@@ -826,32 +912,6 @@ function selectStorageStripeSubscriptionItem (stripeSubscription) {
   }
   const item = items.data[0]
   return item
-}
-
-/**
- * @param {null|Stripe.Subscription} stripeSubscription
- * @param {import('./billing-types').NamedStripePrices} priceNamer
- * @returns {import('./billing-types').W3PlatformSubscription['storage']}
- */
-function createW3StorageSubscription (stripeSubscription, priceNamer) {
-  if (!stripeSubscription) {
-    return null
-  }
-  if (stripeSubscription.items.data.length > 1) {
-    throw new Error(`subscription ${stripeSubscription.id} has ${stripeSubscription.items.data?.length} items, but we only expect to ever see one.`)
-  }
-  // @todo - be more clever in ensuring this came from correct subscription item
-  // or consider throwing if there is more than one subscription item
-  const storagePrice = /** @type {StripePriceId} */ (stripeSubscription.items.data[0].price.id)
-  const storagePriceName = priceNamer.priceToName(storagePrice)
-  if (!storagePriceName) {
-    throw new Error(`unable to determien price name for stripe price ${storagePrice}`)
-  }
-  /** @type {import('./billing-types').W3PlatformSubscription['storage']} */
-  const storageSubscription = {
-    price: storagePriceName
-  }
-  return storageSubscription
 }
 
 /**

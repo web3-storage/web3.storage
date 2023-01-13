@@ -129,9 +129,11 @@ const PaymentSettingsPage = props => {
       // user has no storage subscription, show early adopter plan
       return earlyAdopterPlan;
     }
-    return planList.find(plan => {
-      return plan.id === storageSubscription.price;
-    });
+    return typeof storageSubscription.price === 'string'
+      ? planList.find(plan => {
+          return plan.id === storageSubscription.price;
+        })
+      : storageSubscription.price;
   }, [planList, paymentSettings, optimisticCurrentPlan]);
   const savedPaymentMethod = useMemo(() => {
     return paymentSettings?.paymentMethod;

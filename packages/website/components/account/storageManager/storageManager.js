@@ -4,7 +4,7 @@ import { useMemo, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 
 import { useUser } from 'components/contexts/userContext';
-import { elementIsInViewport } from 'lib/utils';
+import { elementIsInViewport, formatAsStorageAmount } from 'lib/utils';
 import { usePayment } from '../../../hooks/use-payment';
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 import InfoIcon from 'assets/icons/info';
@@ -36,7 +36,7 @@ const StorageManager = ({ className = '', content }) => {
     if (currentPlan?.id === 'earlyAdopter') {
       return data?.storageLimitBytes || defaultStorageLimit;
     } else {
-      const byteConversion = currentPlan ? gibibyte * parseInt(currentPlan.baseStorage) : defaultStorageLimit;
+      const byteConversion = currentPlan?.tiers?.[0].upTo ? gibibyte * currentPlan.tiers[0].upTo : defaultStorageLimit;
       return byteConversion;
     }
   }, [data, currentPlan]);
@@ -98,10 +98,10 @@ const StorageManager = ({ className = '', content }) => {
     <div ref={storageManagerRef} className={clsx('section storage-manager-container', className)}>
       <Link href={'account/payment'} passHref>
         <a href={'account/payment'} className="storage-manager-payment-link">
-          Want more storage? Upgrade your plan here!
+          {currentPlan?.isPreferred ? 'View your plan details here.' : 'Want more storage? Upgrade your plan here!'}
         </a>
       </Link>
-      <h6>Your Plan: {currentPlan?.title}</h6>
+      <h6>Your Plan: {currentPlan?.label}</h6>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
           {isLoading ? (
@@ -122,7 +122,11 @@ const StorageManager = ({ className = '', content }) => {
                 </>
               ) : (
                 <>
-                  &nbsp;of <span className="storage-number">{currentPlan?.baseStorage}</span> used
+                  &nbsp;of{' '}
+                  <span className="storage-number">
+                    {currentPlan?.tiers?.[0].upTo ? formatAsStorageAmount(currentPlan?.tiers?.[0].upTo) : ''}
+                  </span>{' '}
+                  used
                 </>
               )}
               <Tooltip content={content.tooltip_total}>
