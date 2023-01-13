@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.14.0](https://github.com/web3-storage/web3.storage/compare/api-v7.13.1...api-v7.14.0) (2023-01-13)
+
+
+### Features
+
+* allow displaying of custom stripe prices ([#2152](https://github.com/web3-storage/web3.storage/issues/2152)) ([e3011be](https://github.com/web3-storage/web3.storage/commit/e3011bee166f762cefae40240be8ab46476aee33))
+* use pickup as `CLUSTER_API_URL` ([#2179](https://github.com/web3-storage/web3.storage/issues/2179)) ([e486a67](https://github.com/web3-storage/web3.storage/commit/e486a67ae5d49e42525cfeaf977fce166f3833ee))
+
 ## [7.13.1](https://github.com/web3-storage/web3.storage/compare/api-v7.13.0...api-v7.13.1) (2023-01-04)
 
 
