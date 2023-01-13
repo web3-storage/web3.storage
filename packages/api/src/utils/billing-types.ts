@@ -66,7 +66,8 @@ export interface PriceTier {
 
 export interface CustomStoragePrice {
   id: string;
-  bandwidth?: string;
+  // Monthly bandwidth in GiB
+  bandwidth?: number;
   label: string;
   // True if price is prioritized.  It could be used to disable selection of alternative prices.
   isPreferred: boolean;

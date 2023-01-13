@@ -1,6 +1,7 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
 import { CustomerNotFound, hasOwnProperty, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
+import { stringToNumber } from './number.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
@@ -807,7 +808,7 @@ export class StripeSubscriptionsService {
       id: price.id,
       label: price.metadata['UI Label'] ?? 'Custom',
       description: price.metadata?.Description,
-      bandwidth: price.metadata?.Bandwidth,
+      bandwidth: stringToNumber(price.metadata?.Bandwidth),
       isPreferred: price.metadata?.Preferred === 'true',
       tiers: price.tiers?.map((tier) => ({
         flatAmount: tier.flat_amount,
