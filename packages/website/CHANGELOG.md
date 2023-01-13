@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.35.0](https://github.com/web3-storage/web3.storage/compare/website-v2.34.0...website-v2.35.0) (2023-01-13)
+
+
+### Features
+
+* allow displaying of custom stripe prices ([#2152](https://github.com/web3-storage/web3.storage/issues/2152)) ([e3011be](https://github.com/web3-storage/web3.storage/commit/e3011bee166f762cefae40240be8ab46476aee33))
+
+
+### Bug Fixes
+
+* make pinning API request form more general ([#2146](https://github.com/web3-storage/web3.storage/issues/2146)) ([4f12057](https://github.com/web3-storage/web3.storage/commit/4f12057cdddf48dfa61cdb74e910b1e448722d47))
+* more precise language in SLA ([#2149](https://github.com/web3-storage/web3.storage/issues/2149)) ([b61060e](https://github.com/web3-storage/web3.storage/commit/b61060e4abc5e66c610345abc256ff6b82234dfe))
+
 ## [2.34.0](https://github.com/web3-storage/web3.storage/compare/website-v2.33.1...website-v2.34.0) (2023-01-02)
 
 
