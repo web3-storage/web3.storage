@@ -268,12 +268,15 @@ function createMockAuthenticatedRequest (_request, user = createMockRequestUser(
 }
 
 describe('/user/payment', () => {
-  it('can userPaymentPut and then userPaymentGet the saved payment settings', async function () {
-    const env = {
+  let env
+  beforeEach(() => {
+    env = {
       ...createMockBillingContext(),
       billing: createMockBillingService(),
       customers: createMockCustomerService()
     }
+  })
+  it('can userPaymentPut and then userPaymentGet the saved payment settings', async function () {
     const desiredPaymentMethodId = `test_pm_${randomString()}`
     const desiredStorageSubscriptionPriceId = storagePriceNames.lite
     /** @type {import('src/utils/billing-types.js').PaymentSettings} */
@@ -299,6 +302,20 @@ describe('/user/payment', () => {
     const gotPaymentSettings = await getPaymentSettingsResponse.json()
     assert.equal(gotPaymentSettings.paymentMethod.id, desiredPaymentMethodId, 'gotPaymentSettings.paymentMethod.id is desiredPaymentMethodId')
     assert.deepEqual(gotPaymentSettings, desiredPaymentSettings, 'gotPaymentSettings is desiredPaymentSettings')
+  })
+
+  it('should subscribe to the free tier if there does not already exist a subscription', async () => {
+    const user = createMockRequestUser()
+    const getPaymentSettingsRequest = createMockAuthenticatedRequest(
+      createUserPaymentRequest(),
+      user
+    )
+    await userPaymentGet(getPaymentSettingsRequest, env)
+
+    assert.deepEqual(
+      env.subscriptions.saveSubscriptionCalls[0][1],
+      { storage: { price: storagePriceNames.free } }
+    )
   })
 })
 

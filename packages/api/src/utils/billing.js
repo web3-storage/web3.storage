@@ -140,7 +140,15 @@ export async function getPaymentSettings (ctx) {
   if (paymentMethod instanceof Error) {
     throw paymentMethod
   }
-  const subscription = await ctx.subscriptions.getSubscription(customer.id)
+  let subscription = await ctx.subscriptions.getSubscription(customer.id)
+
+  // This ensures that all users have at least a subscription to the Free tier.  This is both for gradual migration
+  // of inactive early adopters, but also to repair data integrity issues that may arise during new account creation.
+  if (!(subscription instanceof Error) && subscription.storage === null) {
+    await ctx.subscriptions.saveSubscription(customer.id, { storage: { price: storagePriceNames.free } })
+    subscription = await ctx.subscriptions.getSubscription(customer.id)
+  }
+
   if (subscription instanceof Error) {
     return subscription
   }
