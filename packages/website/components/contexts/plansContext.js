@@ -77,7 +77,7 @@ export const sharedPlans = [
 
 export const freePlan = {
   id: /** @type {const} */ ('free'),
-  description: 'You are currently on the free tier. You can use our service up to 5GiB/mo without being charged.',
+  description: 'You are currently on the free tier. You can use our service up to 5GiB without being charged.',
   label: 'Free',
   bandwidth: '10',
   isPreferred: false,
