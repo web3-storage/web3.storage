@@ -265,4 +265,16 @@ describe('user operations', () => {
     // can create a second time. it will append another record of the second agreement with its own timestamp
     await client.createUserAgreement(user._id, agreement)
   })
+
+  it('can check if given token is blocked when not existent', async () => {
+    const now = Date.now()
+    const authToken = await client.createKey({
+      name: `test-key-name-${now}`,
+      secret: `test-secret-${now}`,
+      user: user._id
+    })
+
+    const res = await client.checkIsTokenBlocked(authToken)
+    assert.equal(res, false)
+  })
 })

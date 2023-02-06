@@ -74,6 +74,7 @@ export class DBClient {
   upsertUserCustomer(userId: string, customerId: string): Promise<void>
   createUserAgreement(userId: string, agreement: AgreementKind): Promise<void>
   getUserCustomer(userId: string): Promise<{ id: string }|null>
+  checkIsTokenBlocked(token: CreateAuthKeyOutput): Promise<boolean>
 }
 
 export function parseTextToNumber(n: string): number

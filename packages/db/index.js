@@ -996,19 +996,23 @@ export class DBClient {
     }
   }
 
+  /**
+   * Check if given token has a blocked status.
+   *
+   * @param {{ _id: string }} token
+   */
   async checkIsTokenBlocked (token) {
     const { data, error } = await this._client
       .from('auth_key_history')
       .select('status')
       .filter('deleted_at', 'is', null)
       .eq('auth_key_id', token._id)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data?.status === 'Blocked'
+    return data?.[0]?.status === 'Blocked'
   }
 
   /**
