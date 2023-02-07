@@ -8,6 +8,7 @@ export const PIN_STATUSES = ['PinQueued', 'Pinning', 'Pinned', 'PinError']
 export const USER_TAGS = {
   ACCOUNT_RESTRICTION: 'HasAccountRestriction',
   DELETE_RESTRICTION: 'HasDeleteRestriction',
+  EARLY_ADOPTER: 'IsEarlyAdopter',
   PSA_ACCESS: 'HasPsaAccess'
 }
 export const CAR_CODE = 0x202

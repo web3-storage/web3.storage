@@ -284,6 +284,7 @@ export async function userInfoGet (request, env) {
         HasDeleteRestriction: hasTag(user, 'HasDeleteRestriction', 'true'),
         HasPsaAccess: hasTag(user, 'HasPsaAccess', 'true'),
         HasSuperHotAccess: hasTag(user, 'HasSuperHotAccess', 'true'),
+        IsEarlyAdopter: hasTag(user, 'IsEarlyAdopter', 'true'),
         StorageLimitBytes: getTagValue(user, 'StorageLimitBytes', '')
       },
       tagProposals: {

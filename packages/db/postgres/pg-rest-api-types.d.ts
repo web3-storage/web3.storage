@@ -2505,6 +2505,7 @@ export interface definitions {
       | "HasAccountRestriction"
       | "HasDeleteRestriction"
       | "HasPsaAccess"
+      | "IsEarlyAdopter"
       | "StorageLimitBytes";
     /** Format: text */
     value: string;

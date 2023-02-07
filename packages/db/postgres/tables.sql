@@ -21,6 +21,7 @@ BEGIN
       'HasAccountRestriction',
       'HasDeleteRestriction',
       'HasPsaAccess',
+      'IsEarlyAdopter',
       'StorageLimitBytes'
     );
   END IF;
