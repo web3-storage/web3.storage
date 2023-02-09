@@ -72,6 +72,7 @@ export class DBClient {
   createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
   getUserTags(userId: string): Promise<UserTagInfo[]>
   upsertUserCustomer(userId: string, customerId: string): Promise<void>
+  insertUserCustomer(userId: string, customerId: string): Promise<void>
   createUserAgreement(userId: string, agreement: AgreementKind): Promise<void>
   getUserCustomer(userId: string): Promise<{ id: string }|null>
   checkIsTokenBlocked(token: CreateAuthKeyOutput): Promise<boolean>

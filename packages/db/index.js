@@ -1323,6 +1323,28 @@ export class DBClient {
 
   /**
    * @param {string} userId
+   * @param {string} customerId
+   */
+  async insertUserCustomer (userId, customerId) {
+    const { error } = await this._client
+      .from('user_customer')
+      .insert({
+        user_id: userId,
+        customer_id: customerId
+      })
+      .single()
+
+    if (error) {
+      if (error.code.startsWith('23')) {
+        throw new ConstraintError(error)
+      }
+
+      throw new DBError(error)
+    }
+  }
+
+  /**
+   * @param {string} userId
    * @param {import('./db-client-types').AgreementKind} agreement
    * @returns {Promise<void>}
    */

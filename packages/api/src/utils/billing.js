@@ -167,14 +167,14 @@ export function createMockUserCustomerService () {
   /**
    * @returns {Promise<void>}
    */
-  const upsertUserCustomer = async (userId, customerId) => {
+  const insertUserCustomer = async (userId, customerId) => {
     userIdToCustomerId.set(userId, customerId)
   }
 
   return {
     userIdToCustomerId,
     getUserCustomer,
-    upsertUserCustomer
+    insertUserCustomer
   }
 }
 
@@ -210,7 +210,9 @@ export function createMockCustomerService (
         name: creationOptions?.name
       }
     })
-    await userCustomerService.upsertUserCustomer(user.id, createdCustomer.id)
+
+    await userCustomerService.insertUserCustomer(user.id, createdCustomer.id)
+
     return createdCustomer
   }
   /** @type {import('./billing-types').CustomersService['getContact']} */

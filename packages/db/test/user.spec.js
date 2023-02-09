@@ -277,4 +277,26 @@ describe('user operations', () => {
     const res = await client.checkIsTokenBlocked(authToken)
     assert.equal(res, false)
   })
+
+  describe('user_customer insertion', () => {
+    it('should throw if a user_customer is inserted twice with the same userId', async () => {
+      const upsertUser = await client.upsertUser({
+        name,
+        email,
+        issuer: `${issuer}-user_customer_test`,
+        publicAddress: `${publicAddress}-user_customer_test`,
+      })
+
+      const now = Date.now()
+      await client.insertUserCustomer(
+        upsertUser.id,
+        `customer-id-${now}`,
+      )
+
+      assert.rejects(
+        async () => await client.insertUserCustomer(upsertUser.id, `customer-id-${now}`),
+        /duplicate key value/
+      )
+    })
+  })
 })

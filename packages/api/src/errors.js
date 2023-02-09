@@ -143,6 +143,15 @@ export class InvalidCidError extends Error {
 }
 InvalidCidError.CODE = 'ERROR_INVALID_CID'
 
+export class CustomerNotFoundError extends Error {
+  constructor (msg = 'Error fetching associated billing customer') {
+    super(msg)
+    this.name = 'CustomerNotFound'
+    this.code = 404
+  }
+}
+CustomerNotFoundError.CODE = 'ERROR_CUSTOMER_NOT_FOUND'
+
 export class InvalidCarError extends Error {
   /**
    * @param {string} reason

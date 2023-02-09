@@ -83,6 +83,7 @@ describe('StripeCustomersService', async function () {
   it('can getOrCreateForUser', async function () {
     const userId1 = 'userId1'
     const userId2 = 'userId2'
+    const userId3 = 'userId3'
     const customerId1 = 'customerId1'
 
     const mockUserCustomerService = createMockUserCustomerService()

@@ -2,6 +2,7 @@
 import Stripe from 'stripe'
 import { CustomerNotFound, hasOwnProperty, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
 import { stringToNumber } from './number.js'
+import { CustomerNotFoundError } from 'src/errors.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
@@ -141,6 +142,7 @@ export function stripeToStripeCardPaymentMethod (paymentMethod) {
  * @property {StripeComCustomers['create']} create
  * @property {StripeComCustomers['retrieve']} retrieve
  * @property {StripeComCustomers['update']} update
+ * @property {StripeComCustomers['del']} del
  */
 
 /**
@@ -247,7 +249,7 @@ export class StripeCustomersService {
    * @returns {Promise<import('./billing-types').Customer>}
    */
   async getOrCreateForUser (user, options) {
-    const existingCustomer = await this.userCustomerService.getUserCustomer(user.id.toString())
+    let existingCustomer = await this.userCustomerService.getUserCustomer(user.id.toString())
     if (existingCustomer) return existingCustomer
     const createdCustomer = await this.stripe.customers.create({
       metadata: {
@@ -256,7 +258,26 @@ export class StripeCustomersService {
       name: options?.name,
       email: options?.email
     })
-    await this.userCustomerService.upsertUserCustomer(user.id.toString(), createdCustomer.id)
+
+    try {
+      await this.userCustomerService.insertUserCustomer(user.id.toString(), createdCustomer.id)
+    } catch (error) {
+      // due to potential race conditions, we want to ensure we only return an actual associated stripe customer
+      // and remove stripe customers that we fail to associate
+      if (hasOwnProperty(error, 'code') && error.code === 'CONSTRAINT_ERROR_DB') {
+        // no need to block during deletion
+        this.stripe.customers.del(createdCustomer.id)
+
+        existingCustomer = await this.userCustomerService.getUserCustomer(user.id.toString())
+
+        if (!existingCustomer) {
+          throw new CustomerNotFoundError()
+        }
+
+        return existingCustomer
+      }
+    }
+
     const customer = {
       id: createdCustomer.id
     }
@@ -312,6 +333,18 @@ export function createMockStripeForCustomersService () {
           lastResponse: {},
           ...customer
         }
+        return response
+      },
+      del: async (id) => {
+        /** @type {Stripe.Response<Stripe.DeletedCustomer>} */
+        const response = {
+          id: id,
+          object: 'customer',
+          deleted: true,
+          // @ts-ignore
+          lastResponse: {}
+        }
+
         return response
       },
       retrieve: async (id) => {
@@ -509,7 +542,7 @@ export function createMockStripeCustomer (options = {}) {
  * Otherwise the mock implementations will be used.
  * @param {object} env
  * @param {string} env.STRIPE_SECRET_KEY
- * @param {Pick<DBClient, 'upsertUserCustomer'|'getUserCustomer'|'createUserAgreement'>} env.db
+ * @param {Pick<DBClient, 'insertUserCustomer'|'getUserCustomer'|'createUserAgreement'>} env.db
  * @returns {import('./billing-types').BillingEnv}
  */
 export function createStripeBillingContext (env) {
@@ -524,7 +557,7 @@ export function createStripeBillingContext (env) {
   const billing = StripeBillingService.create(stripe)
   /** @type {UserCustomerService} */
   const userCustomerService = {
-    upsertUserCustomer: env.db.upsertUserCustomer.bind(env.db),
+    insertUserCustomer: env.db.insertUserCustomer.bind(env.db),
     getUserCustomer: env.db.getUserCustomer.bind(env.db)
   }
   const customers = StripeCustomersService.create(stripe, userCustomerService)
