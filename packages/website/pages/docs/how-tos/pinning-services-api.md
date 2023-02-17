@@ -9,7 +9,7 @@ import Callout from 'components/callout/callout';
 
 [IPFS](https://ipfs.io/) is a distributed storage network. Data is cached on IPFS nodes. All content uploaded to web3.storage's IPFS nodes are persisted until told otherwise, but some nodes might garbage collect to make room for new content. A remote pinning service allows users to save and persist data that is already available on the IPFS network on its set of IPFS nodes. For instance, if you uploaded a file to your local IPFS node but don't want to make sure your computer is always connected to IPFS and this file is always served, you can remote pin it to a pinning service.
 
-web3.storage provides a pinning service that complies with the [IPFS Pinning Service API specification](https://ipfs.github.io/pinning-services-api-spec/).
+web3.storage provides a pinning service that complies with the [IPFS Pinning Service API specification](https://ipfs.github.io/pinning-services-api-spec/). **web3.storage's Pinning Service API is not to be used for ongoing production traffic, but rather for one-time migrations.**
 
 For a full list and documentation of all the available pinning service endpoints, visit the [IPFS Pinning Service API endpoint documentation](https://ipfs.github.io/pinning-services-api-spec/#tag/pins).
 
