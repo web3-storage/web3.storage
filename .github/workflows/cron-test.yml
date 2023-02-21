@@ -51,7 +51,7 @@ jobs:
           ipfs pin remote service add web3 "https://api.web3.storage" ${{ secrets.WEB3_TOKEN }}
           dd if=/dev/urandom of=./pin-test-3mib bs=1024 count=3072
           ipfs add --quiet --cid-version=1 ./pin-test-3mib > ./cid-to-pin
-          /usr/bin/time -f "%e" -o ./pin_duration_secs ipfs pin remote add --service=web3 --name=foo ./cid-to-pin
+          /usr/bin/time -f "%e" -o ./pin_duration_secs ipfs pin remote add --service=web3 --name=foo $(cat ./cid-to-pin)
           cat ./pin_duration_secs
           echo "# HELP web3storage_pin_duration_seconds How long it took to pin a file via kubo" > ./pin_metric
           echo "# TYPE web3storage_pin_duration_seconds gauge" >> ./pin_metric
