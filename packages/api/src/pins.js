@@ -144,6 +144,24 @@ export async function pinGet (request, env, ctx) {
     throw new PSAErrorResourceNotFound()
   }
 
+  /** @type {(() => Promise<any>)[]} */
+  const tasks = []
+
+  const inProgress = pinRequest.pins.filter((p) => p.status === 'PinQueued' || p.status === 'Pinning')
+  if (inProgress.length > 0) {
+    tasks.push(
+      waitAndUpdateOkPins.bind(
+        null,
+        pinRequest.contentCid,
+        env.cluster,
+        env.db)
+    )
+  }
+
+  if (ctx.waitUntil) {
+    tasks.forEach(t => ctx.waitUntil(t()))
+  }
+
   /** @type { PsaPinStatusResponse } */
   return new JSONResponse(toPinStatusResponse(pinRequest))
 }
