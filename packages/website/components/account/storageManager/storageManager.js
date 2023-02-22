@@ -33,23 +33,18 @@ const StorageManager = ({ className = '', content }) => {
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
   const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
   const limit = useMemo(() => {
-    if (currentPlan?.id === 'earlyAdopter') {
-      return data?.storageLimitBytes || defaultStorageLimit;
-    } else {
-      const byteConversion = currentPlan?.tiers?.[0].upTo ? gibibyte * currentPlan.tiers[0].upTo : defaultStorageLimit;
-      return byteConversion;
-    }
-  }, [data, currentPlan]);
+    const byteConversion = currentPlan?.tiers?.[0].upTo ? gibibyte * currentPlan.tiers[0].upTo : defaultStorageLimit;
+    return byteConversion;
+  }, [currentPlan]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
-  const { maxSpaceLabel, percentUploaded, percentPinned } = useMemo(
+  const { percentUploaded, percentPinned } = useMemo(
     () => ({
-      maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
       percentUploaded: Math.min((uploaded / limit) * 100, 100),
       percentPinned: Math.min((psaPinned / limit) * 100, 100),
     }),
-    [uploaded, psaPinned, limit, content]
+    [uploaded, psaPinned, limit]
   );
 
   useEffect(() => {
@@ -116,19 +111,11 @@ const StorageManager = ({ className = '', content }) => {
                   standard: 'iec',
                 })}
               </span>
-              {currentPlan?.id === 'earlyAdopter' ? (
-                <>
-                  &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
-                </>
-              ) : (
-                <>
-                  &nbsp;of{' '}
-                  <span className="storage-number">
-                    {currentPlan?.tiers?.[0].upTo ? formatAsStorageAmount(currentPlan?.tiers?.[0].upTo) : ''}
-                  </span>{' '}
-                  used
-                </>
-              )}
+              &nbsp;of{' '}
+              <span className="storage-number">
+                {currentPlan?.tiers?.[0].upTo ? formatAsStorageAmount(currentPlan?.tiers?.[0].upTo) : ''}
+              </span>{' '}
+              used
               <Tooltip content={content.tooltip_total}>
                 <InfoIcon />
               </Tooltip>

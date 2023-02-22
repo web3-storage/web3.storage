@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 
 import { userBillingSettings } from '../lib/api';
 import constants from '../lib/constants';
-import { earlyAdopterPlan, plans, plansEarly } from '../components/contexts/plansContext';
+import { freePlan, plans } from '../components/contexts/plansContext';
 
 /**
  * @typedef {import('../components/contexts/plansContext').Plan} Plan
@@ -42,19 +42,6 @@ export const usePayment = () => {
     loadPaymentSettings();
   }, [needsFetchPaymentSettings]);
 
-  // When storageSubscription is null, user sees a version of planList that contains 'Early Adopter' instead of 'free'
-  /** @type {Array<Plan>} */
-  const planList = useMemo(() => {
-    if (typeof paymentSettings === 'undefined') {
-      return plans;
-    }
-    const storageSubscription = paymentSettings.subscription.storage;
-    if (storageSubscription === null) {
-      return plansEarly;
-    }
-    return plans;
-  }, [paymentSettings]);
-
   // whenever the optimisticCurrentPlan is set, enqueue a fetch of actual payment settings
   useEffect(() => {
     if (optimisticCurrentPlan) {
@@ -72,10 +59,9 @@ export const usePayment = () => {
     }
     const storageSubscription = paymentSettings.subscription.storage;
     if (!storageSubscription) {
-      // user has no storage subscription, show early adopter plan
-      return earlyAdopterPlan;
+      return freePlan;
     }
-    const matchingStandardPlan = planList.find(plan => {
+    const matchingStandardPlan = plans.find(plan => {
       return plan.id === storageSubscription.price;
     });
 
@@ -84,7 +70,7 @@ export const usePayment = () => {
     }
 
     return matchingStandardPlan;
-  }, [planList, paymentSettings, optimisticCurrentPlan]);
+  }, [paymentSettings, optimisticCurrentPlan]);
 
   const savedPaymentMethod = useMemo(() => {
     return paymentSettings?.paymentMethod;

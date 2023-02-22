@@ -333,8 +333,6 @@ export class UnexpectedAPIResponseError extends APIError {
 
 /**
  * @typedef {import('../components/contexts/plansContext').StorageSubscription} StorageSubscription
- * @typedef {import('../components/contexts/plansContext').EarlyAdopterStorageSubscription
- *  } EarlyAdopterStorageSubscription
  */
 
 /**
@@ -364,7 +362,7 @@ export function isW3STermsOfServiceAgreement(value) {
  * Gets/Puts saved user plan and billing settings.
  * @param {W3STermsOfServiceAgreement|undefined} agreement
  * @param {string} [pmId] - payment method id
- * @param {StorageSubscription|EarlyAdopterStorageSubscription} [storageSubscription]
+ * @param {StorageSubscription} [storageSubscription]
  */
 export async function userBillingSettings(agreement, pmId, storageSubscription) {
   const putBody =
