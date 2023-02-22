@@ -45,11 +45,11 @@ export const sharedPlans = [
       {
         flatAmount: 300,
         unitAmount: 0,
-        upTo: 15,
+        upTo: 30,
       },
       {
         flatAmount: null,
-        unitAmount: 20,
+        unitAmount: 10,
         upTo: null,
       },
     ],
@@ -58,17 +58,17 @@ export const sharedPlans = [
     id: /** @type {const} */ ('pro'),
     description: 'Our lowest price per GiB stored. For those with use cases that require scale.',
     label: 'Expert',
-    bandwidth: '24',
+    bandwidth: '240',
     isPreferred: false,
     tiers: [
       {
         flatAmount: 1000,
         unitAmount: null,
-        upTo: 60,
+        upTo: 120,
       },
       {
         flatAmount: null,
-        unitAmount: 20,
+        unitAmount: 8,
         upTo: null,
       },
     ],
@@ -86,11 +86,6 @@ export const freePlan = {
       flatAmount: 0,
       unitAmount: 0,
       upTo: 5,
-    },
-    {
-      flatAmount: 0,
-      unitAmount: 20,
-      upTo: null,
     },
   ],
 };
