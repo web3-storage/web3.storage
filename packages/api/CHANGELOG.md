@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.1](https://github.com/web3-storage/web3.storage/compare/api-v7.15.0...api-v7.15.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* include R2 key in error message ([#2219](https://github.com/web3-storage/web3.storage/issues/2219)) ([5a320f4](https://github.com/web3-storage/web3.storage/commit/5a320f4258c9c757075545762d0a65dbb602daaf))
+
 ## [7.15.0](https://github.com/web3-storage/web3.storage/compare/api-v7.14.0...api-v7.15.0) (2023-02-21)
 
 
