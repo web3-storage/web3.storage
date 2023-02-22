@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.0](https://github.com/web3-storage/web3.storage/compare/api-v7.14.0...api-v7.15.0) (2023-02-21)
+
+
+### Features
+
+* recheck pin status on GET /pins/:req-id ([#2214](https://github.com/web3-storage/web3.storage/issues/2214)) ([91f067f](https://github.com/web3-storage/web3.storage/commit/91f067fabbea2403280b25cc555cd88fb062e201))
+
 ## [7.14.0](https://github.com/web3-storage/web3.storage/compare/api-v7.13.1...api-v7.14.0) (2023-01-13)
 
 
