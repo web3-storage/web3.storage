@@ -342,7 +342,7 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
     // assuming mostly unique cars, but could check for existence here before writing.
     return await pRetry(async () => env.CARPARK.put(key, carBytes, opts), { retries: 3 })
   } catch (cause) {
-    throw new Error('Failed to upload CAR to R2', { cause })
+    throw new Error(`Failed to upload CAR to R2: ${key}`, { cause })
   } finally {
     env.log.timeEnd('putToR2')
   }
@@ -379,7 +379,7 @@ export async function writeSatNavIndex (env, carCid, carBytes) {
     // assuming mostly unique cars, but could check for existence here before writing.
     return await pRetry(async () => env.SATNAV.put(key, indexBytes, opts), { retries: 3 })
   } catch (cause) {
-    throw new Error('Failed to write satnav index to R2', { cause })
+    throw new Error(`Failed to write satnav index to R2: ${key}`, { cause })
   } finally {
     env.log.timeEnd('writeSatNavIndex')
   }
@@ -400,7 +400,7 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
   try {
     return await pRetry(async () => env.DUDEWHERE.put(key, data), { retries: 3 })
   } catch (cause) {
-    throw new Error('Failed to write dudewhere index to R2', { cause })
+    throw new Error(`Failed to write dudewhere index to R2: ${key}`, { cause })
   } finally {
     env.log.timeEnd('writeDudeWhereIndex')
   }
