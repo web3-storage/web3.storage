@@ -14,7 +14,7 @@ import PaymentTable from '../../components/account/paymentTable.js/paymentTable.
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
-import { earlyAdopterPlan, plans, plansEarly } from '../../components/contexts/plansContext';
+import { plans, freePlan } from '../../components/contexts/plansContext';
 import { userBillingSettings } from '../../lib/api';
 import GeneralPageData from '../../content/pages/general.json';
 import constants from '../../lib/constants.js';
@@ -23,7 +23,6 @@ import constants from '../../lib/constants.js';
  * @typedef {import('../../components/contexts/plansContext').Plan} Plan
  * @typedef {import('../../components/contexts/plansContext').StorageSubscription} StorageSubscription
  * @typedef {import('../../components/contexts/plansContext').StoragePrice} StoragePrice
- * @typedef {import('../../components/contexts/plansContext').EarlyAdopterPlanId} EarlyAdopterPlanId
  */
 
 /**
@@ -96,19 +95,6 @@ const PaymentSettingsPage = props => {
     loadPaymentSettings();
   }, [needsFetchPaymentSettings]);
 
-  // When storageSubscription is null, user sees a version of planList that contains 'Early Adopter' instead of 'free'
-  /** @type {Array<Plan>} */
-  const planList = useMemo(() => {
-    if (typeof paymentSettings === 'undefined') {
-      return plans;
-    }
-    const storageSubscription = paymentSettings.subscription.storage;
-    if (storageSubscription === null) {
-      return plansEarly;
-    }
-    return plans;
-  }, [paymentSettings]);
-
   // whenever the optimisticCurrentPlan is set, enqueue a fetch of actual payment settings
   useEffect(() => {
     if (optimisticCurrentPlan) {
@@ -126,15 +112,14 @@ const PaymentSettingsPage = props => {
     }
     const storageSubscription = paymentSettings.subscription.storage;
     if (!storageSubscription) {
-      // user has no storage subscription, show early adopter plan
-      return earlyAdopterPlan;
+      return freePlan;
     }
     return typeof storageSubscription.price === 'string'
-      ? planList.find(plan => {
+      ? plans.find(plan => {
           return plan.id === storageSubscription.price;
         })
       : storageSubscription.price;
-  }, [planList, paymentSettings, optimisticCurrentPlan]);
+  }, [paymentSettings, optimisticCurrentPlan]);
   const savedPaymentMethod = useMemo(() => {
     return paymentSettings?.paymentMethod;
   }, [paymentSettings]);
@@ -160,7 +145,7 @@ const PaymentSettingsPage = props => {
               <Loading message="Fetching user info..." />
             ) : (
               <PaymentTable
-                plans={planList}
+                plans={plans}
                 currentPlan={currentPlan}
                 setPlanSelection={setPlanSelection}
                 setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
@@ -214,7 +199,7 @@ const PaymentSettingsPage = props => {
                   removePlanQueryParam();
                 }
               }}
-              planList={planList}
+              planList={plans}
               planSelection={planSelection}
               setCurrentPlan={setOptimisticCurrentPlan}
               savedPaymentMethod={savedPaymentMethod}

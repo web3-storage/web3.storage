@@ -8,16 +8,6 @@
  */
 
 /**
- * @typedef {null} EarlyAdopterStorageSubscription
- * When api's /user/payment .subscription.storage is null, there is no storage subscription.
- * And that is what we sometimes render as 'Early Adopter'
- */
-
-/**
- * @typedef {'earlyAdopter'} EarlyAdopterPlanId
- */
-
-/**
  * @typedef {object} StripeTier
  * @property {number|null} flatAmount
  * @property {number|null} unitAmount
@@ -34,7 +24,23 @@
  * @property {StripeTier[]} [tiers]
  */
 
-export const sharedPlans = [
+export const freePlan = {
+  id: /** @type {const} */ ('free'),
+  description: 'You are currently on the free tier. You can use our service up to 5GiB without being charged.',
+  label: 'Free',
+  bandwidth: '10',
+  isPreferred: false,
+  tiers: [
+    {
+      flatAmount: 0,
+      unitAmount: 0,
+      upTo: 5,
+    },
+  ],
+};
+
+export const plans = [
+  freePlan,
   {
     id: /** @type {const} */ ('lite'),
     description: 'For those that want to take advantage of more storage',
@@ -74,32 +80,3 @@ export const sharedPlans = [
     ],
   },
 ];
-
-export const freePlan = {
-  id: /** @type {const} */ ('free'),
-  description: 'You are currently on the free tier. You can use our service up to 5GiB without being charged.',
-  label: 'Free',
-  bandwidth: '10',
-  isPreferred: false,
-  tiers: [
-    {
-      flatAmount: 0,
-      unitAmount: 0,
-      upTo: 5,
-    },
-  ],
-};
-
-export const earlyAdopterPlan = {
-  id: /** @type {const} */ ('earlyAdopter'),
-  isPreferred: true,
-  bandwidth: null,
-  description:
-    'As an early adopter we appreciate your support and can continue to use the storage you are already accustomed to.',
-  label: 'Early Adopter',
-  tiers: [],
-};
-
-export const plans = [freePlan, ...sharedPlans];
-export const plansEarly = [earlyAdopterPlan, ...sharedPlans];
-export const plansAll = [freePlan, earlyAdopterPlan, ...sharedPlans];
