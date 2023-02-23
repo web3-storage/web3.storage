@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.35.1](https://github.com/web3-storage/web3.storage/compare/website-v2.35.0...website-v2.35.1) (2023-02-23)
+
+
+### Bug Fixes
+
+* display those with no subscription as Free Tier users ([#2221](https://github.com/web3-storage/web3.storage/issues/2221)) ([81081bd](https://github.com/web3-storage/web3.storage/commit/81081bd6760b5277a9f194f468ce5abd9e255f84))
+* PSA language emphasizing not for production ([#2209](https://github.com/web3-storage/web3.storage/issues/2209)) ([6f06ca7](https://github.com/web3-storage/web3.storage/commit/6f06ca7dd87737ba08ae2c6bcc619f0951b2545c))
+* remove '/mo' from free tier description ([#2203](https://github.com/web3-storage/web3.storage/issues/2203)) ([769fd67](https://github.com/web3-storage/web3.storage/commit/769fd6770a54d2aa826b6cd4a8cec1f2ac384ce3)), closes [#2173](https://github.com/web3-storage/web3.storage/issues/2173)
+* update price displayed in UI to reflect advertised price ([#2207](https://github.com/web3-storage/web3.storage/issues/2207)) ([da1b1d8](https://github.com/web3-storage/web3.storage/commit/da1b1d832b583bf04a53f77c3b5e1aaa110ba865))
+
 ## [2.35.0](https://github.com/web3-storage/web3.storage/compare/website-v2.34.0...website-v2.35.0) (2023-01-13)
 
 
