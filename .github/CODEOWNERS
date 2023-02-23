@@ -6,7 +6,7 @@
 
 # github's syntax docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#codeowners-syntax
 
-* @web3-storage/dag-house
+* @web3-storage/dag-house-devs
 
 # @web3-storage/website is maintained by multiple teams
-/packages/website/  @web3-storage/dag-house @web3-storage/website-codeowners
+/packages/website/  @web3-storage/dag-house-devs @web3-storage/website-codeowners
