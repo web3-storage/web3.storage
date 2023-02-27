@@ -54,6 +54,7 @@ export interface CustomersService {
   getContact(customerId: Customer['id']): Promise<CustomerContact|CustomerNotFound>
   updateContact(customerId: Customer['id'], contact: CustomerContact): Promise<CustomerNotFound|void>
   getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Pick<Customer, 'id'>>
+  getForUser(user: BillingUser): Promise<Pick<Customer, 'id'>|null>
 }
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'

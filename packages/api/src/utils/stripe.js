@@ -243,6 +243,20 @@ export class StripeCustomersService {
 
   /**
    * @param {import('./billing-types').BillingUser} user
+   * @returns {Promise<import('./billing-types').Customer|null>}
+   */
+  async getForUser (user) {
+    const customer = await this.userCustomerService.getUserCustomer(user.id.toString())
+
+    if (!customer) return null
+
+    return {
+      id: customer.id
+    }
+  }
+
+  /**
+   * @param {import('./billing-types').BillingUser} user
    * @param {import('./billing-types').UserCreationOptions} [options]
    * @returns {Promise<import('./billing-types').Customer>}
    */

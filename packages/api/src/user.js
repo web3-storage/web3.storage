@@ -13,7 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { INVALID_REQUEST_ID, REQUIRED_REQUEST_ID, validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
+import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {string} UserId
@@ -108,25 +108,6 @@ const createMagicLinkRequestAuthenticator = (env) => async (request) => {
 }
 
 /**
- * Initialize a new user that just registered.
- * @param {object} ctx
- * @param {object} user
- * @param {string} user.id
- * @param {string} user.issuer
- * @param {import('../src/utils/billing-types').UserCreationOptions} [userCreationOptions]
- */
-async function initializeNewUser (ctx, user, userCreationOptions) {
-  await initializeBillingForNewUser(
-    {
-      customers: ctx.customers,
-      subscriptions: ctx.subscriptions,
-      user: { ...user, id: user.id.toString() },
-      userCreationOptions
-    }
-  )
-}
-
-/**
  * @param {Request} request
  * @param {UserRegistrationContext} env
  * @returns {Promise<{ issuer: string }>}
@@ -155,15 +136,7 @@ async function loginOrRegister (request, env) {
     return maintenanceHandler()
   } else if (env.MODE === READ_WRITE) {
     user = await env.db.upsertUser(parsed)
-    // initialize billing, etc, but only if the user was newly inserted
-    if (user.inserted) {
-      await initializeNewUser(
-        env,
-        { ...user, id: user.id },
-        { name: parsed.name, email: parsed.email }
-      )
-    } else {
-      // previously existing user. Update their customer record
+    if (!user.inserted) {
       await updateUserCustomerContact(env, user, parsed)
     }
   } else if (env.MODE === READ_ONLY) {
@@ -182,8 +155,11 @@ async function loginOrRegister (request, env) {
  * @param {import('../src/utils/billing-types').CustomerContact} contact
  */
 async function updateUserCustomerContact (context, user, contact) {
-  const customer = await context.customers.getOrCreateForUser(user)
-  await context.customers.updateContact(customer.id, contact)
+  const customer = await context.customers.getForUser(user)
+
+  if (customer) {
+    await context.customers.updateContact(customer.id, contact)
+  }
 }
 
 /**
