@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.2](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.1...web3.storage-v4.5.2) (2023-02-28)
+
+
+### Bug Fixes
+
+* trigger ci ([efe9f14](https://github.com/web3-storage/web3.storage/commit/efe9f1421f9dae4a048ba8c15c32b982cc1be689))
+
 ## [4.5.1](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.0...web3.storage-v4.5.1) (2023-02-28)
 
 
