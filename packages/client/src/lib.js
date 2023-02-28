@@ -31,7 +31,7 @@ import {
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
-const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
+const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 50 // chunk to ~50MB CARs
 const MAX_BLOCK_SIZE = 1048576
 const MAX_CHUNK_SIZE = 104857600
 // These match what is enforced server-side

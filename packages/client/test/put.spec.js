@@ -144,7 +144,7 @@ describe('put', () => {
         uploadedChunks++
       }
     })
-    assert.ok(uploadedChunks >= 100)
+    assert.ok(uploadedChunks >= 20)
   })
 
   it('aborts', async () => {
