@@ -74,6 +74,16 @@ cli.command('name resolve <keyId>')
   .example('name resolve k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
   .action(Name.resolve)
 
+cli.command('name export <keyId>')
+  .describe('Print the signing key associated with the passed name. Can be used to write the key to a file for transfer to another machine.')
+  .example('name get k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z > priv.key')
+  .action(Name.exportKey)
+
+cli.command('name import <keyFile>')
+  .describe('Import a signing key from a file, as exported by `name export`.')
+  .example('name import priv.key')
+  .action(Name.importKey)
+
 cli.command('name rm <keyId>')
   .describe('Remove an IPNS name managed by this utility. Note: this does NOT unpublish the IPNS name, it simply removes the IPNS name and signing key from local config.')
   .example('name rm k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
