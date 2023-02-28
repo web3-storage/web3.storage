@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.5.1](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.0...web3.storage-v4.5.1) (2023-02-28)
+
+
+### Bug Fixes
+
+* set client default chunk size to 50MB ([#2227](https://github.com/web3-storage/web3.storage/issues/2227)) ([e34c2ac](https://github.com/web3-storage/web3.storage/commit/e34c2ace59633080898e05bc4bf963d72ffc1565))
+* upload and pin table refactor ([#2018](https://github.com/web3-storage/web3.storage/issues/2018)) ([cbfe9d7](https://github.com/web3-storage/web3.storage/commit/cbfe9d70dbd6ce4ac9e70692160feeec5d2713e2))
+
 ## [4.5.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.4.1...web3.storage-v4.5.0) (2022-09-20)
 
 
