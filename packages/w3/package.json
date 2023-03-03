@@ -33,7 +33,7 @@
     "sade": "^1.7.4",
     "uint8arrays": "^3.0.0",
     "w3name": "^1.0.6",
-    "web3.storage": "^3.5.2"
+    "web3.storage": "^4.5.4"
   },
   "devDependencies": {
     "execa": "^5.1.1",
