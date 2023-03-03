@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.7.0...w3-v2.8.0) (2023-03-03)
+
+
+### Features
+
+* update to latest web3.storage@4.5 ([#2232](https://github.com/web3-storage/web3.storage/issues/2232)) ([312a940](https://github.com/web3-storage/web3.storage/commit/312a940ce81ee75dc86555dee1a08a5eae23b536))
+
 ## [2.7.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.6.1...w3-v2.7.0) (2022-09-14)
 
 
