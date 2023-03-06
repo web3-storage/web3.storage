@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { JSONResponse } from './utils/json-response.js'
-import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
+import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins, fetchAndUpdatePins } from './utils/pin.js'
 import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, PinningServiceApiError } from './errors.js'
 import {
   INVALID_REQUEST_ID,
