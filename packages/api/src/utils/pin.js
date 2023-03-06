@@ -167,7 +167,6 @@ export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_
  * @returns {import('@web3-storage/db/db-client-types').PinsUpsertInput[]}
  */
 export function toPinsUpsert (contentCid, pins) {
-  // @ts-ignore
   return pins.map(pin => ({
     id: pin._id,
     status: pin.status,
