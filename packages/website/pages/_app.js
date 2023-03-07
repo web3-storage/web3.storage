@@ -29,7 +29,10 @@ const App = ({ Component, pageProps }) => {
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
         <Script src="https://track.web3.storage/latest.js" data-hostname="web3.storage" data-ignore-pages="/callback" />
-        <Script src="https://track.web3.storage/auto-events.js" />
+        {/* We're specifying download extensions here because the 'doc' extension conflicts
+            with the /docs URL path for our docs pages.  This is a workaround for a bad regex on
+            the Simple Analytics side.  See https://docs.simpleanalytics.com/automated-events */}
+        <Script data-extensions="pdf,csv,docx,xlsx,zip,xls" src="https://track.web3.storage/auto-events.js" />
         <noscript>
           {/* eslint-disable @next/next/no-img-element */}
           <img
