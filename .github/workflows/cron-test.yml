@@ -41,24 +41,6 @@ jobs:
           cat ./metric
           curl --silent --show-error --data-binary "@./metric" --basic --user "${{ secrets.PUSHGATEWAY_BASIC_AUTH }}" https://pushgateway.k8s.locotorp.info/metrics/job/web3storage_ci/instance/github_action
 
-      - uses: ibnesayeed/setup-ipfs@aff2e4ae38368a44ac36ecc244f8c693d2e5b263
-        with:
-          ipfs_version: '0.18.1'
-          run_daemon: true
-
-      - name: Pin 3MiB file via kubo and push duration to prometheus push gateway
-        run: |
-          ipfs pin remote service add web3 "https://api.web3.storage" ${{ secrets.WEB3_TOKEN }}
-          dd if=/dev/urandom of=./pin-test-3mib bs=1024 count=3072
-          ipfs add --quiet --cid-version=1 ./pin-test-3mib > ./cid-to-pin
-          /usr/bin/time -f "%e" -o ./pin_duration_secs ipfs pin remote add --service=web3 --name=foo $(cat ./cid-to-pin)
-          cat ./pin_duration_secs
-          echo "# HELP web3storage_pin_duration_seconds How long it took to pin a file via kubo" > ./pin_metric
-          echo "# TYPE web3storage_pin_duration_seconds gauge" >> ./pin_metric
-          echo "web3storage_pin_duration_seconds{size=\"3MiB\",cmd=\"kubo\"} $(cat ./pin_duration_secs)" >> ./pin_metric
-          cat ./pin_metric
-          curl --silent --show-error --data-binary "@./pin_metric" --basic --user "${{ secrets.PUSHGATEWAY_BASIC_AUTH }}" https://pushgateway.k8s.locotorp.info/metrics/job/web3storage_ci/instance/github_action
-
       - name: Heartbeat
         if: ${{ success() }}
         run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-upload-test
