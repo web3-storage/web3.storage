@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.35.2](https://github.com/web3-storage/web3.storage/compare/website-v2.35.1...website-v2.35.2) (2023-03-07)
+
+
+### Bug Fixes
+
+* apply workaround to Simple Analytics blocking navigation to /docs ([#2238](https://github.com/web3-storage/web3.storage/issues/2238)) ([29ab7fa](https://github.com/web3-storage/web3.storage/commit/29ab7fa86f98e1334599e3158f51bbb43eaa13f9)), closes [#2237](https://github.com/web3-storage/web3.storage/issues/2237)
+
 ## [2.35.1](https://github.com/web3-storage/web3.storage/compare/website-v2.35.0...website-v2.35.1) (2023-02-23)
 
 
