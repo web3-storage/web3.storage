@@ -183,5 +183,5 @@ export function toPinsUpsert (contentCid, pins) {
 export async function fetchAndUpdatePins (contentCid, cluster, db) {
   const statuses = await retry(() => getPins(contentCid, cluster), { retries: 3 })
   const upserts = toPinsUpsert(contentCid, statuses)
-  await retry(() => db.upsertPins(upserts), { retries: 3 })
+  return retry(() => db.upsertPins(upserts), { retries: 3 })
 }

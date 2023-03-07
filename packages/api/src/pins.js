@@ -148,6 +148,7 @@ export async function pinGet (request, env, ctx) {
 
   if (inProgress.length > 0) {
     await fetchAndUpdatePins(pinRequest.contentCid, env.cluster, env.db)
+    pinRequest = await env.db.getPsaPinRequest(authToken._id, request.params.requestId)
   }
 
   /** @type { PsaPinStatusResponse } */
