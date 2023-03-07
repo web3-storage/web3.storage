@@ -20,6 +20,12 @@ jobs:
           ipfs_version: '0.18.1'
           run_daemon: true
 
+      - name: IPFS debug info
+        run: |
+          # print multiaddrs for the local node
+          ipfs id -f="<addrs>"
+          ipfs version
+
       - name: Create a 3MiB file and add it to kubo
         run: |
           dd if=/dev/urandom of=./pin-test-3mib bs=1024 count=3072
