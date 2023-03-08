@@ -33,7 +33,7 @@ const generateUID = () => {
  *
  * @param { any } props TODO: Define props
  */
-function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disabled, children }) {
+function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disabled, children, trackingId }) {
   const [uid, setUID] = useState(generateUID);
   const [openOnNavigate, setopenOnNavigate] = useState(false);
   const router = useRouter();
@@ -46,13 +46,10 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
   }, [reportUID, uid]);
 
   useEffect(() => {
-    if (open && header) {
-      const headerLabel = header.props.children.find(child => {
-        return child.props.className === 'accordion-header-text';
-      });
-      saEvent('accordion_opened', { title: headerLabel.props.children });
+    if (open && trackingId) {
+      saEvent('accordion_opened', { title: trackingId });
     }
-  }, [header, open]);
+  }, [open, trackingId]);
 
   useEffect(() => {
     if (!!slug && !!router.query.section && router.query.section === slug) {

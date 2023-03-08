@@ -66,14 +66,6 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
     }
   }, [router, isMenuOpen]);
 
-  const handleKeySelect = useCallback(
-    (e, url) => {
-      onLinkClick(e);
-      router.push(url);
-    },
-    [router, onLinkClick]
-  );
-
   // ======================================================= Templates [Buttons]
   const getAccountMenu = () => {
     if (account && account.links) {
@@ -253,7 +245,7 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
                   <Fragment key={item.text}>
                     {item.links ? (
                       <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
-                        <ZeroAccordionSection disabled={!Array.isArray(item.links)}>
+                        <ZeroAccordionSection disabled={!Array.isArray(item.links)} trackingId={item.text}>
                           <ZeroAccordionSection.Header>
                             <div className="nav-item-heading">{item.text}</div>
                           </ZeroAccordionSection.Header>
@@ -288,7 +280,7 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
 
                 {isLoggedIn && account && (
                   <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
-                    <ZeroAccordionSection disabled={!Array.isArray(account.links)}>
+                    <ZeroAccordionSection disabled={!Array.isArray(account.links)} trackingId={account.text}>
                       <ZeroAccordionSection.Header>
                         <div className="nav-item-heading">{account.text}</div>
                       </ZeroAccordionSection.Header>
@@ -306,15 +298,8 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
                                   {link.text}
                                 </button>
                               ) : (
-                                <Link href={link.url} key={link.text}>
-                                  <a
-                                    href={link.url}
-                                    className="nav-sublink"
-                                    onClick={onLinkClick}
-                                    onKeyPress={e => handleKeySelect(e, link.url)}
-                                  >
-                                    {link.text}
-                                  </a>
+                                <Link href={link.url} key={link.text} onClick={onLinkClick} className="nav-sublink">
+                                  {link.text}
                                 </Link>
                               )
                             )}
