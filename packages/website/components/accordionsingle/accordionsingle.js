@@ -9,7 +9,7 @@ export default function AccordionSingle({ heading, children }) {
   return (
     <div className="block accordion-block">
       <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
-        <ZeroAccordionSection>
+        <ZeroAccordionSection trackingId={heading}>
           <ZeroAccordionSection.Header>
             <div className="accordion-chevron">
               <Chevron />
