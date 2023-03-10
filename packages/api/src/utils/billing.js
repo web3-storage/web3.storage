@@ -107,24 +107,6 @@ export function hasOwnProperty (obj, prop) {
 }
 
 /**
- * Initialize billing for a newly signed up user
- * @param {object} ctx
- * @param {import('./billing-types').CustomersService} ctx.customers
- * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
- * @param {import('./billing-types').BillingUser} ctx.user
- * @param {import('./billing-types').UserCreationOptions} [ctx.userCreationOptions]
- */
-export async function initializeBillingForNewUser (ctx) {
-  const { customers, user, userCreationOptions } = ctx
-  const customer = await customers.getOrCreateForUser(user, userCreationOptions)
-  await ctx.subscriptions.saveSubscription(customer.id, {
-    storage: {
-      price: storagePriceNames.free
-    }
-  })
-}
-
-/**
  * Get a user's payment settings
  * @param {object} ctx
  * @param {import('./billing-types').BillingService} ctx.billing
@@ -191,6 +173,17 @@ export function createMockCustomerService (
 ) {
   const mockCustomers = []
   /**
+   * @type {import('src/utils/billing-types.js').CustomersService['getForUser']}
+   */
+  async function getForUser (user) {
+    const existingCustomerForUser = await userCustomerService.getUserCustomer(user.id)
+    if (existingCustomerForUser) {
+      return { id: existingCustomerForUser.id }
+    }
+
+    return null
+  }
+  /**
    * @type {import('src/utils/billing-types.js').CustomersService['getOrCreateForUser']}
    */
   async function getOrCreateForUser (user, creationOptions) {
@@ -230,6 +223,7 @@ export function createMockCustomerService (
   return {
     getContact,
     getOrCreateForUser,
+    getForUser,
     updateContact,
     mockCustomers
   }
