@@ -4,6 +4,7 @@ title: Getting upload status
 
 import Img from 'components/cloudflareImage';
 import ImgPageFiles from '../../../public/images/docs/account-page-files.png';
+import Callout from 'components/callout/callout';
 
 # Getting upload status
 
