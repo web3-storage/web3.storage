@@ -488,6 +488,6 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, `Invalid CAR file received: block data does not match CID for ${cid.toString()}`)
+    assert.strictEqual(message, 'CID hash does not match bytes')
   })
 })
