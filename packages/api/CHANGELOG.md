@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.2](https://github.com/web3-storage/web3.storage/compare/api-v7.15.1...api-v7.15.2) (2023-03-10)
+
+
+### Bug Fixes
+
+* stop creating a Stripe account during web3.storage account creation ([#2226](https://github.com/web3-storage/web3.storage/issues/2226)) ([425ac5c](https://github.com/web3-storage/web3.storage/commit/425ac5c0b6f92ffa038077b08237a4201dfa5615))
+
 ## [7.15.1](https://github.com/web3-storage/web3.storage/compare/api-v7.15.0...api-v7.15.1) (2023-02-22)
 
 
