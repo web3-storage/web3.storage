@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.35.3](https://github.com/web3-storage/web3.storage/compare/website-v2.35.2...website-v2.35.3) (2023-03-13)
+
+
+### Bug Fixes
+
+* clarify docs when status is pinning ([#2242](https://github.com/web3-storage/web3.storage/issues/2242)) ([04ff58a](https://github.com/web3-storage/web3.storage/commit/04ff58ac0a488360926f9c9e8c31184c53da4d1d))
+* fix app failure when clicking 'Account +' on mobile ([#2240](https://github.com/web3-storage/web3.storage/issues/2240)) ([34e64ea](https://github.com/web3-storage/web3.storage/commit/34e64ea1135915ebdfe9951689756c273c64eabf)), closes [#2223](https://github.com/web3-storage/web3.storage/issues/2223)
+
 ## [2.35.2](https://github.com/web3-storage/web3.storage/compare/website-v2.35.1...website-v2.35.2) (2023-03-07)
 
 
