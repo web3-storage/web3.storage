@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.3](https://github.com/web3-storage/web3.storage/compare/api-v7.15.2...api-v7.15.3) (2023-03-15)
+
+
+### Bug Fixes
+
+* use car block validator ([#2241](https://github.com/web3-storage/web3.storage/issues/2241)) ([13fcc6c](https://github.com/web3-storage/web3.storage/commit/13fcc6c70e6f2af81e78f149c6e507109adc5563))
+
 ## [7.15.2](https://github.com/web3-storage/web3.storage/compare/api-v7.15.1...api-v7.15.2) (2023-03-10)
 
 
