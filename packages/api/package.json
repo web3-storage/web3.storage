@@ -69,6 +69,7 @@
     "@magic-ext/oauth": "^0.8.0",
     "@magic-sdk/admin": "^1.3.0",
     "@nftstorage/ipfs-cluster": "^5.0.1",
+    "@web3-storage/car-block-validator": "^1.0.0",
     "@web3-storage/db": "^4.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
     "cardex": "^1.0.0",
