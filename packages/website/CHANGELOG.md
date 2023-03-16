@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.35.4](https://github.com/web3-storage/web3.storage/compare/website-v2.35.3...website-v2.35.4) (2023-03-16)
+
+
+### Bug Fixes
+
+* w3link rate limit in docs ([#2250](https://github.com/web3-storage/web3.storage/issues/2250)) ([ef67051](https://github.com/web3-storage/web3.storage/commit/ef6705191a51a48b7b056e9c0fc06e3733787121))
+
 ## [2.35.3](https://github.com/web3-storage/web3.storage/compare/website-v2.35.2...website-v2.35.3) (2023-03-13)
 
 
