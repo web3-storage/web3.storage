@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { JSONResponse } from './utils/json-response.js'
-import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
+import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins, fetchAndUpdatePins } from './utils/pin.js'
 import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, PinningServiceApiError } from './errors.js'
 import {
   INVALID_REQUEST_ID,
@@ -144,22 +144,11 @@ export async function pinGet (request, env, ctx) {
     throw new PSAErrorResourceNotFound()
   }
 
-  /** @type {(() => Promise<any>)[]} */
-  const tasks = []
-
   const inProgress = pinRequest.pins.filter((p) => p.status === 'PinQueued' || p.status === 'Pinning')
-  if (inProgress.length > 0) {
-    tasks.push(
-      waitAndUpdateOkPins.bind(
-        null,
-        pinRequest.contentCid,
-        env.cluster,
-        env.db)
-    )
-  }
 
-  if (ctx.waitUntil) {
-    tasks.forEach(t => ctx.waitUntil(t()))
+  if (inProgress.length > 0) {
+    await fetchAndUpdatePins(pinRequest.contentCid, env.cluster, env.db)
+    pinRequest = await env.db.getPsaPinRequest(authToken._id, request.params.requestId)
   }
 
   /** @type { PsaPinStatusResponse } */
