@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.7.0...cron-v1.7.1) (2023-03-17)
+
+
+### Bug Fixes
+
+* only recheck pin status if pinning or queued ([#2236](https://github.com/web3-storage/web3.storage/issues/2236)) ([949f866](https://github.com/web3-storage/web3.storage/commit/949f866b1845cc3a407d91bd8c09d21fbe0b13bb))
+
 ## [1.7.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.6.1...cron-v1.7.0) (2023-01-03)
 
 
