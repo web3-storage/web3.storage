@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.4](https://github.com/web3-storage/web3.storage/compare/api-v7.15.3...api-v7.15.4) (2023-03-17)
+
+
+### Bug Fixes
+
+* update pin status from GET /pins even if failed ([#2235](https://github.com/web3-storage/web3.storage/issues/2235)) ([78bbcdb](https://github.com/web3-storage/web3.storage/commit/78bbcdb019458c13395f07b44c8804d5e16b9788))
+
 ## [7.15.3](https://github.com/web3-storage/web3.storage/compare/api-v7.15.2...api-v7.15.3) (2023-03-15)
 
 
