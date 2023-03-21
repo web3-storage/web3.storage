@@ -1,4 +1,4 @@
-name: Cron PSA Test
+name: Pinning Test
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   psa-test:
-    name: PSA test
+    name: Pinning Test
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
