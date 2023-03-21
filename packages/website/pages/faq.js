@@ -7,8 +7,16 @@ import GeneralPageData from '../content/pages/general.json';
 import AccordionBlock from '../components/accordionblock/accordionblock';
 import Loading from '../components/loading/loading';
 
+/**
+ * @typedef {{
+ *   id: string,
+ *   heading: string,
+ *   content: string,
+ * }} FaqSection
+ */
+
 export default function Home() {
-  const [faqSections, setFaqSections] = useState();
+  const [faqSections, setFaqSections] = useState(/** @type {FaqSection[]|undefined} */ (undefined));
   /** @type [any, null | any] */
   const [propsToParseAsMarkdown, setPropsToParseAsMarkdown] = useState([]);
   const sections = FAQPageData.page_content;
@@ -36,7 +44,8 @@ export default function Home() {
         setPropsToParseAsMarkdown(['content']);
       })
       .catch(e => {
-        // @ts-ignore
+        console.error('Error fetching FAQ: ', e);
+
         setFaqSections([
           {
             id: 'platform',
