@@ -81,10 +81,11 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
   const pinName = pinData.name || undefined
   const pinMeta = pinData.meta || undefined
 
-  await env.cluster.pin(cid, {
+  const pinRes = await env.cluster.pin(cid, {
     name: pinName,
     origins
   })
+  const delegates = pinRes?.metadata?.delegates
   const pins = await getPins(cid, env.cluster)
 
   const pinRequestData = {
@@ -100,7 +101,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
   const pinRequest = await env.db.createPsaPinRequest(pinRequestData)
 
   /** @type {PsaPinStatusResponse} */
-  const pinStatus = toPinStatusResponse(pinRequest)
+  const pinStatus = toPinStatusResponse(pinRequest, delegates)
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
@@ -195,9 +196,10 @@ export async function pinsGet (request, env, ctx) {
  * Transform a PinRequest into a PinStatus
  *
  * @param { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } pinRequest
+ * @param {string[]} delegates
  * @returns { PsaPinStatusResponse }
  */
-export function toPinStatusResponse (pinRequest) {
+export function toPinStatusResponse (pinRequest, delegates = []) {
   return {
     requestid: pinRequest._id.toString(),
     status: getEffectivePinStatus(pinRequest.pins),
@@ -208,7 +210,7 @@ export function toPinStatusResponse (pinRequest) {
       ...pinRequest.origins && { origins: pinRequest.origins },
       ...pinRequest.meta && { meta: pinRequest.meta }
     },
-    delegates: []
+    delegates
   }
 }
 
