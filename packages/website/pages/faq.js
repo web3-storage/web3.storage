@@ -44,6 +44,7 @@ export default function Home() {
         setPropsToParseAsMarkdown(['content']);
       })
       .catch(e => {
+        // Any error in fetching or handling the response from the CMS should result in displaying the default content.
         console.error('Error fetching FAQ: ', e);
 
         setFaqSections([
