@@ -3,7 +3,7 @@ name: Pinning Test
 on:
   push:
     paths:
-      - '.github/workflows/cron-psa.yml'
+      - '.github/workflows/cron-test-pinning.yml'
   schedule:
     - cron: '50 * * * *'
   workflow_dispatch:

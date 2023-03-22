@@ -3,7 +3,7 @@ name: Upload test
 on:
   push:
     paths:
-      - '.github/workflows/cron-test.yml'
+      - '.github/workflows/cron-test-upload.yml'
   schedule:
     - cron: '*/10 * * * *'
   workflow_dispatch:
