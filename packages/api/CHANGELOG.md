@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.16.0](https://github.com/web3-storage/web3.storage/compare/api-v7.15.4...api-v7.16.0) (2023-03-22)
+
+
+### Features
+
+* provide delegates on pin add response ([#2255](https://github.com/web3-storage/web3.storage/issues/2255)) ([5764145](https://github.com/web3-storage/web3.storage/commit/5764145230dcb5bb4c3cbcc0de54092e28dd31d2))
+
 ## [7.15.4](https://github.com/web3-storage/web3.storage/compare/api-v7.15.3...api-v7.15.4) (2023-03-17)
 
 
