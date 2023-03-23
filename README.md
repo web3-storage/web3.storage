@@ -1,4 +1,5 @@
-<h1 align="center">⁂<br/>web3.storage</h1>
+<h1 align="center">⁂<br><a href="https://web3.storage"><img width="25%" src="https://user-images.githubusercontent.com/11778450/227262707-1a9674a7-9286-43e3-87b4-98b388677720.png" alt="web3.storage logo" /></a>
+</h1>
 <p align="center">The simple file storage service for IPFS &amp; Filecoin.</p>
 
 ## Usage
