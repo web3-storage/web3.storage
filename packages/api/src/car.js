@@ -119,6 +119,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const { size: dagSize, rootCid, structure } = await carStat(carBytes)
 
   const sourceCid = rootCid.toString()
+  const contentCid = normalizeCid(sourceCid)
   const carCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes))
   const s3Key = `raw/${sourceCid}/${user._id}/${toString(carCid.multihash.bytes, 'base32')}.car`
   const r2Key = `${carCid}/${carCid}.car`
@@ -128,7 +129,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     putToS3(env, s3Key, carBytes, carCid, sourceCid, structure),
     putToR2(env, r2Key, carBytes, carCid, sourceCid, structure),
     writeSatNavIndex(env, carCid, carBytes),
-    writeDudeWhereIndex(env, sourceCid, carCid)
+    writeDudeWhereIndex(env, contentCid, carCid)
   ])
 
   const xName = headers.get('x-name')
@@ -136,8 +137,6 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   if (!name || typeof name !== 'string') {
     name = `Upload at ${new Date().toISOString()}`
   }
-
-  const contentCid = normalizeCid(sourceCid)
 
   // provide a pin object for elastic-ipfs.
   const elasticPin = (structure) => ({
