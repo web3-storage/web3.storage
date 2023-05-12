@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.16.1](https://github.com/web3-storage/web3.storage/compare/api-v7.16.0...api-v7.16.1) (2023-05-12)
+
+
+### Bug Fixes
+
+* dudewhere root cid should be content cid ([#2267](https://github.com/web3-storage/web3.storage/issues/2267)) ([2beaf4f](https://github.com/web3-storage/web3.storage/commit/2beaf4f211e19a62d5b00ffcbdfec817c60a37bf))
+
 ## [7.16.0](https://github.com/web3-storage/web3.storage/compare/api-v7.15.4...api-v7.16.0) (2023-03-22)
 
 
