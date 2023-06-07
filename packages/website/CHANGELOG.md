@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.36.0](https://github.com/web3-storage/web3.storage/compare/website-v2.35.4...website-v2.36.0) (2023-06-07)
+
+
+### Features
+
+* load faq content from Netlify ([#2106](https://github.com/web3-storage/web3.storage/issues/2106)) ([7eb3e11](https://github.com/web3-storage/web3.storage/commit/7eb3e114c8089aaa53ace6810fab717cd78b4018))
+
+
+### Bug Fixes
+
+* w3name docs ([#2273](https://github.com/web3-storage/web3.storage/issues/2273)) ([8fee564](https://github.com/web3-storage/web3.storage/commit/8fee56448bc5557264f85ef6cc68b3df641b4596))
+
 ## [2.35.4](https://github.com/web3-storage/web3.storage/compare/website-v2.35.3...website-v2.35.4) (2023-03-16)
 
 
