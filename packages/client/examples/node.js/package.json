@@ -8,9 +8,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@ipld/car": "^3.2.4",
+    "@ipld/dag-json": "^10.1.1",
     "minimist": "^1.2.5",
+    "multiformats": "^9.9.0",
     "web3.storage": "latest"
   },
   "author": "Vasco Santos",
-  "license": "(Apache-2.0 AND MIT)"
+  "license": "(Apache-2.0 AND MIT)",
+  "devDependencies": {
+    "@types/minimist": "^1.2.2",
+    "ts-node": "^10.9.1"
+  }
 }
