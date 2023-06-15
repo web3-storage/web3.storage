@@ -75,6 +75,7 @@
   "main": "./dist/src/lib.cjs",
   "exports": {
     ".": {
+			      "types": "./dist/src/lib.d.ts",
       "browser": "./src/lib.js",
       "require": "./dist/src/lib.cjs",
       "node": "./src/lib.js"
