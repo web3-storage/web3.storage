@@ -166,6 +166,10 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     dagSize
   })
 
+  if (structure === 'Complete') {
+    await env.GENDEX_QUEUE.send({ root: contentCid })
+  }
+
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
 
@@ -178,7 +182,11 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     }
     const report = await res.json()
     if (report.structure === 'Complete') {
-      return env.db.upsertPins([elasticPin(report.structure)])
+      return Promise.all([
+        env.db.upsertPins([elasticPin(report.structure)]),
+        // trigger block indexes to be built for this DAG
+        env.GENDEX_QUEUE.send({ root: contentCid })
+      ])
     }
   }, { retries: 3 })
 
