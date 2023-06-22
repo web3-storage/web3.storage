@@ -178,7 +178,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   // ask linkdex for the dag structure across the set of CARs in S3 for this upload.
   const checkDagStructureTask = async () => {
     /** @type {import('linkdex').Report & { cars: string[] }} */
-    const report = pRetry(async () => {
+    const report = await pRetry(async () => {
       const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
       const res = await fetch(url)
       if (!res.ok) {
@@ -188,7 +188,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     }, { retries: 3 })
 
     if (report.structure === 'Complete') {
-      return Promise.all([
+      return await Promise.all([
         pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
         // trigger block indexes to be built for this DAG
         pRetry(async () => {
