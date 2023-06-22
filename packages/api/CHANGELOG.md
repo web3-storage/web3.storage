@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.17.0](https://github.com/web3-storage/web3.storage/compare/api-v7.16.1...api-v7.17.0) (2023-06-22)
+
+
+### Features
+
+* trigger block index creation ([#2279](https://github.com/web3-storage/web3.storage/issues/2279)) ([f058dcf](https://github.com/web3-storage/web3.storage/commit/f058dcf0226b08739393f7cb68762db6c0d3cc8e))
+
 ## [7.16.1](https://github.com/web3-storage/web3.storage/compare/api-v7.16.0...api-v7.16.1) (2023-05-12)
 
 
