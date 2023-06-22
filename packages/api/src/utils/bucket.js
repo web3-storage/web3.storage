@@ -9,7 +9,7 @@ import { CAR_CODE } from '../constants.js'
  * @param {string} path
  */
 export function rawCarPathToShardCid (path) {
-  const parts = String(path).split('/')
+  const parts = path.split('/')
   const filename = String(parts[3])
   const digestBytes = fromString(filename.split('.')[0], 'base32')
   const digest = Digest.decode(digestBytes)
