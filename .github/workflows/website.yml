@@ -57,7 +57,7 @@ jobs:
           - firefox
           - chromium
         os:
-          - ubuntu-18.04
+          - ubuntu-latest
         node-version:
           - 16
         test_results_path:
