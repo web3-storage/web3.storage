@@ -18,6 +18,7 @@ import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
+import { rawCarPathToShardCid } from './utils/bucket.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -167,7 +168,8 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   })
 
   if (structure === 'Complete') {
-    await env.GENDEX_QUEUE.send({ root: contentCid })
+    const message = { block: contentCid, shards: [carCid.toString()], root: contentCid, recursive: true }
+    await env.GENDEX_QUEUE.send(message)
   }
 
   /** @type {(() => Promise<any>)[]} */
@@ -180,12 +182,17 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     if (!res.ok) {
       throw new LinkdexError(res.status, res.statusText)
     }
+    /** @type {import('linkdex').Report & { cars: string[] }} */
     const report = await res.json()
     if (report.structure === 'Complete') {
       return Promise.all([
         env.db.upsertPins([elasticPin(report.structure)]),
         // trigger block indexes to be built for this DAG
-        env.GENDEX_QUEUE.send({ root: contentCid })
+        (async () => {
+          const shards = report.cars.map(rawCarPathToShardCid).map(cid => cid.toString())
+          const message = { block: contentCid, shards, root: contentCid, recursive: true }
+          await env.GENDEX_QUEUE.send(message)
+        })()
       ])
     }
   }, { retries: 3 })
