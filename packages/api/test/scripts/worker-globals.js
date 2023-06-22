@@ -16,6 +16,7 @@ export const GATEWAY_URL = 'http://localhost:8080'
 export const ENABLE_ADD_TO_CLUSTER = 'true'
 export const LINKDEX_URL = 'https://fake.linkdex.net'
 export const CARPARK_URL = 'https://carpark-test.web3.storage'
+export const GENDEX_QUEUE = { send: () => {} }
 
 // Can be removed once we get a test mode for admin magic sdk.
 export const DANGEROUSLY_BYPASS_MAGIC_AUTH = true

@@ -58,6 +58,7 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {import('./utils/billing-types').BillingService} billing
  * @property {import('./utils/billing-types').CustomersService} customers
  * @property {string} stripeSecretKey
+ * @property {Queue<{ block: string, shards: string[], root?: string, recursive?: boolean }>} GENDEX_QUEUE
  */
 
 /**

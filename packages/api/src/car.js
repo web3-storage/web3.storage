@@ -18,6 +18,7 @@ import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
+import { rawCarPathToShardCid } from './utils/bucket.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -165,21 +166,38 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     dagSize
   })
 
+  if (structure === 'Complete') {
+    const message = { block: contentCid, shards: [carCid.toString()], root: contentCid, recursive: true }
+    await env.GENDEX_QUEUE.send(message)
+  }
+
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
 
   // ask linkdex for the dag structure across the set of CARs in S3 for this upload.
-  const checkDagStructureTask = () => pRetry(async () => {
-    const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
-    const res = await fetch(url)
-    if (!res.ok) {
-      throw new LinkdexError(res.status, res.statusText)
-    }
-    const report = await res.json()
+  const checkDagStructureTask = async () => {
+    /** @type {import('linkdex').Report & { cars: string[] }} */
+    const report = await pRetry(async () => {
+      const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
+      const res = await fetch(url)
+      if (!res.ok) {
+        throw new LinkdexError(res.status, res.statusText)
+      }
+      return await res.json()
+    }, { retries: 3 })
+
     if (report.structure === 'Complete') {
-      return env.db.upsertPins([elasticPin(report.structure)])
+      return await Promise.all([
+        pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
+        // trigger block indexes to be built for this DAG
+        pRetry(async () => {
+          const shards = report.cars.map(rawCarPathToShardCid).map(cid => cid.toString())
+          const message = { block: contentCid, shards, root: contentCid, recursive: true }
+          await env.GENDEX_QUEUE.send(message)
+        }, { retries: 3 })
+      ])
     }
-  }, { retries: 3 })
+  }
 
   // pin and add the blocks to cluster. Has it's own internal retry logic.
   const addToClusterTask = async () => {
