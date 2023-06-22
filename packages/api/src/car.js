@@ -176,26 +176,29 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const tasks = []
 
   // ask linkdex for the dag structure across the set of CARs in S3 for this upload.
-  const checkDagStructureTask = () => pRetry(async () => {
-    const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
-    const res = await fetch(url)
-    if (!res.ok) {
-      throw new LinkdexError(res.status, res.statusText)
-    }
+  const checkDagStructureTask = async () => {
     /** @type {import('linkdex').Report & { cars: string[] }} */
-    const report = await res.json()
+    const report = pRetry(async () => {
+      const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
+      const res = await fetch(url)
+      if (!res.ok) {
+        throw new LinkdexError(res.status, res.statusText)
+      }
+      return await res.json()
+    }, { retries: 3 })
+
     if (report.structure === 'Complete') {
       return Promise.all([
-        env.db.upsertPins([elasticPin(report.structure)]),
+        pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
         // trigger block indexes to be built for this DAG
-        (async () => {
+        pRetry(async () => {
           const shards = report.cars.map(rawCarPathToShardCid).map(cid => cid.toString())
           const message = { block: contentCid, shards, root: contentCid, recursive: true }
           await env.GENDEX_QUEUE.send(message)
-        })()
+        }, { retries: 3 })
       ])
     }
-  }, { retries: 3 })
+  }
 
   // pin and add the blocks to cluster. Has it's own internal retry logic.
   const addToClusterTask = async () => {
