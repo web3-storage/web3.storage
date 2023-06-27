@@ -166,9 +166,9 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     dagSize
   })
 
-  if (structure === 'Complete') {
+  if (structure === 'Complete' && env.GENDEX_QUEUE) {
     const message = { block: contentCid, shards: [carCid.toString()], root: contentCid, recursive: true }
-    await env.GENDEX_QUEUE?.send(message)
+    await env.GENDEX_QUEUE.send(message)
   }
 
   /** @type {(() => Promise<any>)[]} */
@@ -191,9 +191,11 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
         pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
         // trigger block indexes to be built for this DAG
         pRetry(async () => {
-          const shards = report.cars.map(rawCarPathToShardCid).map(cid => cid.toString())
-          const message = { block: contentCid, shards, root: contentCid, recursive: true }
-          await env.GENDEX_QUEUE?.send(message)
+          if (env.GENDEX_QUEUE) {
+            const shards = report.cars.map(rawCarPathToShardCid).map(cid => cid.toString())
+            const message = { block: contentCid, shards, root: contentCid, recursive: true }
+            await env.GENDEX_QUEUE.send(message)
+          }
         }, { retries: 3 })
       ])
     }
