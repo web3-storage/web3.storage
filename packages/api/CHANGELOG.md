@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.17.2](https://github.com/web3-storage/web3.storage/compare/api-v7.17.1...api-v7.17.2) (2023-06-27)
+
+
+### Bug Fixes
+
+* really do not use the queue ([851560c](https://github.com/web3-storage/web3.storage/commit/851560c0296b93c493218bad3e26f3ae52655cad))
+
 ## [7.17.1](https://github.com/web3-storage/web3.storage/compare/api-v7.17.0...api-v7.17.1) (2023-06-27)
 
 
