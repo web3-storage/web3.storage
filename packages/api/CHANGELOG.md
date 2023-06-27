@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.18.0](https://github.com/web3-storage/web3.storage/compare/api-v7.17.2...api-v7.18.0) (2023-06-27)
+
+
+### Features
+
+* re-enable queue push ([35b6bbd](https://github.com/web3-storage/web3.storage/commit/35b6bbd0d4db5462b21729d44b3be3e682cd10d1))
+
 ## [7.17.2](https://github.com/web3-storage/web3.storage/compare/api-v7.17.1...api-v7.17.2) (2023-06-27)
 
 
