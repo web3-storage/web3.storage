@@ -55,9 +55,9 @@ r2_buckets = [
   { binding = "SATNAV", bucket_name = "satnav-prod-0" }
 ]
 
-# [[env.production.queues.producers]]
-#   queue = "gendex-prod"
-#   binding = "GENDEX_QUEUE"
+[[env.production.queues.producers]]
+  queue = "gendex-production"
+  binding = "GENDEX_QUEUE"
 
 [env.staging]
 # name = "web3-storage-staging"

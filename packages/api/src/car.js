@@ -167,8 +167,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   })
 
   if (structure === 'Complete' && env.GENDEX_QUEUE) {
-    const message = { block: contentCid, shards: [carCid.toString()], root: contentCid, recursive: true }
-    await env.GENDEX_QUEUE.send(message)
+    await env.GENDEX_QUEUE.send({ shards: [carCid.toString()] })
   }
 
   /** @type {(() => Promise<any>)[]} */
@@ -193,8 +192,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
         pRetry(async () => {
           if (env.GENDEX_QUEUE) {
             const shards = report.cars.map(rawCarPathToShardCid).map(cid => cid.toString())
-            const message = { block: contentCid, shards, root: contentCid, recursive: true }
-            await env.GENDEX_QUEUE.send(message)
+            await env.GENDEX_QUEUE.send({ shards })
           }
         }, { retries: 3 })
       ])
