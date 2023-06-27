@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.17.1](https://github.com/web3-storage/web3.storage/compare/api-v7.17.0...api-v7.17.1) (2023-06-27)
+
+
+### Bug Fixes
+
+* only send to queue if configured ([f2b3d2c](https://github.com/web3-storage/web3.storage/commit/f2b3d2c6d467efe5bfae022e8f779511a886ccd4))
+* remove queue binding ([d945fc9](https://github.com/web3-storage/web3.storage/commit/d945fc97dca143635c41c3d7ab235ca7148ad314))
+
 ## [7.17.0](https://github.com/web3-storage/web3.storage/compare/api-v7.16.1...api-v7.17.0) (2023-06-22)
 
 
