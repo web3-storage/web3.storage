@@ -18,7 +18,6 @@ import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
-import { rawCarPathToShardCid } from './utils/bucket.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -166,10 +165,6 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     dagSize
   })
 
-  if (structure === 'Complete' && env.GENDEX_QUEUE) {
-    await env.GENDEX_QUEUE.send({ shards: [carCid.toString()] })
-  }
-
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
 
@@ -186,16 +181,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     }, { retries: 3 })
 
     if (report.structure === 'Complete') {
-      return await Promise.all([
-        pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
-        // trigger block indexes to be built for this DAG
-        pRetry(async () => {
-          if (env.GENDEX_QUEUE) {
-            const shards = report.cars.map(rawCarPathToShardCid).map(cid => cid.toString())
-            await env.GENDEX_QUEUE.send({ shards })
-          }
-        }, { retries: 3 })
-      ])
+      return await pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 })
     }
   }
 

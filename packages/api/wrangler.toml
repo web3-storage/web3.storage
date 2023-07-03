@@ -15,10 +15,6 @@ new_classes = ["NameRoom0"]
 tag = "v1"
 deleted_classes = ["NameRoom0"]
 
-[[queues.producers]]
-  queue = "gendex-dev"
-  binding = "GENDEX_QUEUE"
-
 # ---- Environment specific overrides below ! ----
 # NOTE: wrangler automatically assigns each env the root `name` with the env name suffixed on the end
 # NOTE: wrangler tries to find an account_id defined at the root if workers_dev = true is not provided on your env.
@@ -39,10 +35,6 @@ r2_buckets = [
   { binding = "SATNAV", bucket_name = "satnav-test-0" }
 ]
 
-[[env.test.queues.producers]]
-  queue = "gendex-test"
-  binding = "GENDEX_QUEUE"
-
 # PROD!
 [env.production]
 # name = "web3-storage-production"
@@ -55,10 +47,6 @@ r2_buckets = [
   { binding = "SATNAV", bucket_name = "satnav-prod-0" }
 ]
 
-[[env.production.queues.producers]]
-  queue = "gendex-production"
-  binding = "GENDEX_QUEUE"
-
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
@@ -70,10 +58,6 @@ r2_buckets = [
   { binding = "DUDEWHERE", bucket_name = "dudewhere-staging-0" },
   { binding = "SATNAV", bucket_name = "satnav-staging-0" }
 ]
-
-[[env.staging.queues.producers]]
-  queue = "gendex-staging"
-  binding = "GENDEX_QUEUE"
 
 [env.alan]
 workers_dev = true
