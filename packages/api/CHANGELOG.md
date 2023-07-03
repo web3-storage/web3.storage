@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.18.1](https://github.com/web3-storage/web3.storage/compare/api-v7.18.0...api-v7.18.1) (2023-07-03)
+
+
+### Bug Fixes
+
+* remove send to gendex queue ([#2287](https://github.com/web3-storage/web3.storage/issues/2287)) ([a2cf9fd](https://github.com/web3-storage/web3.storage/commit/a2cf9fd551343a943c1a481d29dd0457f51f1143))
+
 ## [7.18.0](https://github.com/web3-storage/web3.storage/compare/api-v7.17.2...api-v7.18.0) (2023-06-27)
 
 
