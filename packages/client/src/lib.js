@@ -184,10 +184,10 @@ class Web3Storage {
     }
     const targetSize = maxChunkSize
     const url = new URL('car', endpoint)
-    let headers = Web3Storage.headers(token)
-
-    if (name) {
-      headers = { ...headers, 'X-Name': encodeURIComponent(name) }
+    const headers = {
+      ...Web3Storage.headers(token),
+      'Content-Type': 'application/vnd.ipld.car',
+      ...(name ? { 'X-Name': encodeURIComponent(name) } : {})
     }
 
     const roots = await car.getRoots()
@@ -221,7 +221,11 @@ class Web3Storage {
             response = await fetch(url.toString(), {
               method: 'POST',
               headers,
-              body: carFile,
+              // TODO: should not be necessary to await arrayBuffer()!
+              // Node.js 20 hangs reading the stream (it never ends) but in
+              // older node versions and the browser it is fine to pass a blob.
+              body: await carFile.arrayBuffer(),
+              // body: carFile,
               signal
             })
           } catch (/** @type {any} */err) {

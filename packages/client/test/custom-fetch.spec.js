@@ -6,7 +6,7 @@ import { File, fetch } from '../src/platform.js'
 describe('test custom fetch', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
-  const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
+  const endpoint = new URL(API_PORT ? `http://127.0.0.1:${API_PORT}` : '')
 
   it('with custom fetch', async () => {
     let result = false
