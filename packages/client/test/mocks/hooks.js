@@ -5,7 +5,7 @@
  *  smoke --hooks test/mocks/hoooks.js <your mocks dir>
  *
  * Allows you to curl a CAR at your mock like:
- *  curl -X POST http://localhost:1337/car -H "Content-Type: application/vnd.ipld.car" --data-binary "@./pics.car"
+ *  curl -X POST http://127.0.0.1:1337/car -H "Content-Type: application/vnd.ipld.car" --data-binary "@./pics.car"
  *  {"ok":true,"value":{"cid":"bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu","size":195}}
  *
  * see: https://github.com/sinedied/smoke#middleware-hooks
