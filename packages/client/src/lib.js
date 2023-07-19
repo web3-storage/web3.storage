@@ -218,6 +218,7 @@ class Web3Storage {
       // FIXME: should not be necessary to await arrayBuffer()!
       // Node.js 20 hangs reading the stream (it never ends) but in
       // older node versions and the browser it is fine to pass a blob.
+      /* c8 ignore next 3 */
       if (parseInt(globalThis.process?.versions?.node) > 18) {
         body = await body.arrayBuffer()
       }
