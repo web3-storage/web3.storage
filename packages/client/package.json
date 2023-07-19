@@ -15,7 +15,7 @@
   "scripts": {
     "test": "npm-run-all -p -r mock:api test:all",
     "test:all": "run-s test:web test:cjs test:esm",
-    "test:size": "bundlesize",
+    "test:size": "npx bundlesize",
     "test:web": "API_PORT=1337 playwright-test test/*.spec.js",
     "test:cjs": "API_PORT=1337 mocha dist/test/*.spec.cjs --exit",
     "test:esm": "API_PORT=1337 hundreds mocha test/*.spec.js --exit",
@@ -54,7 +54,6 @@
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@types/mocha": "9.0.0",
     "body-parser": "^1.20.2",
-    "bundlesize": "^0.18.1",
     "cors": "^2.8.5",
     "del-cli": "^4.0.0",
     "hundreds": "0.0.9",
