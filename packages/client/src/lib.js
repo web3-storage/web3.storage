@@ -211,8 +211,10 @@ class Web3Storage {
         carParts.push(part)
       }
 
+      const carFile = new Blob(carParts, { type: 'application/vnd.ipld.car' })
+
       /** @type {Blob|ArrayBuffer} */
-      let body = new Blob(carParts, { type: 'application/vnd.ipld.car' })
+      let body = carFile
       // FIXME: should not be necessary to await arrayBuffer()!
       // Node.js 20 hangs reading the stream (it never ends) but in
       // older node versions and the browser it is fine to pass a blob.
