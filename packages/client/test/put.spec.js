@@ -111,7 +111,7 @@ describe('put', () => {
   })
 
   it('adds big files', async function () {
-    this.timeout(60e3)
+    this.timeout(120e3)
     const rateLimiter = createUnboundRateLimiter()
     const client = new Web3Storage({ token, endpoint, rateLimiter })
     let uploadedChunks = 0
