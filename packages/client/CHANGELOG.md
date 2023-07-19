@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.5](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.4...web3.storage-v4.5.5) (2023-07-19)
+
+
+### Bug Fixes
+
+* this param for fetch calls ([#2292](https://github.com/web3-storage/web3.storage/issues/2292)) ([bf32c53](https://github.com/web3-storage/web3.storage/commit/bf32c53959d731ca567b109ab4d5fc73b4bbbfb7))
+
 ## [4.5.4](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.3...web3.storage-v4.5.4) (2023-02-28)
 
 
