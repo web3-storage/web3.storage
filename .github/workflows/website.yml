@@ -268,7 +268,6 @@ jobs:
       url: https://web3.storage
     needs:
       - test
-      - test-e2e
       - preview
       - changelog
     steps:
