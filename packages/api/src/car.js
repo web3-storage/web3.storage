@@ -1,8 +1,7 @@
 // @ts-nocheck
 /* eslint-env serviceworker */
+/* global ReadableStream */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
-import { CarBlockIterator } from '@ipld/car'
-import { CarIndexer } from '@ipld/car/indexer'
 import { toString } from 'uint8arrays'
 import { LinkIndexer } from 'linkdex'
 import { maybeDecode } from 'linkdex/decode'
@@ -12,12 +11,16 @@ import * as raw from 'multiformats/codecs/raw'
 import * as pb from '@ipld/dag-pb'
 import { validateBlock } from '@web3-storage/car-block-validator'
 import pRetry from 'p-retry'
-import { MultihashIndexSortedWriter } from 'cardex'
+import { CARReaderStream } from 'carstream'
+import { Map as LinkMap } from 'lnmap'
+import { Set as LinkSet } from 'lnset'
+import * as CARIndex from './utils/car-index.js'
 import { InvalidCarError, LinkdexError } from './errors.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
+import { bucketKeyToCarCID } from './utils/bucket.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -116,21 +119,22 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
-  const { size: dagSize, rootCid, structure } = await carStat(carBytes)
+  const { size: dagSize, rootCid, carCid, structure, linkIndex, blockOffsets } = await carStat(carBytes)
 
   const sourceCid = rootCid.toString()
   const contentCid = normalizeCid(sourceCid)
-  const carCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes))
   const s3Key = `raw/${sourceCid}/${user._id}/${toString(carCid.multihash.bytes, 'base32')}.car`
   const r2Key = `${carCid}/${carCid}.car`
   env.sentry?.setExtras({ sourceCid, carCid: carCid.toString(), dagSize, structure, s3Key, r2Key })
 
-  await Promise.all([
+  const [,, indexCid] = await Promise.all([
     putToS3(env, s3Key, carBytes, carCid, sourceCid, structure),
     putToR2(env, r2Key, carBytes, carCid, sourceCid, structure),
-    writeSatNavIndex(env, carCid, carBytes),
+    writeSatNavIndex(env, carCid, blockOffsets),
     writeDudeWhereIndex(env, contentCid, carCid)
   ])
+
+  await writeContentClaims(env, rootCid, carCid, indexCid, structure, linkIndex, blockOffsets)
 
   const xName = headers.get('x-name')
   let name = xName && decodeURIComponent(xName)
@@ -181,7 +185,18 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     }, { retries: 3 })
 
     if (report.structure === 'Complete') {
-      return await pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 })
+      return Promise.all([
+        pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
+        pRetry(async () => {
+          if (!env.claimBuilder) return
+          const parts = new LinkSet(report.cars.map(bucketKeyToCarCID).filter(Boolean))
+          const claim = env.claimBuilder.createPartitionClaim(rootCid, [...parts])
+          const result = await claim.execute(env.claimBuilder.connection)
+          if (!result.ok) {
+            throw new Error('failed writing partition claim', { cause: result.out.error })
+          }
+        }, { retries: 3 })
+      ])
     }
   }
 
@@ -357,31 +372,19 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
  *
  * @param {import('./env').Env} env
  * @param {CID} carCid
- * @param {Uint8Array} carBytes
+ * @param {Map<CID, number>} blockOffsets
  */
-export async function writeSatNavIndex (env, carCid, carBytes) {
+export async function writeSatNavIndex (env, carCid, blockOffsets) {
   env.log.time('writeSatNavIndex')
-  const indexer = await CarIndexer.fromBytes(carBytes)
-  const { writer, out } = MultihashIndexSortedWriter.create()
-
-  for await (const blockIndexData of indexer) {
-    writer.put(blockIndexData)
-  }
-  writer.close()
-
-  const chunks = []
-  for await (const chunk of out) {
-    chunks.push(chunk)
-  }
-  const indexBytes = new Uint8Array(await new Blob(chunks).arrayBuffer())
-  const digest = await sha256.encode(indexBytes)
+  const index = await CARIndex.encode(blockOffsets)
   const key = `${carCid}/${carCid}.car.idx`
 
   /** @type R2PutOptions */
-  const opts = { sha256: toString(digest, 'base16') }
+  const opts = { sha256: toString(index.cid.multihash.digest, 'base16') }
   try {
     // assuming mostly unique cars, but could check for existence here before writing.
-    return await pRetry(async () => env.SATNAV.put(key, indexBytes, opts), { retries: 3 })
+    await pRetry(async () => env.SATNAV.put(key, index.bytes, opts), { retries: 3 })
+    return index.cid
   } catch (cause) {
     throw new Error(`Failed to write satnav index to R2: ${key}`, { cause })
   } finally {
@@ -411,6 +414,31 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
 }
 
 /**
+ * @param {import('./env').Env} env
+ * @param {import('multiformats').UnknownLink} rootCid
+ * @param {import('multiformats').Link} carCid
+ * @param {import('multiformats').Link} indexCid
+ * @param {import('linkdex').DagStructure} structure
+ * @param {Map<string, Set<string>>} linkIndex
+ * @param {Map<import('multiformats').UnknownLink, number>} blockOffsets
+ */
+async function writeContentClaims (env, rootCid, carCid, indexCid, structure, linkIndex, blockOffsets) {
+  if (!env.claimBuilder) return
+  const claims = [
+    env.claimBuilder.createLocationClaim(carCid, new URL(`${carCid}/${carCid}.car`, env.CARPARK_URL)),
+    env.claimBuilder.createLocationClaim(indexCid, new URL(`${carCid}/${carCid}.car.idx`, env.CARPARK_URL)),
+    env.claimBuilder.createInclusionClaim(carCid, indexCid),
+    ...(await env.claimBuilder.createRelationClaims(rootCid, carCid, linkIndex, blockOffsets)),
+    ...(structure === 'Complete' ? [env.claimBuilder.createPartitionClaim(rootCid, [carCid])] : [])
+  ]
+  const results = await pRetry(() => env.claimBuilder.connection.execute(...claims), { retries: 3 })
+  for (const result of results) {
+    if (result.out.ok) continue
+    throw new Error('failed writing content claims', { cause: result.out.error })
+  }
+}
+
+/**
  * Returns the sum of all block sizes and total blocks. Throws if the CAR does
  * not conform to our idea of a valid CAR i.e.
  * - Missing root CIDs
@@ -420,13 +448,29 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
  * - Missing root block
  * - Missing non-root blocks (when root block has links)
  *
- * @typedef {{ size: number, blocks: number, rootCid: CID }} CarStat
+ * @typedef {{
+ *   size: number
+ *   blocks: number
+ *   rootCid: CID
+ *   carCid: CID
+ *   structure: import('linkdex').DagStructure
+ *   linkIndex: Map<string, Set<string>>
+ *   blockOffsets: Map<import('multiformats').UnknownLink, number>
+ * }} CarStat
  * @param {Uint8Array} carBytes
  * @returns {Promise<CarStat>}
  */
 async function carStat (carBytes) {
-  const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
-  const roots = await blocksIterator.getRoots()
+  const carCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes))
+  const carByteStream = new ReadableStream({
+    pull (controller) {
+      controller.enqueue(carBytes)
+      controller.close()
+    }
+  })
+  const carReader = new CARReaderStream()
+  const blocksIterator = toIterable(carByteStream.pipeThrough(carReader))
+  const { roots } = await carReader.getHeader()
   if (roots.length === 0) {
     throw new InvalidCarError('missing roots')
   }
@@ -436,6 +480,8 @@ async function carStat (carBytes) {
   const linkIndexer = new LinkIndexer()
   const rootCid = roots[0]
   let rawRootBlock
+  /** @type {Map<import('multiformats').Link, number>} */
+  const blockOffsets = new LinkMap()
   let blocks = 0
   for await (const block of blocksIterator) {
     const blockSize = block.bytes.byteLength
@@ -447,6 +493,7 @@ async function carStat (carBytes) {
       rawRootBlock = block
     }
     linkIndexer.decodeAndIndex(block)
+    blockOffsets.set(block.cid, block.offset)
     blocks++
   }
   if (blocks === 0) {
@@ -474,7 +521,7 @@ async function carStat (carBytes) {
     }
   }
   const structure = linkIndexer.getDagStructureLabel()
-  return { size, blocks, rootCid, structure }
+  return { size, blocks, rootCid, carCid, structure, linkIndex: linkIndexer.idx, blockOffsets }
 }
 
 /**
@@ -489,3 +536,11 @@ function cumulativeSize (pbNodeBytes, pbNode) {
   // This logic is the same as used by go/js-ipfs to display the cumulative size of a dag-pb dag.
   return pbNodeBytes.byteLength + pbNode.Links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
 }
+
+/**
+ * ReadableStream does not have [Symbol.asyncIterator] in typescript types yet.
+ * @template T
+ * @param {ReadableStream<T>} readable
+ * @returns {AsyncIterable<T>}
+ */
+const toIterable = readable => readable

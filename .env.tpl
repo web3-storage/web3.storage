@@ -54,6 +54,12 @@ S3_SECRET_ACCESS_KEY_ID = 'minioadmin'
 # URL prefix for the linkdex-api
 # LINKDEX_URL = "https://linkdex.web3.storage"
 
+# Content Claims
+# CONTENT_CLAIMS_PRIVATE_KEY = "base64pad encoded ed25519 key"
+# CONTENT_CLAIMS_PROOF = "base64pad encoded CAR of delegation"
+# CONTENT_CLAIMS_SERVICE_DID = "did:web:claims.web3.storage"
+# CONTENT_CLAIMS_SERVICE_URL = "https://claims.web3.storage"
+
 ## ---- website ---------------------------------------------------------------
 
 # vars to expose to the public website build have to be prefixed with NEXT_PUBLIC_
