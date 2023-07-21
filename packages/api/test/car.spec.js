@@ -11,6 +11,8 @@ import retry from 'p-retry'
 import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/client-s3'
 import { concat, equals } from 'uint8arrays'
 import { MultihashIndexSortedReader } from 'cardex'
+import * as Claims from '@web3-storage/content-claims/client'
+import { Assert } from '@web3-storage/content-claims/capability'
 import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from '../src/constants.js'
@@ -274,6 +276,74 @@ describe('POST /car', () => {
     }, { retries: 3 })
 
     linkdexMock.destroy()
+  })
+
+  it.only('should write content claims', async () => {
+    const issuer = 'test-upload'
+    const token = await getTestJWT(issuer, issuer)
+    const { root, car: carBody } = await createCar('content clams')
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/vnd.ipld.car'
+      },
+      body: carBody
+    })
+    await res.json()
+
+    /** @param {import('multiformats').UnknownLink} content */
+    const getClaims = async content => {
+      /** @type {import('@web3-storage/content-claims/server/api').ClaimStore} */
+      const claimStore = globalThis.claimStore
+      const rows = await claimStore.get(content)
+      const claims = await Promise.all(rows.map(c => Claims.decode(c.bytes)))
+      const groups = {
+        [Assert.inclusion.can]: /** @type {import('@web3-storage/content-claims/client/api').InclusionClaim[]} */ ([]),
+        [Assert.relation.can]: /** @type {import('@web3-storage/content-claims/client/api').RelationClaim[]} */ ([]),
+        [Assert.partition.can]: /** @type {import('@web3-storage/content-claims/client/api').PartitionClaim[]} */ ([]),
+        [Assert.location.can]: /** @type {import('@web3-storage/content-claims/client/api').LocationClaim[]} */ ([])
+      }
+      for (const c of claims) {
+        const group = groups[c.type]
+        if (!group) throw new Error('unknown claim')
+        group.push(c)
+      }
+      return groups
+    }
+
+    let claims = await getClaims(root)
+
+    // expect a relation claim and partition claim
+    assert.equal(claims[Assert.relation.can].length, 1)
+    assert.equal(claims[Assert.partition.can].length, 1)
+    assert.equal(claims[Assert.inclusion.can].length, 0)
+    assert.equal(claims[Assert.location.can].length, 0)
+
+    const part = claims[Assert.partition.can][0].parts[0]
+    assert(part)
+
+    claims = await getClaims(part)
+
+    // expect a location claim and an inclusion claim
+    assert.equal(claims[Assert.relation.can].length, 0)
+    assert.equal(claims[Assert.partition.can].length, 0)
+    assert.equal(claims[Assert.inclusion.can].length, 1)
+    assert.equal(claims[Assert.location.can].length, 1)
+
+    assert.equal(String(claims[Assert.location.can][0].location[0]), `${CARPARK_URL}/${part}/${part}.car`)
+
+    const index = claims[Assert.inclusion.can][0].includes
+    claims = await getClaims(index)
+
+    // expect a location claim
+    assert.equal(claims[Assert.relation.can].length, 0)
+    assert.equal(claims[Assert.partition.can].length, 0)
+    assert.equal(claims[Assert.inclusion.can].length, 0)
+    assert.equal(claims[Assert.location.can].length, 1)
+
+    assert.equal(String(claims[Assert.location.can][0].location[0]), `${CARPARK_URL}/${part}/${part}.car.idx`)
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {

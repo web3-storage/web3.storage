@@ -163,12 +163,13 @@ export function createRelationClaimsWithIndexes (conf, root, part, linkIndex, bl
   const items = []
   for (const [cidstr, links] of linkIndex) {
     const cid = Link.parse(cidstr)
-    if ((cid.code === raw.code || !blockOffsets.has(cid)) && !root.equals(cid)) {
-      continue
-    }
+    if (!blockOffsets.has(cid)) continue
+
+    const isRoot = root.toString() === cid.toString()
+    if (cid.code === raw.code && !isRoot) continue
 
     const children = [...links].map(l => Link.parse(l)).filter(l => blockOffsets.has(l))
-    if (!children.length) continue
+    if (!children.length && !isRoot) continue
     items.push([cid, children])
   }
 
