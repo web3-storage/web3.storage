@@ -186,14 +186,18 @@ describe('POST /car', () => {
     const r2Object = await r2Bucket.get(`${carCid}/${carCid}.car.idx`)
     assert.ok(r2Object?.body, 'repsonse stream must exist')
 
-    const reader = MultihashIndexSortedReader.fromIterable(r2Object?.body)
+    const reader = MultihashIndexSortedReader.createReader({ reader: r2Object.body.getReader() })
     const entries = []
-    for await (const entry of reader.entries()) {
-      entries.push(entry)
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      entries.push(value)
     }
 
     assert.equal(entries.length, 1, 'Index contains a single entry')
-    assert.ok(equals(entries[0].digest, root.multihash.digest), 'Index entry is for root data CID')
+    const entryDigest = entries[0]?.digest
+    assert(entryDigest)
+    assert.ok(equals(entryDigest, root.multihash.digest), 'Index entry is for root data CID')
   })
 
   it('should write dudewhere index', async () => {

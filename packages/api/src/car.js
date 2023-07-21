@@ -188,10 +188,11 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
       return Promise.all([
         pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
         pRetry(async () => {
-          if (!env.claimBuilder) return
+          const { claimFactory } = env
+          if (!claimFactory) return
           const parts = new LinkSet(report.cars.map(bucketKeyToCarCID).filter(Boolean))
-          const claim = env.claimBuilder.createPartitionClaim(rootCid, [...parts])
-          const result = await claim.execute(env.claimBuilder.connection)
+          const claim = claimFactory.createPartitionClaim(rootCid, [...parts])
+          const result = await claim.execute(claimFactory.connection)
           if (!result.ok) {
             throw new Error('failed writing partition claim', { cause: result.out.error })
           }
@@ -423,15 +424,16 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
  * @param {Map<import('multiformats').UnknownLink, number>} blockOffsets
  */
 async function writeContentClaims (env, rootCid, carCid, indexCid, structure, linkIndex, blockOffsets) {
-  if (!env.claimBuilder) return
+  const { claimFactory } = env
+  if (!claimFactory) return
   const claims = [
-    env.claimBuilder.createLocationClaim(carCid, new URL(`${carCid}/${carCid}.car`, env.CARPARK_URL)),
-    env.claimBuilder.createLocationClaim(indexCid, new URL(`${carCid}/${carCid}.car.idx`, env.CARPARK_URL)),
-    env.claimBuilder.createInclusionClaim(carCid, indexCid),
-    ...(await env.claimBuilder.createRelationClaims(rootCid, carCid, linkIndex, blockOffsets)),
-    ...(structure === 'Complete' ? [env.claimBuilder.createPartitionClaim(rootCid, [carCid])] : [])
+    claimFactory.createLocationClaim(carCid, new URL(`${carCid}/${carCid}.car`, env.CARPARK_URL)),
+    claimFactory.createLocationClaim(indexCid, new URL(`${carCid}/${carCid}.car.idx`, env.CARPARK_URL)),
+    claimFactory.createInclusionClaim(carCid, indexCid),
+    ...(await claimFactory.createRelationClaimsWithIndexes(rootCid, carCid, linkIndex, blockOffsets)),
+    ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
   ]
-  const results = await pRetry(() => env.claimBuilder.connection.execute(...claims), { retries: 3 })
+  const results = await pRetry(() => claimFactory.connection.execute(...claims), { retries: 3 })
   for (const result of results) {
     if (result.out.ok) continue
     throw new Error('failed writing content claims', { cause: result.out.error })

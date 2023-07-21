@@ -15,7 +15,7 @@ import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 import { createStripeBillingContext } from './utils/stripe.js'
 import { createMockBillingContext } from './utils/billing.js'
-import { Builder } from './utils/content-claims.js'
+import { Factory as ClaimFactory } from './utils/content-claims.js'
 
 /**
  * @typedef {object} Env
@@ -67,7 +67,7 @@ import { Builder } from './utils/content-claims.js'
  * @property {import('./utils/billing-types').BillingService} billing
  * @property {import('./utils/billing-types').CustomersService} customers
  * @property {string} stripeSecretKey
- * @property {import('./utils/content-claims').Builder} [claimBuilder]
+ * @property {import('./utils/content-claims').Factory} [claimFactory]
  */
 
 /**
@@ -234,12 +234,13 @@ export async function envAll (req, env, ctx) {
     const proofs = []
     if (env.CONTENT_CLAIMS_PROOF) {
       const proof = await Delegation.extract(fromString(env.CONTENT_CLAIMS_PROOF, 'base64pad'))
+      // @ts-expect-error typescript version does not support cause
       if (!proof.ok) throw new Error('failed to extract proof', { cause: proof.error })
       proofs.push(proof.ok)
     }
     const servicePrincipal = DID.parse(env.CONTENT_CLAIMS_SERVICE_DID ?? 'did:web:claims.web3.storage')
     const serviceURL = new URL(env.CONTENT_CLAIMS_SERVICE_URL ?? 'https://claims.web3.storage')
-    env.claimBuilder = new Builder(signer, proofs, servicePrincipal, serviceURL)
+    env.claimFactory = new ClaimFactory(signer, proofs, servicePrincipal, serviceURL)
   } else {
     console.warn('content claims are disabled')
   }

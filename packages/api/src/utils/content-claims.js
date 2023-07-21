@@ -13,7 +13,7 @@ import * as CARIndex from './car-index.js'
  * }} InvocationConfig
  */
 
-export class Builder {
+export class Factory {
   /**
    * @param {import('@ucanto/interface').Signer} issuer
    * @param {import('@ucanto/interface').Proof[]} proofs
@@ -58,13 +58,28 @@ export class Builder {
   }
 
   /**
+   * @param {import('multiformats').UnknownLink} content
+   * @param {import('multiformats').UnknownLink[]} children
+   * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
+   */
+  createRelationClaim (content, children, parts) {
+    return createRelationClaim(this._conf, content, children, parts)
+  }
+
+  /**
+   * Create relation claims for all indexed blocks that have children, plus one
+   * for the root block, even if it does not have children.
+   *
+   * Also creates CARv2 indexes for each claim and attaches the index as a
+   * block in the claim.
+   *
    * @param {import('multiformats').UnknownLink} root
    * @param {import('multiformats').Link} part
    * @param {Map<string, Set<string>>} linkIndex
    * @param {Map<import('multiformats').UnknownLink, number>} blockOffsets
    */
-  createRelationClaims (root, part, linkIndex, blockOffsets) {
-    return createRelationClaims(this._conf, root, part, linkIndex, blockOffsets)
+  createRelationClaimsWithIndexes (root, part, linkIndex, blockOffsets) {
+    return createRelationClaimsWithIndexes(this._conf, root, part, linkIndex, blockOffsets)
   }
 }
 
@@ -80,7 +95,6 @@ export function createLocationClaim (conf, content, location) {
     with: conf.audience.did(),
     nb: {
       content,
-      // @ts-expect-error string is not `${string}:${string}`
       location: [location.toString()]
     },
     expiration: Infinity,
@@ -121,16 +135,30 @@ export function createPartitionClaim (conf, content, parts) {
 }
 
 /**
- * Create relation claims for all indexed blocks that have children, plus one
- * for the root block, even if it does not have children.
- *
+ * @param {InvocationConfig} conf
+ * @param {import('multiformats').UnknownLink} content
+ * @param {import('multiformats').UnknownLink[]} children
+ * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
+ */
+export function createRelationClaim (conf, content, children, parts) {
+  return Assert.relation.invoke({
+    issuer: conf.issuer,
+    audience: conf.audience,
+    with: conf.audience.did(),
+    nb: { content, children, parts },
+    expiration: Infinity,
+    proofs: conf.proofs
+  })
+}
+
+/**
  * @param {InvocationConfig} conf
  * @param {import('multiformats').UnknownLink} root
  * @param {import('multiformats').Link} part
  * @param {Map<string, Set<string>>} linkIndex
  * @param {Map<import('multiformats').UnknownLink, number>} blockOffsets
  */
-export function createRelationClaims (conf, root, part, linkIndex, blockOffsets) {
+export function createRelationClaimsWithIndexes (conf, root, part, linkIndex, blockOffsets) {
   /** @type {Array<[import('multiformats').UnknownLink, import('multiformats').UnknownLink[]]>} */
   const items = []
   for (const [cidstr, links] of linkIndex) {
@@ -157,18 +185,7 @@ export function createRelationClaims (conf, root, part, linkIndex, blockOffsets)
     }
 
     const index = await CARIndex.encode([[cid, offset], ...childOffsets])
-    const claim = Assert.relation.invoke({
-      issuer: conf.issuer,
-      audience: conf.audience,
-      with: conf.audience.did(),
-      nb: {
-        content: cid,
-        children,
-        parts: [{ content: part, includes: index.cid }]
-      },
-      expiration: Infinity,
-      proofs: conf.proofs
-    })
+    const claim = createRelationClaim(conf, cid, children, [{ content: part, includes: index.cid }])
     claim.attach(index)
     return claim
   }))
