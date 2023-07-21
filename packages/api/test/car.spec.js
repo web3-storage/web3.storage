@@ -25,7 +25,8 @@ import {
   S3_ACCESS_KEY_ID,
   S3_SECRET_ACCESS_KEY_ID,
   LINKDEX_URL,
-  CARPARK_URL
+  CARPARK_URL,
+  GATEWAY_URL
 } from './scripts/worker-globals.js'
 
 // Cluster client needs global fetch
@@ -278,7 +279,7 @@ describe('POST /car', () => {
     linkdexMock.destroy()
   })
 
-  it.only('should write content claims', async () => {
+  it('should write content claims', async () => {
     const issuer = 'test-upload'
     const token = await getTestJWT(issuer, issuer)
     const { root, car: carBody } = await createCar('content clams')
@@ -332,7 +333,7 @@ describe('POST /car', () => {
     assert.equal(claims[Assert.inclusion.can].length, 1)
     assert.equal(claims[Assert.location.can].length, 1)
 
-    assert.equal(String(claims[Assert.location.can][0].location[0]), `${CARPARK_URL}/${part}/${part}.car`)
+    assert.equal(String(claims[Assert.location.can][0].location[0]), new URL(`/ipfs/${part}`, GATEWAY_URL))
 
     const index = claims[Assert.inclusion.can][0].includes
     claims = await getClaims(index)
@@ -343,7 +344,7 @@ describe('POST /car', () => {
     assert.equal(claims[Assert.inclusion.can].length, 0)
     assert.equal(claims[Assert.location.can].length, 1)
 
-    assert.equal(String(claims[Assert.location.can][0].location[0]), `${CARPARK_URL}/${part}/${part}.car.idx`)
+    assert.equal(String(claims[Assert.location.can][0].location[0]), new URL(`/ipfs/${index}`, GATEWAY_URL))
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {

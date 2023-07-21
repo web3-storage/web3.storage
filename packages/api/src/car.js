@@ -426,17 +426,22 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
 async function writeContentClaims (env, rootCid, carCid, indexCid, structure, linkIndex, blockOffsets) {
   const { claimFactory } = env
   if (!claimFactory) return
-  const claims = [
-    claimFactory.createLocationClaim(carCid, new URL(`${carCid}/${carCid}.car`, env.CARPARK_URL)),
-    claimFactory.createLocationClaim(indexCid, new URL(`${carCid}/${carCid}.car.idx`, env.CARPARK_URL)),
-    claimFactory.createInclusionClaim(carCid, indexCid),
-    ...(await claimFactory.createRelationClaimsWithIndexes(rootCid, carCid, linkIndex, blockOffsets)),
-    ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
-  ]
-  const results = await pRetry(() => claimFactory.connection.execute(...claims), { retries: 3 })
-  for (const result of results) {
-    if (result.out.ok) continue
-    throw new Error('failed writing content claims', { cause: result.out.error })
+  env.log.time('writeContentClaims')
+  try {
+    const claims = [
+      claimFactory.createLocationClaim(carCid, new URL(`/ipfs/${carCid}`, env.GATEWAY_URL)),
+      claimFactory.createLocationClaim(indexCid, new URL(`/ipfs/${indexCid}`, env.GATEWAY_URL)),
+      claimFactory.createInclusionClaim(carCid, indexCid),
+      ...(await claimFactory.createRelationClaimsWithIndexes(rootCid, carCid, linkIndex, blockOffsets)),
+      ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
+    ]
+    const results = await pRetry(() => claimFactory.connection.execute(...claims), { retries: 3 })
+    for (const result of results) {
+      if (result.out.ok) continue
+      throw new Error('failed writing content claims', { cause: result.out.error })
+    }
+  } finally {
+    env.log.timeEnd('writeContentClaims')
   }
 }
 
