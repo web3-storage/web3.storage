@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.1](https://github.com/web3-storage/web3.storage/compare/website-v2.36.0...website-v2.36.1) (2023-07-24)
+
+
+### Bug Fixes
+
+* make blocking in ToS explicit ([#2296](https://github.com/web3-storage/web3.storage/issues/2296)) ([0a7e091](https://github.com/web3-storage/web3.storage/commit/0a7e09100b0991d14281f6c826877c469c9032db))
+
 ## [2.36.0](https://github.com/web3-storage/web3.storage/compare/website-v2.35.4...website-v2.36.0) (2023-06-07)
 
 
