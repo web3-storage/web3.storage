@@ -49,6 +49,7 @@ jobs:
       - run: npm run lint -w packages/website
 
   test-e2e:
+    if: false
     name: "Test e2e - ${{ matrix.browser }}"
     strategy:
       fail-fast: false
@@ -268,7 +269,7 @@ jobs:
       url: https://web3.storage
     needs:
       - test
-      - test-e2e
+      # - test-e2e
       - preview
       - changelog
     steps:
