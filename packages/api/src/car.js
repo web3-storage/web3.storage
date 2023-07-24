@@ -429,8 +429,8 @@ async function writeContentClaims (env, rootCid, carCid, indexCid, structure, li
   env.log.time('writeContentClaims')
   try {
     const claims = [
-      claimFactory.createLocationClaim(carCid, new URL(`/ipfs/${carCid}`, env.GATEWAY_URL)),
-      claimFactory.createLocationClaim(indexCid, new URL(`/ipfs/${indexCid}`, env.GATEWAY_URL)),
+      claimFactory.createLocationClaim(carCid, new URL(`/${carCid}/${carCid}.car`, env.CARPARK_URL)),
+      claimFactory.createLocationClaim(indexCid, new URL(`/${carCid}/${carCid}.car.idx`, env.SATNAV_URL)),
       claimFactory.createInclusionClaim(carCid, indexCid),
       ...(await claimFactory.createRelationClaimsWithIndexes(rootCid, carCid, linkIndex, blockOffsets)),
       ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
