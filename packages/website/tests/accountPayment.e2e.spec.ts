@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }, testInfo) => {
 test.describe('/account/payment', () => {
   test('redirects through login and back when not initially authenticated', async ({ page }, testInfo) => {
     const accountPaymentPathname = '/account/payment/';
-    const accountQuery = '?plan=lite'
+    const accountQuery = '?plan=lite';
     const accountUrl = `${accountPaymentPathname}${accountQuery}`;
 
     // try to go to page that requires authn
