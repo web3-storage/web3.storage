@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.2](https://github.com/web3-storage/web3.storage/compare/website-v2.36.1...website-v2.36.2) (2023-07-24)
+
+
+### Bug Fixes
+
+* trigger release for 0a7e091 ([480d49d](https://github.com/web3-storage/web3.storage/commit/480d49d266786068c4be41cb3bad0f80dff4c7c2))
+
 ## [2.36.1](https://github.com/web3-storage/web3.storage/compare/website-v2.36.0...website-v2.36.1) (2023-07-24)
 
 
