@@ -357,7 +357,7 @@ describe('POST /car', () => {
     assert.equal(claims[Assert.relation.can].length, 1)
 
     assert.equal(claims[Assert.relation.can][0].children.length, 1)
-    assert.equal(claims[Assert.relation.can][0].children[0].toString(), middle.cid.toString())
+    assert.equal(claims[Assert.relation.can][0].children[0].toString(), leaf.cid.toString())
 
     claims = await getClaims(leaf.cid)
 
