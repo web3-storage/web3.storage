@@ -120,7 +120,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
-  const { size: dagSize, rootCid, carCid, structure, blockOffsets } = await carStat(carBytes)
+  const { size: dagSize, rootCid, carCid, structure, linkIndex, blockOffsets } = await carStat(carBytes)
 
   const sourceCid = rootCid.toString()
   const contentCid = normalizeCid(sourceCid)
@@ -135,7 +135,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     writeDudeWhereIndex(env, contentCid, carCid)
   ])
 
-  await writeContentClaims(env, rootCid, carCid, indexCid, indexCarCid, structure, [...blockOffsets.keys()])
+  await writeContentClaims(env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex)
 
   const xName = headers.get('x-name')
   let name = xName && decodeURIComponent(xName)
@@ -431,9 +431,9 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
  * @param {import('multiformats').Link} indexCid
  * @param {import('multiformats').Link} indexCarCid
  * @param {import('linkdex').DagStructure} structure
- * @param {import('multiformats').UnknownLink[]} descendants
+ * @param {Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>} linkIndex
  */
-async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, structure, descendants) {
+async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex) {
   const { claimFactory } = env
   if (!claimFactory) return
   env.log.time('writeContentClaims')
@@ -443,8 +443,8 @@ async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, 
       claimFactory.createInclusionClaim(carCid, indexCid),
       // The index data can be found in the index CAR.
       claimFactory.createPartitionClaim(indexCid, [indexCarCid]),
-      // Blocks with links are descendants of the root CID (so we can lookup the index)
-      ...claimFactory.createDescendantClaims(descendants, rootCid),
+      // Blocks with links have children that can be found in this CAR.
+      ...claimFactory.createRelationClaims(rootCid, carCid, indexCid, linkIndex),
       // If complete DAG, it can be found in the uploaded CAR.
       ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
     ]
@@ -474,6 +474,7 @@ async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, 
  *   rootCid: CID
  *   carCid: CID
  *   structure: import('linkdex').DagStructure
+ *   linkIndex: Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>
  *   blockOffsets: Map<import('multiformats').UnknownLink, number>
  * }} CarStat
  * @param {Uint8Array} carBytes
@@ -540,7 +541,7 @@ async function carStat (carBytes) {
     }
   }
   const structure = linkIndexer.getDagStructureLabel()
-  return { size, blocks, rootCid, carCid, structure, blockOffsets }
+  return { size, blocks, rootCid, carCid, structure, linkIndex: linkIndexer.idx, blockOffsets }
 }
 
 /**

@@ -307,7 +307,7 @@ describe('POST /car', () => {
       const claims = await Promise.all(rows.map(c => Claims.decode(c.bytes)))
       const groups = {
         [Assert.inclusion.can]: /** @type {import('@web3-storage/content-claims/client/api').InclusionClaim[]} */ ([]),
-        [Assert.descendant.can]: /** @type {import('@web3-storage/content-claims/client/api').DescendantClaim[]} */ ([]),
+        [Assert.relation.can]: /** @type {import('@web3-storage/content-claims/client/api').RelationClaim[]} */ ([]),
         [Assert.partition.can]: /** @type {import('@web3-storage/content-claims/client/api').PartitionClaim[]} */ ([])
       }
       for (const c of claims) {
@@ -320,10 +320,13 @@ describe('POST /car', () => {
 
     let claims = await getClaims(parent.cid)
 
-    // expect a partition claim for parent
-    assert.equal(claims[Assert.descendant.can].length, 0)
+    // expect a partition claim and relation claim for parent
+    assert.equal(claims[Assert.relation.can].length, 1)
     assert.equal(claims[Assert.partition.can].length, 1)
     assert.equal(claims[Assert.inclusion.can].length, 0)
+
+    assert.equal(claims[Assert.relation.can][0].children.length, 1)
+    assert.equal(claims[Assert.relation.can][0].children[0].toString(), middle.cid.toString())
 
     const part = claims[Assert.partition.can][0].parts[0]
     assert(part)
@@ -333,7 +336,7 @@ describe('POST /car', () => {
     // expect an inclusion claim for the CAR
     assert.equal(claims[Assert.partition.can].length, 0)
     assert.equal(claims[Assert.inclusion.can].length, 1)
-    assert.equal(claims[Assert.descendant.can].length, 0)
+    assert.equal(claims[Assert.relation.can].length, 0)
 
     const index = claims[Assert.inclusion.can][0].includes
     claims = await getClaims(index)
@@ -341,19 +344,27 @@ describe('POST /car', () => {
     // expect a partition claim for the index
     assert.equal(claims[Assert.partition.can].length, 1)
     assert.equal(claims[Assert.inclusion.can].length, 0)
-    assert.equal(claims[Assert.descendant.can].length, 0)
+    assert.equal(claims[Assert.relation.can].length, 0)
 
     const indexPart = claims[Assert.partition.can][0].parts[0]
     assert(indexPart)
 
     claims = await getClaims(middle.cid)
 
-    // expect a descendant claim for the middle node
+    // expect a relation claim for the middle node
     assert.equal(claims[Assert.partition.can].length, 0)
     assert.equal(claims[Assert.inclusion.can].length, 0)
-    assert.equal(claims[Assert.descendant.can].length, 1)
+    assert.equal(claims[Assert.relation.can].length, 1)
 
-    assert.equal(claims[Assert.descendant.can][0].ancestor.toString(), parent.cid.toString())
+    assert.equal(claims[Assert.relation.can][0].children.length, 1)
+    assert.equal(claims[Assert.relation.can][0].children[0].toString(), middle.cid.toString())
+
+    claims = await getClaims(leaf.cid)
+
+    // expect no claims for the leaf
+    assert.equal(claims[Assert.partition.can].length, 0)
+    assert.equal(claims[Assert.inclusion.can].length, 0)
+    assert.equal(claims[Assert.relation.can].length, 0)
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {

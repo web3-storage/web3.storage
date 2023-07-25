@@ -56,20 +56,24 @@ export class Factory {
 
   /**
    * @param {import('multiformats').UnknownLink} content
-   * @param {import('multiformats').UnknownLink} ancestor
+   * @param {import('multiformats').UnknownLink[]} children
+   * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
    */
-  createDescendantClaim (content, ancestor) {
-    return createDescendantClaim(this._conf, content, ancestor)
+  createRelationClaim (content, children, parts) {
+    return createRelationClaim(this._conf, content, children, parts)
   }
 
   /**
-   * Create descendant claims for all descendants that have children.
+   * Create relation claims for all indexed blocks that have children, plus one
+   * for the root block, even if it does not have children.
    *
-   * @param {import('multiformats').UnknownLink[]} contents
-   * @param {import('multiformats').UnknownLink} ancestor
+   * @param {import('multiformats').UnknownLink} root CID of the DAG root
+   * @param {import('multiformats').Link} part CID of the CAR
+   * @param {import('multiformats').Link} index CID of the index
+   * @param {Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>} linkIndex
    */
-  createDescendantClaims (contents, ancestor) {
-    return createDescendantClaims(this._conf, contents, ancestor)
+  createRelationClaims (root, part, index, linkIndex) {
+    return createRelationClaims(this._conf, root, part, index, linkIndex)
   }
 }
 
@@ -126,15 +130,15 @@ export function createPartitionClaim (conf, content, parts) {
 
 /**
  * @param {InvocationConfig} conf
- * @param {import('multiformats').UnknownLink} content
- * @param {import('multiformats').UnknownLink} ancestor
+ * @param {import('multiformats').UnknownLink[]} children
+ * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
  */
-export function createDescendantClaim (conf, content, ancestor) {
-  return Assert.descendant.invoke({
+export function createRelationClaim (conf, content, children, parts) {
+  return Assert.relation.invoke({
     issuer: conf.issuer,
     audience: conf.audience,
     with: conf.audience.did(),
-    nb: { content, ancestor },
+    nb: { content, children, parts },
     expiration: Infinity,
     proofs: conf.proofs
   })
@@ -142,16 +146,21 @@ export function createDescendantClaim (conf, content, ancestor) {
 
 /**
  * @param {InvocationConfig} conf
- * @param {import('multiformats').UnknownLink[]} contents
- * @param {import('multiformats').UnknownLink} ancestor
+ * @param {import('multiformats').UnknownLink} root
+ * @param {import('multiformats').Link} part
+ * @param {import('multiformats').Link} index
+ * @param {Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>} linkIndex
  */
-export function createDescendantClaims (conf, contents, ancestor) {
+export function createRelationClaims (conf, root, part, index, linkIndex) {
   const claims = []
-  for (const cid of contents) {
-    if (cid.code === raw.code || ancestor.toString() === cid.toString()) {
-      continue
-    }
-    claims.push(createDescendantClaim(conf, cid, ancestor))
+  const parts = [{ content: part, includes: index }]
+  for (const [cid, links] of linkIndex) {
+    const isRoot = root.toString() === cid.toString()
+    // do not create relation claim for raw CID, unless it is the root
+    if (cid.code === raw.code && !isRoot) continue
+    // only include the children known to have been indexed in this CAR
+    const children = [...links].filter(l => linkIndex.has(l))
+    claims.push(createRelationClaim(conf, cid, children, parts))
   }
   return claims
 }

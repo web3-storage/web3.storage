@@ -81,7 +81,7 @@
     "cborg": "^1.6.0",
     "ipfs-car": "^0.7.0",
     "itty-router": "^2.4.8",
-    "linkdex": "^2.1.2",
+    "linkdex": "^3.0.0",
     "lnmap": "^1.0.1",
     "lnset": "^1.2.0",
     "multiformats": "^12.0.1",
