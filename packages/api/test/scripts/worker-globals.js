@@ -16,7 +16,6 @@ export const GATEWAY_URL = 'http://localhost:8080'
 export const ENABLE_ADD_TO_CLUSTER = 'true'
 export const LINKDEX_URL = 'https://fake.linkdex.net'
 export const CARPARK_URL = 'https://carpark-test.web3.storage'
-export const SATNAV_URL = 'https://satnav-test.web3.storage'
 export const CONTENT_CLAIMS_SERVICE_DID = 'did:key:z6MktzteCTGYfZxSZvhJ6C2CwhKsTaBh8ne6j98ouaybaLFY'
 export const CONTENT_CLAIMS_SERVICE_URL = 'http://127.0.0.1:1337'
 // self signed claims (this is the private key for did:key:z6MktzteCTGYfZxSZvhJ6C2CwhKsTaBh8ne6j98ouaybaLFY)

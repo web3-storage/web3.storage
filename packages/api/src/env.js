@@ -47,7 +47,6 @@ import { Factory as ClaimFactory } from './utils/content-claims.js'
  * @property {string} [LINKDEX_URL] dag completeness checking service for the S3 Bucket configured in `S3_BUCKET_NAME`
  * @property {string} [STRIPE_SECRET_KEY]
  * @property {string} CARPARK_URL the public url prefix for CARs stored in R2
- * @property {string} SATNAV_URL the public url prefix for CARv2 indexes stored in R2
  * @property {R2Bucket} CARPARK the bound R2 Bucket interface
  * @property {R2Bucket} SATNAV
  * @property {R2Bucket} DUDEWHERE
@@ -158,14 +157,6 @@ export async function envAll (req, env, ctx) {
       env.CARPARK_URL = 'https://carpark-dev.web3.storage'
     } else {
       throw new Error('Missing ENV. Please set CARPARK_URL')
-    }
-  }
-
-  if (!env.SATNAV_URL) {
-    if (env.ENV === 'dev') {
-      env.SATNAV_URL = 'https://satnav-dev.web3.storage'
-    } else {
-      throw new Error('Missing ENV. Please set SATNAV_URL')
     }
   }
 

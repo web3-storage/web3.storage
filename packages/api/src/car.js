@@ -14,6 +14,7 @@ import pRetry from 'p-retry'
 import { CARReaderStream } from 'carstream'
 import { Map as LinkMap } from 'lnmap'
 import { Set as LinkSet } from 'lnset'
+import * as CAR from './utils/car.js'
 import * as CARIndex from './utils/car-index.js'
 import { InvalidCarError, LinkdexError } from './errors.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
@@ -127,14 +128,14 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const r2Key = `${carCid}/${carCid}.car`
   env.sentry?.setExtras({ sourceCid, carCid: carCid.toString(), dagSize, structure, s3Key, r2Key })
 
-  const [,, indexCid] = await Promise.all([
+  const [,, { cid: indexCid, carCid: indexCarCid }] = await Promise.all([
     putToS3(env, s3Key, carBytes, carCid, sourceCid, structure),
     putToR2(env, r2Key, carBytes, carCid, sourceCid, structure),
     writeSatNavIndex(env, carCid, blockOffsets),
     writeDudeWhereIndex(env, contentCid, carCid)
   ])
 
-  await writeContentClaims(env, rootCid, carCid, indexCid, structure, linkIndex, blockOffsets)
+  await writeContentClaims(env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex, blockOffsets)
 
   const xName = headers.get('x-name')
   let name = xName && decodeURIComponent(xName)
@@ -378,16 +379,25 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
 export async function writeSatNavIndex (env, carCid, blockOffsets) {
   env.log.time('writeSatNavIndex')
   const index = await CARIndex.encode(blockOffsets)
-  const key = `${carCid}/${carCid}.car.idx`
+  const indexKey = `${carCid}/${carCid}.car.idx`
+
+  // Store the index in CARPARK so it can be fetched like any other DAG
+  const car = await CAR.encode(index.cid, [index])
+  const carKey = `${car.cid}/${car.cid}.car`
 
   /** @type R2PutOptions */
-  const opts = { sha256: toString(index.cid.multihash.digest, 'base16') }
+  const satnavOpts = { sha256: toString(index.cid.multihash.digest, 'base16') }
+  /** @type R2PutOptions */
+  const carparkOpts = { sha256: toString(car.cid.multihash.digest, 'base16') }
   try {
     // assuming mostly unique cars, but could check for existence here before writing.
-    await pRetry(async () => env.SATNAV.put(key, index.bytes, opts), { retries: 3 })
-    return index.cid
+    await Promise.all([
+      pRetry(async () => env.SATNAV.put(indexKey, index.bytes, satnavOpts), { retries: 3 }),
+      pRetry(async () => env.CARPARK.put(carKey, car.bytes, carparkOpts), { retries: 3 })
+    ])
+    return { cid: index.cid, carCid: car.cid }
   } catch (cause) {
-    throw new Error(`Failed to write satnav index to R2: ${key}`, { cause })
+    throw new Error(`Failed to write satnav index to R2: ${indexKey}`, { cause })
   } finally {
     env.log.timeEnd('writeSatNavIndex')
   }
@@ -419,20 +429,24 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
  * @param {import('multiformats').UnknownLink} rootCid
  * @param {import('multiformats').Link} carCid
  * @param {import('multiformats').Link} indexCid
+ * @param {import('multiformats').Link} indexCarCid
  * @param {import('linkdex').DagStructure} structure
  * @param {Map<string, Set<string>>} linkIndex
  * @param {Map<import('multiformats').UnknownLink, number>} blockOffsets
  */
-async function writeContentClaims (env, rootCid, carCid, indexCid, structure, linkIndex, blockOffsets) {
+async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex, blockOffsets) {
   const { claimFactory } = env
   if (!claimFactory) return
   env.log.time('writeContentClaims')
   try {
     const claims = [
-      claimFactory.createLocationClaim(carCid, new URL(`/${carCid}/${carCid}.car`, env.CARPARK_URL)),
-      claimFactory.createLocationClaim(indexCid, new URL(`/${carCid}/${carCid}.car.idx`, env.SATNAV_URL)),
+      // The uploaded CAR includes the CIDs in the index.
       claimFactory.createInclusionClaim(carCid, indexCid),
-      ...(await claimFactory.createRelationClaimsWithIndexes(rootCid, carCid, linkIndex, blockOffsets)),
+      // The index data can be found in the index CAR.
+      claimFactory.createPartitionClaim(indexCid, [indexCarCid]),
+      // Blocks with links are descendants of the root CID (so we can lookup the index)
+      ...claimFactory.createDescendantClaims([...blockOffsets.keys()], rootCid),
+      // If complete DAG, it can be found in the uploaded CAR.
       ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
     ]
     const results = await pRetry(() => claimFactory.connection.execute(...claims), { retries: 3 })

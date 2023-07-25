@@ -1,9 +1,6 @@
 import { Assert } from '@web3-storage/content-claims/capability'
 import { connect, CAR, HTTP } from '@web3-storage/content-claims/client'
-import * as Link from 'multiformats/link'
 import * as raw from 'multiformats/codecs/raw'
-import { Map as LinkMap } from 'lnmap'
-import * as CARIndex from './car-index.js'
 
 /**
  * @typedef {{
@@ -59,27 +56,20 @@ export class Factory {
 
   /**
    * @param {import('multiformats').UnknownLink} content
-   * @param {import('multiformats').UnknownLink[]} children
-   * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
+   * @param {import('multiformats').UnknownLink} ancestor
    */
-  createRelationClaim (content, children, parts) {
-    return createRelationClaim(this._conf, content, children, parts)
+  createDescendantClaim (content, ancestor) {
+    return createDescendantClaim(this._conf, content, ancestor)
   }
 
   /**
-   * Create relation claims for all indexed blocks that have children, plus one
-   * for the root block, even if it does not have children.
+   * Create descendant claims for all descendants that have children.
    *
-   * Also creates CARv2 indexes for each claim and attaches the index as a
-   * block in the claim.
-   *
-   * @param {import('multiformats').UnknownLink} root
-   * @param {import('multiformats').Link} part
-   * @param {Map<string, Set<string>>} linkIndex
-   * @param {Map<import('multiformats').UnknownLink, number>} blockOffsets
+   * @param {import('multiformats').UnknownLink[]} contents
+   * @param {import('multiformats').UnknownLink} ancestor
    */
-  createRelationClaimsWithIndexes (root, part, linkIndex, blockOffsets) {
-    return createRelationClaimsWithIndexes(this._conf, root, part, linkIndex, blockOffsets)
+  createDescendantClaims (contents, ancestor) {
+    return createDescendantClaims(this._conf, contents, ancestor)
   }
 }
 
@@ -95,7 +85,7 @@ export function createLocationClaim (conf, content, location) {
     with: conf.audience.did(),
     nb: {
       content,
-      location: [location.toString()]
+      location: [/** @type {import('@ucanto/interface').URI} */(location.toString())]
     },
     expiration: Infinity,
     proofs: conf.proofs
@@ -137,15 +127,14 @@ export function createPartitionClaim (conf, content, parts) {
 /**
  * @param {InvocationConfig} conf
  * @param {import('multiformats').UnknownLink} content
- * @param {import('multiformats').UnknownLink[]} children
- * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
+ * @param {import('multiformats').UnknownLink} ancestor
  */
-export function createRelationClaim (conf, content, children, parts) {
-  return Assert.relation.invoke({
+export function createDescendantClaim (conf, content, ancestor) {
+  return Assert.descendant.invoke({
     issuer: conf.issuer,
     audience: conf.audience,
     with: conf.audience.did(),
-    nb: { content, children, parts },
+    nb: { content, ancestor },
     expiration: Infinity,
     proofs: conf.proofs
   })
@@ -153,41 +142,16 @@ export function createRelationClaim (conf, content, children, parts) {
 
 /**
  * @param {InvocationConfig} conf
- * @param {import('multiformats').UnknownLink} root
- * @param {import('multiformats').Link} part
- * @param {Map<string, Set<string>>} linkIndex
- * @param {Map<import('multiformats').UnknownLink, number>} blockOffsets
+ * @param {import('multiformats').UnknownLink[]} contents
+ * @param {import('multiformats').UnknownLink} ancestor
  */
-export function createRelationClaimsWithIndexes (conf, root, part, linkIndex, blockOffsets) {
-  /** @type {Array<[import('multiformats').UnknownLink, import('multiformats').UnknownLink[]]>} */
-  const items = []
-  for (const [cidstr, links] of linkIndex) {
-    const cid = Link.parse(cidstr)
-    if (!blockOffsets.has(cid)) continue
-
-    const isRoot = root.toString() === cid.toString()
-    if (cid.code === raw.code && !isRoot) continue
-
-    const children = [...links].map(l => Link.parse(l)).filter(l => blockOffsets.has(l))
-    if (!children.length && !isRoot) continue
-    items.push([cid, children])
-  }
-
-  return Promise.all(items.map(async ([cid, children]) => {
-    const offset = blockOffsets.get(cid)
-    if (!offset) throw new Error('block offset disappeared')
-
-    /** @type {Map<import('multiformats').UnknownLink, number>} */
-    const childOffsets = new LinkMap()
-    for (const cid of children) {
-      const offset = blockOffsets.get(cid)
-      if (!offset) continue
-      childOffsets.set(cid, offset)
+export function createDescendantClaims (conf, contents, ancestor) {
+  const claims = []
+  for (const cid of contents) {
+    if (cid.code === raw.code || ancestor.toString() === cid.toString()) {
+      continue
     }
-
-    const index = await CARIndex.encode([[cid, offset], ...childOffsets])
-    const claim = createRelationClaim(conf, cid, children, [{ content: part, includes: index.cid }])
-    claim.attach(index)
-    return claim
-  }))
+    claims.push(createDescendantClaim(conf, cid, ancestor))
+  }
+  return claims
 }

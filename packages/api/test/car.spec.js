@@ -18,6 +18,7 @@ import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from '../src/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import { PIN_OK_STATUS } from '../src/utils/pin.js'
+import * as CAR from '../src/utils/car.js'
 import {
   S3_BUCKET_ENDPOINT,
   S3_BUCKET_REGION,
@@ -25,8 +26,7 @@ import {
   S3_ACCESS_KEY_ID,
   S3_SECRET_ACCESS_KEY_ID,
   LINKDEX_URL,
-  CARPARK_URL,
-  SATNAV_URL
+  CARPARK_URL
 } from './scripts/worker-globals.js'
 
 // Cluster client needs global fetch
@@ -284,7 +284,10 @@ describe('POST /car', () => {
   it('should write content claims', async () => {
     const issuer = 'test-upload'
     const token = await getTestJWT(issuer, issuer)
-    const { root, car: carBody } = await createCar('content clams')
+    const leaf = await Block.encode({ value: pb.prepare({ Data: 'leaf1' }), codec: pb, hasher: sha256 })
+    const middle = await Block.encode({ value: pb.prepare({ Links: [leaf.cid] }), codec: pb, hasher: sha256 })
+    const parent = await Block.encode({ value: pb.prepare({ Links: [middle.cid] }), codec: pb, hasher: sha256 })
+    const car = await CAR.encode(parent.cid, [parent, middle, leaf])
 
     const res = await fetch(new URL('car', endpoint), {
       method: 'POST',
@@ -292,7 +295,7 @@ describe('POST /car', () => {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/vnd.ipld.car'
       },
-      body: carBody
+      body: car.bytes
     })
     await res.json()
 
@@ -304,9 +307,8 @@ describe('POST /car', () => {
       const claims = await Promise.all(rows.map(c => Claims.decode(c.bytes)))
       const groups = {
         [Assert.inclusion.can]: /** @type {import('@web3-storage/content-claims/client/api').InclusionClaim[]} */ ([]),
-        [Assert.relation.can]: /** @type {import('@web3-storage/content-claims/client/api').RelationClaim[]} */ ([]),
-        [Assert.partition.can]: /** @type {import('@web3-storage/content-claims/client/api').PartitionClaim[]} */ ([]),
-        [Assert.location.can]: /** @type {import('@web3-storage/content-claims/client/api').LocationClaim[]} */ ([])
+        [Assert.descendant.can]: /** @type {import('@web3-storage/content-claims/client/api').DescendantClaim[]} */ ([]),
+        [Assert.partition.can]: /** @type {import('@web3-storage/content-claims/client/api').PartitionClaim[]} */ ([])
       }
       for (const c of claims) {
         const group = groups[c.type]
@@ -316,37 +318,42 @@ describe('POST /car', () => {
       return groups
     }
 
-    let claims = await getClaims(root)
+    let claims = await getClaims(parent.cid)
 
-    // expect a relation claim and partition claim
-    assert.equal(claims[Assert.relation.can].length, 1)
+    // expect a partition claim for parent
+    assert.equal(claims[Assert.descendant.can].length, 0)
     assert.equal(claims[Assert.partition.can].length, 1)
     assert.equal(claims[Assert.inclusion.can].length, 0)
-    assert.equal(claims[Assert.location.can].length, 0)
 
     const part = claims[Assert.partition.can][0].parts[0]
     assert(part)
 
     claims = await getClaims(part)
 
-    // expect a location claim and an inclusion claim
-    assert.equal(claims[Assert.relation.can].length, 0)
+    // expect an inclusion claim for the CAR
     assert.equal(claims[Assert.partition.can].length, 0)
     assert.equal(claims[Assert.inclusion.can].length, 1)
-    assert.equal(claims[Assert.location.can].length, 1)
-
-    assert.equal(String(claims[Assert.location.can][0].location[0]), new URL(`/${part}/${part}.car`, CARPARK_URL))
+    assert.equal(claims[Assert.descendant.can].length, 0)
 
     const index = claims[Assert.inclusion.can][0].includes
     claims = await getClaims(index)
 
-    // expect a location claim
-    assert.equal(claims[Assert.relation.can].length, 0)
+    // expect a partition claim for the index
+    assert.equal(claims[Assert.partition.can].length, 1)
+    assert.equal(claims[Assert.inclusion.can].length, 0)
+    assert.equal(claims[Assert.descendant.can].length, 0)
+
+    const indexPart = claims[Assert.partition.can][0].parts[0]
+    assert(indexPart)
+
+    claims = await getClaims(middle.cid)
+
+    // expect a descendant claim for the middle node
     assert.equal(claims[Assert.partition.can].length, 0)
     assert.equal(claims[Assert.inclusion.can].length, 0)
-    assert.equal(claims[Assert.location.can].length, 1)
+    assert.equal(claims[Assert.descendant.can].length, 1)
 
-    assert.equal(String(claims[Assert.location.can][0].location[0]), new URL(`/${part}/${part}.car.idx`, SATNAV_URL))
+    assert.equal(claims[Assert.descendant.can][0].ancestor.toString(), parent.cid.toString())
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {
