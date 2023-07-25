@@ -160,6 +160,7 @@ export function createRelationClaims (conf, root, part, index, linkIndex) {
     if (cid.code === raw.code && !isRoot) continue
     // only include the children known to have been indexed in this CAR
     const children = [...links].filter(l => linkIndex.has(l))
+    if (!children.length && !isRoot) continue
     claims.push(createRelationClaim(conf, cid, children, parts))
   }
   return claims
