@@ -57,7 +57,7 @@ export class Factory {
   /**
    * @param {import('multiformats').UnknownLink} content
    * @param {import('multiformats').UnknownLink[]} children
-   * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
+   * @param {import('@web3-storage/content-claims/client/api').RelationPart[]} parts
    */
   createRelationClaim (content, children, parts) {
     return createRelationClaim(this._conf, content, children, parts)
@@ -67,13 +67,14 @@ export class Factory {
    * Create relation claims for all indexed blocks that have children, plus one
    * for the root block, even if it does not have children.
    *
-   * @param {import('multiformats').UnknownLink} root CID of the DAG root
-   * @param {import('multiformats').Link} part CID of the CAR
-   * @param {import('multiformats').Link} index CID of the index
+   * @param {import('multiformats').UnknownLink} root Root CID of the DAG
+   * @param {import('multiformats').Link} part CID if the CAR that root can be found in
+   * @param {import('multiformats').Link} index CID of the CARv2 index
+   * @param {import('multiformats').Link} indexPart CAR CID the index may be found
    * @param {Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>} linkIndex
    */
-  createRelationClaims (root, part, index, linkIndex) {
-    return createRelationClaims(this._conf, root, part, index, linkIndex)
+  createRelationClaims (root, part, index, indexPart, linkIndex) {
+    return createRelationClaims(this._conf, root, part, index, indexPart, linkIndex)
   }
 }
 
@@ -130,8 +131,9 @@ export function createPartitionClaim (conf, content, parts) {
 
 /**
  * @param {InvocationConfig} conf
+ * @param {import('multiformats').UnknownLink} content
  * @param {import('multiformats').UnknownLink[]} children
- * @param {Array<{ content: import('multiformats').Link, includes: import('multiformats').Link }>} parts
+ * @param {import('@web3-storage/content-claims/client/api').RelationPart[]} parts
  */
 export function createRelationClaim (conf, content, children, parts) {
   return Assert.relation.invoke({
@@ -149,11 +151,12 @@ export function createRelationClaim (conf, content, children, parts) {
  * @param {import('multiformats').UnknownLink} root
  * @param {import('multiformats').Link} part
  * @param {import('multiformats').Link} index
+ * @param {import('multiformats').Link} indexPart
  * @param {Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>} linkIndex
  */
-export function createRelationClaims (conf, root, part, index, linkIndex) {
+export function createRelationClaims (conf, root, part, index, indexPart, linkIndex) {
   const claims = []
-  const parts = [{ content: part, includes: index }]
+  const parts = [{ content: part, includes: { content: index, parts: [indexPart] } }]
   for (const [cid, links] of linkIndex) {
     const isRoot = root.toString() === cid.toString()
     // do not create relation claim for raw CID, unless it is the root

@@ -444,7 +444,7 @@ async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, 
       // The index data can be found in the index CAR.
       claimFactory.createPartitionClaim(indexCid, [indexCarCid]),
       // Blocks with links have children that can be found in this CAR.
-      ...claimFactory.createRelationClaims(rootCid, carCid, indexCid, linkIndex),
+      ...claimFactory.createRelationClaims(rootCid, carCid, indexCid, indexCarCid, linkIndex),
       // If complete DAG, it can be found in the uploaded CAR.
       ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
     ]

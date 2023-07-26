@@ -327,6 +327,8 @@ describe('POST /car', () => {
 
     assert.equal(claims[Assert.relation.can][0].children.length, 1)
     assert.equal(claims[Assert.relation.can][0].children[0].toString(), middle.cid.toString())
+    assert.equal(claims[Assert.relation.can][0].parts.length, 1)
+    assert.equal(claims[Assert.relation.can][0].parts[0].content.toString(), car.cid.toString())
 
     const part = claims[Assert.partition.can][0].parts[0]
     assert(part)
@@ -358,6 +360,7 @@ describe('POST /car', () => {
 
     assert.equal(claims[Assert.relation.can][0].children.length, 1)
     assert.equal(claims[Assert.relation.can][0].children[0].toString(), leaf.cid.toString())
+    assert.equal(claims[Assert.relation.can][0].parts[0].content.toString(), car.cid.toString())
 
     claims = await getClaims(leaf.cid)
 
