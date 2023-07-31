@@ -6,9 +6,11 @@ import { createFetchMock } from '@miniflare/core'
 import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
+import * as ed25519 from '@ucanto/principal/ed25519'
 import * as workerGlobals from './scripts/worker-globals.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
 import { Response } from '@web-std/fetch'
+import * as Claims from './scripts/content-claims.js'
 
 // @ts-ignore
 global.crypto = webcrypto
@@ -31,6 +33,10 @@ export const mochaHooks = () => {
   /** @type {string} */
   let projectMinio
   /** @type {import('http').Server} */
+  let claimsService
+  /** @type {import('./scripts/content-claims.js').Store} */
+  let claimStore
+  /** @type {import('http').Server} */
   let srv
 
   return {
@@ -52,23 +58,38 @@ export const mochaHooks = () => {
       globalThis.miniflareFetchMock = fetchMock
       globalThis.miniflare = mf
 
-      console.log('⚡️ Starting Miniflare')
-      srv = await mf.startServer()
+      await Promise.all([
+        (async () => {
+          console.log('⚡️ Starting Miniflare')
+          srv = await mf.startServer()
+        })(),
+        (async () => {
+          console.log('⚡️ Starting Minio')
+          projectMinio = `web3-storage-minio-${Date.now()}`
+          await execa(toolsCli, ['minio', 'server', 'start', '--project', projectMinio])
+        })(),
+        (async () => {
+          console.log('⚡️ Starting IPFS Cluster')
+          projectCluster = `web3-storage-cluster-${Date.now()}`
+          await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
+        })(),
+        (async () => {
+          console.log('⚡️ Starting PostgreSQL and PostgREST')
+          projectDb = `web3-storage-db-${Date.now()}`
+          await execa(dbCli, ['db', '--start', '--project', projectDb])
 
-      console.log('⚡️ Starting Minio')
-      projectMinio = `web3-storage-minio-${Date.now()}`
-      await execa(toolsCli, ['minio', 'server', 'start', '--project', projectMinio])
-
-      console.log('⚡️ Starting IPFS Cluster')
-      projectCluster = `web3-storage-cluster-${Date.now()}`
-      await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
-
-      console.log('⚡️ Starting PostgreSQL and PostgREST')
-      projectDb = `web3-storage-db-${Date.now()}`
-      await execa(dbCli, ['db', '--start', '--project', projectDb])
-
-      console.log('⚡️ Loading DB schema')
-      await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
+          console.log('⚡️ Loading DB schema')
+          await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
+        })(),
+        (async () => {
+          console.log('⚡️ Starting Content Claims service')
+          const signer = ed25519.parse(workerGlobals.CONTENT_CLAIMS_PRIVATE_KEY)
+          const port = parseInt(new URL(workerGlobals.CONTENT_CLAIMS_SERVICE_URL).port)
+          claimStore = new Claims.Store()
+          claimsService = await Claims.createHTTPServer({ signer, claimStore, port })
+          globalThis.claimStore = claimStore
+        })()
+      ])
 
       await delay(1000)
     },
@@ -91,12 +112,17 @@ export const mochaHooks = () => {
         console.log('🛑 Stopping PostgreSQL and PostgREST')
         execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
       }
+      if (claimsService) {
+        console.log('🛑 Stopping Content Claims service')
+        claimsService.close()
+      }
     },
 
     async beforeEach () {
       await execa(toolsCli, ['minio', 'bucket', 'remove', 'dotstorage-test-0'])
       await execa(toolsCli, ['minio', 'bucket', 'create', 'dotstorage-test-0'])
       await execa(dbCli, ['db-sql', '--skipCreate', '--truncate', `--customSqlPath=${initScript}`])
+      if (claimStore) claimStore.clear()
     }
   }
 }
