@@ -2,10 +2,6 @@
 name = "web3-storage"
 main = "./dist/worker.js"
 compatibility_date = "2023-06-14"
-compatibility_flags = [
-  "streams_enable_constructors",
-  "transformstream_enable_standard_constructor"
-]
 no_bundle = true
 
 [build]
