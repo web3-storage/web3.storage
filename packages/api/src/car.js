@@ -128,14 +128,15 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const r2Key = `${carCid}/${carCid}.car`
   env.sentry?.setExtras({ sourceCid, carCid: carCid.toString(), dagSize, structure, s3Key, r2Key })
 
-  const [,, { cid: indexCid, carCid: indexCarCid }] = await Promise.all([
+  await Promise.all([
     putToS3(env, s3Key, carBytes, carCid, sourceCid, structure),
     putToR2(env, r2Key, carBytes, carCid, sourceCid, structure),
-    writeSatNavIndex(env, carCid, blockOffsets),
+    (async () => {
+      const { cid: indexCid, carCid: indexCarCid } = await writeSatNavIndex(env, carCid, blockOffsets)
+      await writeContentClaims(env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex)
+    })(),
     writeDudeWhereIndex(env, contentCid, carCid)
   ])
-
-  await writeContentClaims(env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex)
 
   const xName = headers.get('x-name')
   let name = xName && decodeURIComponent(xName)
