@@ -1,5 +1,20 @@
 # Changelog
 
+## [7.19.0](https://github.com/web3-storage/web3.storage/compare/api-v7.18.1...api-v7.19.0) (2023-07-31)
+
+
+### Features
+
+* write content claims ([#2291](https://github.com/web3-storage/web3.storage/issues/2291)) ([6a31c9b](https://github.com/web3-storage/web3.storage/commit/6a31c9b990d6600c910e9a77c39ce2b12311abab))
+
+
+### Bug Fixes
+
+* remove unnecessary compatibility flags ([#2301](https://github.com/web3-storage/web3.storage/issues/2301)) ([436cdb8](https://github.com/web3-storage/web3.storage/commit/436cdb82a88a3a253e5916a0dc4e1f6d34bacb89))
+* signer DID ([82c3462](https://github.com/web3-storage/web3.storage/commit/82c34620236dcc978dad2b13d1475f2451307c01))
+* this param for fetch calls ([#2292](https://github.com/web3-storage/web3.storage/issues/2292)) ([bf32c53](https://github.com/web3-storage/web3.storage/commit/bf32c53959d731ca567b109ab4d5fc73b4bbbfb7))
+* use error message value in cause ([9b07288](https://github.com/web3-storage/web3.storage/commit/9b072887557546cbdcd718ea138c08c6319cab35))
+
 ## [7.18.1](https://github.com/web3-storage/web3.storage/compare/api-v7.18.0...api-v7.18.1) (2023-07-03)
 
 
