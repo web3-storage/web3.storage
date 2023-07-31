@@ -94,6 +94,10 @@ wrangler secret put LOGTAIL_TOKEN --env $(whoami) # Get from Logtail
 wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry
 wrangler secret put STRIPE_SECRET_KEY --env $(whoami) # Get from web3.storage 1password
 wrangler secret put LINKDEX_URL --env $(whoami) # Get from 1password. not required for dev
+wrangler secret put CONTENT_CLAIMS_PRIVATE_KEY --env $(whoami) # Get from 1password. not required for dev
+wrangler secret put CONTENT_CLAIMS_PROOF --env $(whoami) # Get from 1password. not required for dev
+wrangler secret put CONTENT_CLAIMS_SERVICE_DID --env $(whoami) # Get from 1password. not required for dev
+wrangler secret put CONTENT_CLAIMS_SERVICE_URL --env $(whoami) # Get from 1password. not required for dev
 ```
 Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 
