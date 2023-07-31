@@ -452,7 +452,7 @@ async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, 
     const results = await pRetry(() => claimFactory.connection.execute(...claims), { retries: 3 })
     for (const result of results) {
       if (result.out.ok) continue
-      throw new Error('failed writing content claims', { cause: result.out.error })
+      throw new Error('failed writing content claims', { cause: result.out.error.message })
     }
   } finally {
     env.log.timeEnd('writeContentClaims')
