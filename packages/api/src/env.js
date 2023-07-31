@@ -230,15 +230,19 @@ export async function envAll (req, env, ctx) {
   }
 
   if (env.CONTENT_CLAIMS_PRIVATE_KEY) {
-    const signer = ed25519.parse(env.CONTENT_CLAIMS_PRIVATE_KEY)
+    const servicePrincipal = DID.parse(env.CONTENT_CLAIMS_SERVICE_DID ?? 'did:web:claims.web3.storage')
+    /** @type {import('@ucanto/interface').Signer} */
+    let signer = ed25519.parse(env.CONTENT_CLAIMS_PRIVATE_KEY)
     const proofs = []
     if (env.CONTENT_CLAIMS_PROOF) {
       const proof = await Delegation.extract(fromString(env.CONTENT_CLAIMS_PROOF, 'base64pad'))
       // @ts-expect-error typescript version does not support cause
       if (!proof.ok) throw new Error('failed to extract proof', { cause: proof.error })
       proofs.push(proof.ok)
+    } else {
+      // if no proofs, we must be using the service private key to sign
+      signer = signer.withDID(servicePrincipal.did())
     }
-    const servicePrincipal = DID.parse(env.CONTENT_CLAIMS_SERVICE_DID ?? 'did:web:claims.web3.storage')
     const serviceURL = new URL(env.CONTENT_CLAIMS_SERVICE_URL ?? 'https://claims.web3.storage')
     env.claimFactory = new ClaimFactory(signer, proofs, servicePrincipal, serviceURL)
   } else {
