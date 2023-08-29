@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.3](https://github.com/web3-storage/web3.storage/compare/website-v2.36.2...website-v2.36.3) (2023-08-29)
+
+
+### Bug Fixes
+
+* curl http header arg name ([#2308](https://github.com/web3-storage/web3.storage/issues/2308)) ([900de50](https://github.com/web3-storage/web3.storage/commit/900de5097f97412256c552836ae60f91c8023f50)), closes [#2289](https://github.com/web3-storage/web3.storage/issues/2289)
+
 ## [2.36.2](https://github.com/web3-storage/web3.storage/compare/website-v2.36.1...website-v2.36.2) (2023-07-24)
 
 
