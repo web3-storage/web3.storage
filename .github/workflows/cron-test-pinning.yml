@@ -49,4 +49,4 @@ jobs:
           echo "# TYPE web3storage_pin_duration_seconds gauge" >> ./pin_metric
           echo "web3storage_pin_duration_seconds{size=\"3MiB\",cmd=\"kubo\"} $(cat ./pin_duration_secs)" >> ./pin_metric
           cat ./pin_metric
-          curl --silent --show-error --data-binary "@./pin_metric" --basic --user "${{ secrets.PUSHGATEWAY_BASIC_AUTH }}" https://pushgateway.k8s.locotorp.info/metrics/job/web3storage_ci/instance/github_action
+          curl --silent --show-error --data-binary "@./pin_metric" ${{ secrets.PUSHGATEWAY_URL }}/metrics/job/web3storage_ci/instance/github_action
