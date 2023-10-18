@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.20.0](https://github.com/web3-storage/web3.storage/compare/api-v7.19.0...api-v7.20.0) (2023-10-18)
+
+
+### Features
+
+* support multiple gateway URLs ([#2126](https://github.com/web3-storage/web3.storage/issues/2126)) ([415dcf6](https://github.com/web3-storage/web3.storage/commit/415dcf6f57bbf6e01253460778d3d9517d878f82))
+
+
+### Bug Fixes
+
+* use dag-staging gateway from staging api ([#2318](https://github.com/web3-storage/web3.storage/issues/2318)) ([943b4cd](https://github.com/web3-storage/web3.storage/commit/943b4cdcec524f21b4c0dc64cda5d6d21cbe156f))
+
 ## [7.19.0](https://github.com/web3-storage/web3.storage/compare/api-v7.18.1...api-v7.19.0) (2023-07-31)
 
 
