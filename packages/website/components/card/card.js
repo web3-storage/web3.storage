@@ -9,7 +9,7 @@ import CardTier from './card-tier';
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
-import countly from '../../lib/countly';
+import analytics, { saEvent } from '../../lib/analytics';
 
 // ====================================================================== Params
 /**
@@ -27,10 +27,10 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   const tracking = {};
   if (typeof card.cta === 'object') {
     if (card.cta.event) {
-      tracking.event = countly.events[card.cta.event];
+      tracking.event = analytics.events[card.cta.event];
     }
     if (card.cta.ui) {
-      tracking.ui = countly.ui[card.cta.ui];
+      tracking.ui = analytics.ui[card.cta.ui];
     }
     if (card.cta.action) {
       tracking.action = card.cta.action;
@@ -44,7 +44,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   }, [onCardLoad]);
 
   const onLinkClick = useCallback(e => {
-    countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
+    saEvent(analytics.events.LINK_CLICK_EXPLORE_DOCS, { link_text: e.currentTarget });
   }, []);
 
   const handleButtonClick = useCallback(

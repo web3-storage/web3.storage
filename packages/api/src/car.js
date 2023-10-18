@@ -1,22 +1,27 @@
 // @ts-nocheck
 /* eslint-env serviceworker */
+/* global ReadableStream */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
-import { CarBlockIterator } from '@ipld/car'
-import { CarIndexer } from '@ipld/car/indexer'
-import { toString, equals } from 'uint8arrays'
+import { toString } from 'uint8arrays'
 import { LinkIndexer } from 'linkdex'
 import { maybeDecode } from 'linkdex/decode'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as pb from '@ipld/dag-pb'
+import { validateBlock } from '@web3-storage/car-block-validator'
 import pRetry from 'p-retry'
-import { MultihashIndexSortedWriter } from 'cardex'
+import { CARReaderStream } from 'carstream'
+import { Map as LinkMap } from 'lnmap'
+import { Set as LinkSet } from 'lnset'
+import * as CAR from './utils/car.js'
+import * as CARIndex from './utils/car-index.js'
 import { InvalidCarError, LinkdexError } from './errors.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
+import { bucketKeyToCarCID } from './utils/bucket.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -116,10 +121,10 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
-  const { size: dagSize, rootCid, structure } = await carStat(carBytes)
+  const { size: dagSize, rootCid, carCid, structure, linkIndex, blockOffsets } = await carStat(carBytes)
 
   const sourceCid = rootCid.toString()
-  const carCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes))
+  const contentCid = normalizeCid(sourceCid)
   const s3Key = `raw/${sourceCid}/${user._id}/${toString(carCid.multihash.bytes, 'base32')}.car`
   const r2Key = `${carCid}/${carCid}.car`
   env.sentry?.setExtras({ sourceCid, carCid: carCid.toString(), dagSize, structure, s3Key, r2Key })
@@ -127,8 +132,11 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   await Promise.all([
     putToS3(env, s3Key, carBytes, carCid, sourceCid, structure),
     putToR2(env, r2Key, carBytes, carCid, sourceCid, structure),
-    writeSatNavIndex(env, carCid, carBytes),
-    writeDudeWhereIndex(env, sourceCid, carCid)
+    (async () => {
+      const { cid: indexCid, carCid: indexCarCid } = await writeSatNavIndex(env, carCid, blockOffsets)
+      await writeContentClaims(env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex)
+    })(),
+    writeDudeWhereIndex(env, contentCid, carCid)
   ])
 
   const xName = headers.get('x-name')
@@ -136,8 +144,6 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   if (!name || typeof name !== 'string') {
     name = `Upload at ${new Date().toISOString()}`
   }
-
-  const contentCid = normalizeCid(sourceCid)
 
   // provide a pin object for elastic-ipfs.
   const elasticPin = (structure) => ({
@@ -170,17 +176,33 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const tasks = []
 
   // ask linkdex for the dag structure across the set of CARs in S3 for this upload.
-  const checkDagStructureTask = () => pRetry(async () => {
-    const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
-    const res = await fetch(url)
-    if (!res.ok) {
-      throw new LinkdexError(res.status, res.statusText)
-    }
-    const report = await res.json()
+  const checkDagStructureTask = async () => {
+    /** @type {import('linkdex').Report & { cars: string[] }} */
+    const report = await pRetry(async () => {
+      const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
+      const res = await fetch(url)
+      if (!res.ok) {
+        throw new LinkdexError(res.status, res.statusText)
+      }
+      return await res.json()
+    }, { retries: 3 })
+
     if (report.structure === 'Complete') {
-      return env.db.upsertPins([elasticPin(report.structure)])
+      return Promise.all([
+        pRetry(() => env.db.upsertPins([elasticPin(report.structure)]), { retries: 3 }),
+        pRetry(async () => {
+          const { claimFactory } = env
+          if (!claimFactory) return
+          const parts = new LinkSet(report.cars.map(bucketKeyToCarCID).filter(Boolean))
+          const claim = claimFactory.createPartitionClaim(rootCid, [...parts])
+          const result = await claim.execute(claimFactory.connection)
+          if (!result.ok) {
+            throw new Error('failed writing partition claim', { cause: result.out.error })
+          }
+        }, { retries: 3 })
+      ])
     }
-  }, { retries: 3 })
+  }
 
   // pin and add the blocks to cluster. Has it's own internal retry logic.
   const addToClusterTask = async () => {
@@ -343,7 +365,7 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
     // assuming mostly unique cars, but could check for existence here before writing.
     return await pRetry(async () => env.CARPARK.put(key, carBytes, opts), { retries: 3 })
   } catch (cause) {
-    throw new Error('Failed to upload CAR to R2', { cause })
+    throw new Error(`Failed to upload CAR to R2: ${key}`, { cause })
   } finally {
     env.log.timeEnd('putToR2')
   }
@@ -354,33 +376,30 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
  *
  * @param {import('./env').Env} env
  * @param {CID} carCid
- * @param {Uint8Array} carBytes
+ * @param {Map<CID, number>} blockOffsets
  */
-export async function writeSatNavIndex (env, carCid, carBytes) {
+export async function writeSatNavIndex (env, carCid, blockOffsets) {
   env.log.time('writeSatNavIndex')
-  const indexer = await CarIndexer.fromBytes(carBytes)
-  const { writer, out } = MultihashIndexSortedWriter.create()
+  const index = await CARIndex.encode(blockOffsets)
+  const indexKey = `${carCid}/${carCid}.car.idx`
 
-  for await (const blockIndexData of indexer) {
-    writer.put(blockIndexData)
-  }
-  writer.close()
-
-  const chunks = []
-  for await (const chunk of out) {
-    chunks.push(chunk)
-  }
-  const indexBytes = new Uint8Array(await new Blob(chunks).arrayBuffer())
-  const digest = await sha256.encode(indexBytes)
-  const key = `${carCid}/${carCid}.car.idx`
+  // Store the index in CARPARK so it can be fetched like any other DAG
+  const car = await CAR.encode(index.cid, [index])
+  const carKey = `${car.cid}/${car.cid}.car`
 
   /** @type R2PutOptions */
-  const opts = { sha256: toString(digest, 'base16') }
+  const satnavOpts = { sha256: toString(index.cid.multihash.digest, 'base16') }
+  /** @type R2PutOptions */
+  const carparkOpts = { sha256: toString(car.cid.multihash.digest, 'base16') }
   try {
     // assuming mostly unique cars, but could check for existence here before writing.
-    return await pRetry(async () => env.SATNAV.put(key, indexBytes, opts), { retries: 3 })
+    await Promise.all([
+      pRetry(async () => env.SATNAV.put(indexKey, index.bytes, satnavOpts), { retries: 3 }),
+      pRetry(async () => env.CARPARK.put(carKey, car.bytes, carparkOpts), { retries: 3 })
+    ])
+    return { cid: index.cid, carCid: car.cid }
   } catch (cause) {
-    throw new Error('Failed to write satnav index to R2', { cause })
+    throw new Error(`Failed to write satnav index to R2: ${indexKey}`, { cause })
   } finally {
     env.log.timeEnd('writeSatNavIndex')
   }
@@ -401,9 +420,43 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
   try {
     return await pRetry(async () => env.DUDEWHERE.put(key, data), { retries: 3 })
   } catch (cause) {
-    throw new Error('Failed to write dudewhere index to R2', { cause })
+    throw new Error(`Failed to write dudewhere index to R2: ${key}`, { cause })
   } finally {
     env.log.timeEnd('writeDudeWhereIndex')
+  }
+}
+
+/**
+ * @param {import('./env').Env} env
+ * @param {import('multiformats').UnknownLink} rootCid
+ * @param {import('multiformats').Link} carCid
+ * @param {import('multiformats').Link} indexCid
+ * @param {import('multiformats').Link} indexCarCid
+ * @param {import('linkdex').DagStructure} structure
+ * @param {Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>} linkIndex
+ */
+async function writeContentClaims (env, rootCid, carCid, indexCid, indexCarCid, structure, linkIndex) {
+  const { claimFactory } = env
+  if (!claimFactory) return
+  env.log.time('writeContentClaims')
+  try {
+    const claims = [
+      // The uploaded CAR includes the CIDs in the index.
+      claimFactory.createInclusionClaim(carCid, indexCid),
+      // The index data can be found in the index CAR.
+      claimFactory.createPartitionClaim(indexCid, [indexCarCid]),
+      // Blocks with links have children that can be found in this CAR.
+      ...claimFactory.createRelationClaims(rootCid, carCid, indexCid, indexCarCid, linkIndex),
+      // If complete DAG, it can be found in the uploaded CAR.
+      ...(structure === 'Complete' ? [claimFactory.createPartitionClaim(rootCid, [carCid])] : [])
+    ]
+    const results = await pRetry(() => claimFactory.connection.execute(...claims), { retries: 3 })
+    for (const result of results) {
+      if (result.out.ok) continue
+      throw new Error('failed writing content claims', { cause: result.out.error.message })
+    }
+  } finally {
+    env.log.timeEnd('writeContentClaims')
   }
 }
 
@@ -417,13 +470,29 @@ export async function writeDudeWhereIndex (env, rootCid, carCid) {
  * - Missing root block
  * - Missing non-root blocks (when root block has links)
  *
- * @typedef {{ size: number, blocks: number, rootCid: CID }} CarStat
+ * @typedef {{
+ *   size: number
+ *   blocks: number
+ *   rootCid: CID
+ *   carCid: CID
+ *   structure: import('linkdex').DagStructure
+ *   linkIndex: Map<import('multiformats').UnknownLink, Set<import('multiformats').UnknownLink>>
+ *   blockOffsets: Map<import('multiformats').UnknownLink, number>
+ * }} CarStat
  * @param {Uint8Array} carBytes
  * @returns {Promise<CarStat>}
  */
 async function carStat (carBytes) {
-  const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
-  const roots = await blocksIterator.getRoots()
+  const carCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes))
+  const carByteStream = new ReadableStream({
+    pull (controller) {
+      controller.enqueue(carBytes)
+      controller.close()
+    }
+  })
+  const carReader = new CARReaderStream()
+  const blocksIterator = toIterable(carByteStream.pipeThrough(carReader))
+  const { roots } = await carReader.getHeader()
   if (roots.length === 0) {
     throw new InvalidCarError('missing roots')
   }
@@ -433,22 +502,20 @@ async function carStat (carBytes) {
   const linkIndexer = new LinkIndexer()
   const rootCid = roots[0]
   let rawRootBlock
+  /** @type {Map<import('multiformats').Link, number>} */
+  const blockOffsets = new LinkMap()
   let blocks = 0
   for await (const block of blocksIterator) {
     const blockSize = block.bytes.byteLength
     if (blockSize > MAX_BLOCK_SIZE) {
       throw new InvalidCarError(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
     }
-    if (block.cid.multihash.code === sha256.code) {
-      const ourHash = await sha256.digest(block.bytes)
-      if (!equals(ourHash.digest, block.cid.multihash.digest)) {
-        throw new InvalidCarError(`block data does not match CID for ${block.cid.toString()}`)
-      }
-    }
+    await validateBlock(block)
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
     }
     linkIndexer.decodeAndIndex(block)
+    blockOffsets.set(block.cid, block.offset)
     blocks++
   }
   if (blocks === 0) {
@@ -476,7 +543,7 @@ async function carStat (carBytes) {
     }
   }
   const structure = linkIndexer.getDagStructureLabel()
-  return { size, blocks, rootCid, structure }
+  return { size, blocks, rootCid, carCid, structure, linkIndex: linkIndexer.idx, blockOffsets }
 }
 
 /**
@@ -491,3 +558,11 @@ function cumulativeSize (pbNodeBytes, pbNode) {
   // This logic is the same as used by go/js-ipfs to display the cumulative size of a dag-pb dag.
   return pbNodeBytes.byteLength + pbNode.Links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
 }
+
+/**
+ * ReadableStream does not have [Symbol.asyncIterator] in typescript types yet.
+ * @template T
+ * @param {ReadableStream<T>} readable
+ * @returns {AsyncIterable<T>}
+ */
+const toIterable = readable => readable

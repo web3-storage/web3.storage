@@ -2,20 +2,21 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
+import { saEvent } from 'lib/analytics';
 
 /**
  * @param {any} props TODO: Define props
  * @callback props.toggle
  * @param Boolean props.toggleOnLoad
  */
-function Header({}) {
+function Header({ }) {
   return null;
 }
 
 /**
  * @param {any} props TODO: Define props
  */
-function Content({}) {
+function Content({ }) {
   return null;
 }
 
@@ -32,7 +33,7 @@ const generateUID = () => {
  *
  * @param { any } props TODO: Define props
  */
-function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disabled, children }) {
+function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disabled, children, trackingId }) {
   const [uid, setUID] = useState(generateUID);
   const [openOnNavigate, setopenOnNavigate] = useState(false);
   const router = useRouter();
@@ -43,6 +44,12 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
   useEffect(() => {
     reportUID(uid);
   }, [reportUID, uid]);
+
+  useEffect(() => {
+    if (open && trackingId) {
+      saEvent('accordion_opened', { title: trackingId });
+    }
+  }, [open, trackingId]);
 
   useEffect(() => {
     if (!!slug && !!router.query.section && router.query.section === slug) {
@@ -62,8 +69,8 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
         toggle={
           disabled
             ? () => {
-                return null;
-              }
+              return null;
+            }
             : toggle
         }
       >

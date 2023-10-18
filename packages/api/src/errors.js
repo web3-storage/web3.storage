@@ -219,6 +219,20 @@ export class PSAErrorDB extends PinningServiceApiError {
 }
 PSAErrorDB.CODE = 'PSA_DB_ERROR'
 
+export class PSACodecNotSupported extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = PSACodecNotSupported.MESSAGE) {
+    super(message)
+    this.details = message
+    this.status = 400
+    this.reason = PSACodecNotSupported.CODE
+  }
+}
+PSACodecNotSupported.CODE = 'PSA_CODEC_ERROR'
+PSACodecNotSupported.MESSAGE = 'IPLD codec not supported. The API supports raw, dag-pb, dag-cbor, dag-json.'
+
 export class RangeNotSatisfiableError extends HTTPError {
   constructor (msg = 'Range Not Satisfiable') {
     super(msg, 416)

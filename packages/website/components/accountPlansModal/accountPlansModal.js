@@ -121,10 +121,12 @@ const AccountPlansModal = ({
               if (typeof currentPlan === 'undefined') {
                 throw new Error('Change plan modal form submitted without selected plan');
               }
-              if (currentPlan.id === 'earlyAdopter') {
-                throw new Error('Change plan modal form submitted with early adopter plan, but it must be a paid plan');
+              if (currentPlan.id !== 'free' && currentPlan.id !== 'pro' && currentPlan.id !== 'lite') {
+                throw new Error('Unrecognized plan');
               }
-              await userBillingSettings(consentedTosAgreement, savedPaymentMethod.id, { price: currentPlan.id });
+              await userBillingSettings(consentedTosAgreement, savedPaymentMethod.id, {
+                price: currentPlan.id,
+              });
               await setCurrentPlan(currentPlan);
               setIsCreatingSub(false);
               onClose();

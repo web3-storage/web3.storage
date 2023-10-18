@@ -18,14 +18,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: Test
+    strategy:
+      matrix:
+        node_version:
+          - 16
+          - 18
+          - 20
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: ${{ matrix.node_version }}
       - uses: bahmutov/npm-install@v1
       - run: npm run build --workspace packages/client
       - run: npm test --workspace packages/client
+      - name: Bundle Size
+        if: matrix.node_version == 18 # does not work on node.js 20 yet
+        run: npm run test:size --workspace packages/client
       - name: Test upload to staging
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
@@ -50,7 +59,7 @@ jobs:
       - uses: actions/setup-node@v2
         if: ${{ steps.tag-release.outputs.releases_created }}
         with:
-          node-version: '16'
+          node-version: 18
           registry-url: https://registry.npmjs.org/
       - uses: bahmutov/npm-install@v1
         if: ${{ steps.tag-release.outputs.releases_created }}

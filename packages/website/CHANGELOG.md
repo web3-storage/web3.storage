@@ -1,5 +1,118 @@
 # Changelog
 
+## [2.36.3](https://github.com/web3-storage/web3.storage/compare/website-v2.36.2...website-v2.36.3) (2023-08-29)
+
+
+### Bug Fixes
+
+* curl http header arg name ([#2308](https://github.com/web3-storage/web3.storage/issues/2308)) ([900de50](https://github.com/web3-storage/web3.storage/commit/900de5097f97412256c552836ae60f91c8023f50)), closes [#2289](https://github.com/web3-storage/web3.storage/issues/2289)
+
+## [2.36.2](https://github.com/web3-storage/web3.storage/compare/website-v2.36.1...website-v2.36.2) (2023-07-24)
+
+
+### Bug Fixes
+
+* trigger release for 0a7e091 ([480d49d](https://github.com/web3-storage/web3.storage/commit/480d49d266786068c4be41cb3bad0f80dff4c7c2))
+
+## [2.36.1](https://github.com/web3-storage/web3.storage/compare/website-v2.36.0...website-v2.36.1) (2023-07-24)
+
+
+### Bug Fixes
+
+* make blocking in ToS explicit ([#2296](https://github.com/web3-storage/web3.storage/issues/2296)) ([0a7e091](https://github.com/web3-storage/web3.storage/commit/0a7e09100b0991d14281f6c826877c469c9032db))
+
+## [2.36.0](https://github.com/web3-storage/web3.storage/compare/website-v2.35.4...website-v2.36.0) (2023-06-07)
+
+
+### Features
+
+* load faq content from Netlify ([#2106](https://github.com/web3-storage/web3.storage/issues/2106)) ([7eb3e11](https://github.com/web3-storage/web3.storage/commit/7eb3e114c8089aaa53ace6810fab717cd78b4018))
+
+
+### Bug Fixes
+
+* w3name docs ([#2273](https://github.com/web3-storage/web3.storage/issues/2273)) ([8fee564](https://github.com/web3-storage/web3.storage/commit/8fee56448bc5557264f85ef6cc68b3df641b4596))
+
+## [2.35.4](https://github.com/web3-storage/web3.storage/compare/website-v2.35.3...website-v2.35.4) (2023-03-16)
+
+
+### Bug Fixes
+
+* w3link rate limit in docs ([#2250](https://github.com/web3-storage/web3.storage/issues/2250)) ([ef67051](https://github.com/web3-storage/web3.storage/commit/ef6705191a51a48b7b056e9c0fc06e3733787121))
+
+## [2.35.3](https://github.com/web3-storage/web3.storage/compare/website-v2.35.2...website-v2.35.3) (2023-03-13)
+
+
+### Bug Fixes
+
+* clarify docs when status is pinning ([#2242](https://github.com/web3-storage/web3.storage/issues/2242)) ([04ff58a](https://github.com/web3-storage/web3.storage/commit/04ff58ac0a488360926f9c9e8c31184c53da4d1d))
+* fix app failure when clicking 'Account +' on mobile ([#2240](https://github.com/web3-storage/web3.storage/issues/2240)) ([34e64ea](https://github.com/web3-storage/web3.storage/commit/34e64ea1135915ebdfe9951689756c273c64eabf)), closes [#2223](https://github.com/web3-storage/web3.storage/issues/2223)
+
+## [2.35.2](https://github.com/web3-storage/web3.storage/compare/website-v2.35.1...website-v2.35.2) (2023-03-07)
+
+
+### Bug Fixes
+
+* apply workaround to Simple Analytics blocking navigation to /docs ([#2238](https://github.com/web3-storage/web3.storage/issues/2238)) ([29ab7fa](https://github.com/web3-storage/web3.storage/commit/29ab7fa86f98e1334599e3158f51bbb43eaa13f9)), closes [#2237](https://github.com/web3-storage/web3.storage/issues/2237)
+
+## [2.35.1](https://github.com/web3-storage/web3.storage/compare/website-v2.35.0...website-v2.35.1) (2023-02-23)
+
+
+### Bug Fixes
+
+* display those with no subscription as Free Tier users ([#2221](https://github.com/web3-storage/web3.storage/issues/2221)) ([81081bd](https://github.com/web3-storage/web3.storage/commit/81081bd6760b5277a9f194f468ce5abd9e255f84))
+* PSA language emphasizing not for production ([#2209](https://github.com/web3-storage/web3.storage/issues/2209)) ([6f06ca7](https://github.com/web3-storage/web3.storage/commit/6f06ca7dd87737ba08ae2c6bcc619f0951b2545c))
+* remove '/mo' from free tier description ([#2203](https://github.com/web3-storage/web3.storage/issues/2203)) ([769fd67](https://github.com/web3-storage/web3.storage/commit/769fd6770a54d2aa826b6cd4a8cec1f2ac384ce3)), closes [#2173](https://github.com/web3-storage/web3.storage/issues/2173)
+* update price displayed in UI to reflect advertised price ([#2207](https://github.com/web3-storage/web3.storage/issues/2207)) ([da1b1d8](https://github.com/web3-storage/web3.storage/commit/da1b1d832b583bf04a53f77c3b5e1aaa110ba865))
+
+## [2.35.0](https://github.com/web3-storage/web3.storage/compare/website-v2.34.0...website-v2.35.0) (2023-01-13)
+
+
+### Features
+
+* allow displaying of custom stripe prices ([#2152](https://github.com/web3-storage/web3.storage/issues/2152)) ([e3011be](https://github.com/web3-storage/web3.storage/commit/e3011bee166f762cefae40240be8ab46476aee33))
+
+
+### Bug Fixes
+
+* make pinning API request form more general ([#2146](https://github.com/web3-storage/web3.storage/issues/2146)) ([4f12057](https://github.com/web3-storage/web3.storage/commit/4f12057cdddf48dfa61cdb74e910b1e448722d47))
+* more precise language in SLA ([#2149](https://github.com/web3-storage/web3.storage/issues/2149)) ([b61060e](https://github.com/web3-storage/web3.storage/commit/b61060e4abc5e66c610345abc256ff6b82234dfe))
+
+## [2.34.0](https://github.com/web3-storage/web3.storage/compare/website-v2.33.1...website-v2.34.0) (2023-01-02)
+
+
+### Features
+
+* add synchronized, persistent tab groups ([#2172](https://github.com/web3-storage/web3.storage/issues/2172)) ([3be2028](https://github.com/web3-storage/web3.storage/commit/3be2028b2e01dfcc1007babe3b4bda7bb454595a))
+* website has /.well-known/did.json so did:web can resolve in prod ([#2169](https://github.com/web3-storage/web3.storage/issues/2169)) ([3ed273d](https://github.com/web3-storage/web3.storage/commit/3ed273d75d6ebd7f733cbcb4c818d5775eca073f))
+
+
+### Bug Fixes
+
+* website typo on protocol descrptions ([#2166](https://github.com/web3-storage/web3.storage/issues/2166)) ([89ff4e1](https://github.com/web3-storage/web3.storage/commit/89ff4e1c2029563cbe855ffa814c0d110e844a10))
+
+## [2.33.1](https://github.com/web3-storage/web3.storage/compare/website-v2.33.0...website-v2.33.1) (2022-12-14)
+
+
+### Bug Fixes
+
+* bump 'playwright' version & fix intermittent e2e test failure ([#2151](https://github.com/web3-storage/web3.storage/issues/2151)) ([dc529f5](https://github.com/web3-storage/web3.storage/commit/dc529f5035fdc525420d9dbdf28ee8d0ac7fee55))
+* update docs for PSA with IPLD codec info ([#2160](https://github.com/web3-storage/web3.storage/issues/2160)) ([e95e434](https://github.com/web3-storage/web3.storage/commit/e95e434264c4435fbb8f3640f042c76b71a123f1))
+
+## [2.33.0](https://github.com/web3-storage/web3.storage/compare/website-v2.32.0...website-v2.33.0) (2022-12-01)
+
+
+### Features
+
+* add tooltip to dashboard storage totals ([#2101](https://github.com/web3-storage/web3.storage/issues/2101)) ([2056ec6](https://github.com/web3-storage/web3.storage/commit/2056ec6fd692949f112b7b37d48d4da9d6a34523)), closes [#2081](https://github.com/web3-storage/web3.storage/issues/2081)
+* list and ability to delete psa request created though deleted tokens ([#2054](https://github.com/web3-storage/web3.storage/issues/2054)) ([e150d1f](https://github.com/web3-storage/web3.storage/commit/e150d1fa86dc0e6600f159fa92ccb7c8e65900e3))
+* simple analytics ([#2110](https://github.com/web3-storage/web3.storage/issues/2110)) ([4d5a1a0](https://github.com/web3-storage/web3.storage/commit/4d5a1a0e07db3c6749efed0072ab5b4c2fcb828e))
+
+
+### Bug Fixes
+
+* styles missing from custom storage form ([#2135](https://github.com/web3-storage/web3.storage/issues/2135)) ([04b66bc](https://github.com/web3-storage/web3.storage/commit/04b66bc27826aab4b10cc9c9b487126ccc7375b0))
+
 ## [2.32.0](https://github.com/web3-storage/web3.storage/compare/website-v2.31.0...website-v2.32.0) (2022-11-11)
 
 

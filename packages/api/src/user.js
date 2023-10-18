@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError, RangeNotSatisfiableError } from './errors.js'
+import { HTTPError, PSAErrorInvalidData, PSAErrorRequiredData, PSAErrorResourceNotFound, RangeNotSatisfiableError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -11,9 +11,9 @@ import {
 } from './maintenance.js'
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
-import { validateSearchParams } from './utils/psa.js'
+import { INVALID_REQUEST_ID, REQUIRED_REQUEST_ID, validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
+import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {string} UserId
@@ -108,25 +108,6 @@ const createMagicLinkRequestAuthenticator = (env) => async (request) => {
 }
 
 /**
- * Initialize a new user that just registered.
- * @param {object} ctx
- * @param {object} user
- * @param {string} user.id
- * @param {string} user.issuer
- * @param {import('../src/utils/billing-types').UserCreationOptions} [userCreationOptions]
- */
-async function initializeNewUser (ctx, user, userCreationOptions) {
-  await initializeBillingForNewUser(
-    {
-      customers: ctx.customers,
-      subscriptions: ctx.subscriptions,
-      user: { ...user, id: user.id.toString() },
-      userCreationOptions
-    }
-  )
-}
-
-/**
  * @param {Request} request
  * @param {UserRegistrationContext} env
  * @returns {Promise<{ issuer: string }>}
@@ -155,15 +136,7 @@ async function loginOrRegister (request, env) {
     return maintenanceHandler()
   } else if (env.MODE === READ_WRITE) {
     user = await env.db.upsertUser(parsed)
-    // initialize billing, etc, but only if the user was newly inserted
-    if (user.inserted) {
-      await initializeNewUser(
-        env,
-        { ...user, id: user.id },
-        { name: parsed.name, email: parsed.email }
-      )
-    } else {
-      // previously existing user. Update their customer record
+    if (!user.inserted) {
       await updateUserCustomerContact(env, user, parsed)
     }
   } else if (env.MODE === READ_ONLY) {
@@ -182,8 +155,11 @@ async function loginOrRegister (request, env) {
  * @param {import('../src/utils/billing-types').CustomerContact} contact
  */
 async function updateUserCustomerContact (context, user, contact) {
-  const customer = await context.customers.getOrCreateForUser(user)
-  await context.customers.updateContact(customer.id, contact)
+  const customer = await context.customers.getForUser(user)
+
+  if (customer) {
+    await context.customers.updateContact(customer.id, contact)
+  }
 }
 
 /**
@@ -330,7 +306,6 @@ export async function userRequestPost (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userTokensGet (request, env) {
-  // @ts-ignore
   const tokens = await env.db.listKeys(request.auth.user._id)
 
   return new JSONResponse(tokens)
@@ -529,8 +504,7 @@ export async function userPinsGet (request, env) {
     throw psaParams.error
   }
 
-  // @ts-ignore
-  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+  const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
 
   let pinRequests
 
@@ -582,6 +556,42 @@ export async function userPinsGet (request, env) {
     results: pins
   // @ts-ignore
   }, { headers })
+}
+
+/**
+ *  List a user's pins regardless of the token used.
+ *  As we don't want to scope the Pinning Service API to users
+ *  we need a new endpoint as an umbrella.
+ *
+ * @param {import('./user').AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
+ */
+export async function userPinDelete (request, env, ctx) {
+  // @ts-ignore
+  const requestId = request.params?.requestId
+
+  if (!requestId) {
+    throw new PSAErrorRequiredData(REQUIRED_REQUEST_ID)
+  }
+
+  if (typeof requestId !== 'string') {
+    throw new PSAErrorInvalidData(INVALID_REQUEST_ID)
+  }
+
+  // TODO: Improve me, it is un-optimal to get the tokens in a separate request to the db.
+  const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
+
+  try {
+    // Update deleted_at (and updated_at) timestamp for the pin request.
+    await env.db.deletePsaPinRequest(requestId, tokens)
+  } catch (e) {
+    console.error(e)
+    throw new PSAErrorResourceNotFound()
+  }
+
+  return new JSONResponse({}, { status: 202 })
 }
 
 /**

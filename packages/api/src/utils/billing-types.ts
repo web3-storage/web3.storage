@@ -54,9 +54,29 @@ export interface CustomersService {
   getContact(customerId: Customer['id']): Promise<CustomerContact|CustomerNotFound>
   updateContact(customerId: Customer['id'], contact: CustomerContact): Promise<CustomerNotFound|void>
   getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Pick<Customer, 'id'>>
+  getForUser(user: BillingUser): Promise<Pick<Customer, 'id'>|null>
 }
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'
+
+export interface PriceTier {
+  flatAmount: number | null;
+  unitAmount: number | null;
+  upTo: number | null;
+}
+
+export interface CustomStoragePrice {
+  id: string;
+  // Monthly bandwidth in GiB
+  bandwidth?: number;
+  label: string;
+  // True if price is prioritized.  It could be used to disable selection of alternative prices.
+  isPreferred: boolean;
+  description?: string;
+  tiers: Array<PriceTier> | null;
+}
+
+export type StoragePrice = StoragePriceName | CustomStoragePrice;
 
 /**
  * A subscription to the web3.storage platform.
@@ -66,12 +86,12 @@ export interface W3PlatformSubscription {
   // details of subscription to storage functionality
   storage: null | {
     // the price that should be used to determine the subscription's periodic invoice/credit.
-    price: StoragePriceName
+    price: StoragePrice
   }
 }
 
 export type NamedStripePrices = {
-  priceToName: (priceId: StripePriceId) => undefined | StoragePriceName
+  priceToName: (priceId: string) => undefined | StoragePriceName
   nameToPrice: (name: StoragePriceName) => undefined | StripePriceId
 }
 

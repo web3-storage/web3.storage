@@ -1,3 +1,4 @@
+import retry from 'p-retry'
 /**
  * @typedef {import('@nftstorage/ipfs-cluster').API.TrackerStatus} TrackerStatus
  * @typedef {'Undefined'
@@ -155,15 +156,32 @@ export async function waitOkPins (cid, cluster, waitTime = MAX_PIN_STATUS_CHECK_
  */
 export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_STATUS_CHECK_TIME, checkInterval = PIN_STATUS_CHECK_INTERVAL) {
   const okPins = await waitOkPins(cid, cluster, waitTime, checkInterval)
-  const pins = okPins.map((pin) => {
-    return {
-      id: pin._id,
-      status: pin.status,
-      contentCid: cid,
-      location: pin.location
-    }
-  })
-  // @ts-ignore
+  const pins = toPinsUpsert(cid, okPins)
   await db.upsertPins(pins)
   return okPins
+}
+
+/**
+ * @param {string} contentCid
+ * @param {import('@web3-storage/db/db-client-types').PinUpsertInput[]} pins
+ * @returns {import('@web3-storage/db/db-client-types').PinsUpsertInput[]}
+ */
+export function toPinsUpsert (contentCid, pins) {
+  return pins.map(pin => ({
+    id: pin._id,
+    status: pin.status,
+    contentCid,
+    location: pin.location
+  }))
+}
+
+/**
+ * @param {string} contentCid
+ * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
+ * @param {import('@web3-storage/db').DBClient} db
+ */
+export async function fetchAndUpdatePins (contentCid, cluster, db) {
+  const statuses = await retry(() => getPins(contentCid, cluster), { retries: 3 })
+  const upserts = toPinsUpsert(contentCid, statuses)
+  return retry(() => db.upsertPins(upserts), { retries: 3 })
 }

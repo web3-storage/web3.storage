@@ -1,5 +1,133 @@
 # Changelog
 
+## [7.19.0](https://github.com/web3-storage/web3.storage/compare/api-v7.18.1...api-v7.19.0) (2023-07-31)
+
+
+### Features
+
+* write content claims ([#2291](https://github.com/web3-storage/web3.storage/issues/2291)) ([6a31c9b](https://github.com/web3-storage/web3.storage/commit/6a31c9b990d6600c910e9a77c39ce2b12311abab))
+
+
+### Bug Fixes
+
+* remove unnecessary compatibility flags ([#2301](https://github.com/web3-storage/web3.storage/issues/2301)) ([436cdb8](https://github.com/web3-storage/web3.storage/commit/436cdb82a88a3a253e5916a0dc4e1f6d34bacb89))
+* signer DID ([82c3462](https://github.com/web3-storage/web3.storage/commit/82c34620236dcc978dad2b13d1475f2451307c01))
+* this param for fetch calls ([#2292](https://github.com/web3-storage/web3.storage/issues/2292)) ([bf32c53](https://github.com/web3-storage/web3.storage/commit/bf32c53959d731ca567b109ab4d5fc73b4bbbfb7))
+* use error message value in cause ([9b07288](https://github.com/web3-storage/web3.storage/commit/9b072887557546cbdcd718ea138c08c6319cab35))
+
+## [7.18.1](https://github.com/web3-storage/web3.storage/compare/api-v7.18.0...api-v7.18.1) (2023-07-03)
+
+
+### Bug Fixes
+
+* remove send to gendex queue ([#2287](https://github.com/web3-storage/web3.storage/issues/2287)) ([a2cf9fd](https://github.com/web3-storage/web3.storage/commit/a2cf9fd551343a943c1a481d29dd0457f51f1143))
+
+## [7.18.0](https://github.com/web3-storage/web3.storage/compare/api-v7.17.2...api-v7.18.0) (2023-06-27)
+
+
+### Features
+
+* re-enable queue push ([35b6bbd](https://github.com/web3-storage/web3.storage/commit/35b6bbd0d4db5462b21729d44b3be3e682cd10d1))
+
+## [7.17.2](https://github.com/web3-storage/web3.storage/compare/api-v7.17.1...api-v7.17.2) (2023-06-27)
+
+
+### Bug Fixes
+
+* really do not use the queue ([851560c](https://github.com/web3-storage/web3.storage/commit/851560c0296b93c493218bad3e26f3ae52655cad))
+
+## [7.17.1](https://github.com/web3-storage/web3.storage/compare/api-v7.17.0...api-v7.17.1) (2023-06-27)
+
+
+### Bug Fixes
+
+* only send to queue if configured ([f2b3d2c](https://github.com/web3-storage/web3.storage/commit/f2b3d2c6d467efe5bfae022e8f779511a886ccd4))
+* remove queue binding ([d945fc9](https://github.com/web3-storage/web3.storage/commit/d945fc97dca143635c41c3d7ab235ca7148ad314))
+
+## [7.17.0](https://github.com/web3-storage/web3.storage/compare/api-v7.16.1...api-v7.17.0) (2023-06-22)
+
+
+### Features
+
+* trigger block index creation ([#2279](https://github.com/web3-storage/web3.storage/issues/2279)) ([f058dcf](https://github.com/web3-storage/web3.storage/commit/f058dcf0226b08739393f7cb68762db6c0d3cc8e))
+
+## [7.16.1](https://github.com/web3-storage/web3.storage/compare/api-v7.16.0...api-v7.16.1) (2023-05-12)
+
+
+### Bug Fixes
+
+* dudewhere root cid should be content cid ([#2267](https://github.com/web3-storage/web3.storage/issues/2267)) ([2beaf4f](https://github.com/web3-storage/web3.storage/commit/2beaf4f211e19a62d5b00ffcbdfec817c60a37bf))
+
+## [7.16.0](https://github.com/web3-storage/web3.storage/compare/api-v7.15.4...api-v7.16.0) (2023-03-22)
+
+
+### Features
+
+* provide delegates on pin add response ([#2255](https://github.com/web3-storage/web3.storage/issues/2255)) ([5764145](https://github.com/web3-storage/web3.storage/commit/5764145230dcb5bb4c3cbcc0de54092e28dd31d2))
+
+## [7.15.4](https://github.com/web3-storage/web3.storage/compare/api-v7.15.3...api-v7.15.4) (2023-03-17)
+
+
+### Bug Fixes
+
+* update pin status from GET /pins even if failed ([#2235](https://github.com/web3-storage/web3.storage/issues/2235)) ([78bbcdb](https://github.com/web3-storage/web3.storage/commit/78bbcdb019458c13395f07b44c8804d5e16b9788))
+
+## [7.15.3](https://github.com/web3-storage/web3.storage/compare/api-v7.15.2...api-v7.15.3) (2023-03-15)
+
+
+### Bug Fixes
+
+* use car block validator ([#2241](https://github.com/web3-storage/web3.storage/issues/2241)) ([13fcc6c](https://github.com/web3-storage/web3.storage/commit/13fcc6c70e6f2af81e78f149c6e507109adc5563))
+
+## [7.15.2](https://github.com/web3-storage/web3.storage/compare/api-v7.15.1...api-v7.15.2) (2023-03-10)
+
+
+### Bug Fixes
+
+* stop creating a Stripe account during web3.storage account creation ([#2226](https://github.com/web3-storage/web3.storage/issues/2226)) ([425ac5c](https://github.com/web3-storage/web3.storage/commit/425ac5c0b6f92ffa038077b08237a4201dfa5615))
+
+## [7.15.1](https://github.com/web3-storage/web3.storage/compare/api-v7.15.0...api-v7.15.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* include R2 key in error message ([#2219](https://github.com/web3-storage/web3.storage/issues/2219)) ([5a320f4](https://github.com/web3-storage/web3.storage/commit/5a320f4258c9c757075545762d0a65dbb602daaf))
+
+## [7.15.0](https://github.com/web3-storage/web3.storage/compare/api-v7.14.0...api-v7.15.0) (2023-02-21)
+
+
+### Features
+
+* recheck pin status on GET /pins/:req-id ([#2214](https://github.com/web3-storage/web3.storage/issues/2214)) ([91f067f](https://github.com/web3-storage/web3.storage/commit/91f067fabbea2403280b25cc555cd88fb062e201))
+
+## [7.14.0](https://github.com/web3-storage/web3.storage/compare/api-v7.13.1...api-v7.14.0) (2023-01-13)
+
+
+### Features
+
+* allow displaying of custom stripe prices ([#2152](https://github.com/web3-storage/web3.storage/issues/2152)) ([e3011be](https://github.com/web3-storage/web3.storage/commit/e3011bee166f762cefae40240be8ab46476aee33))
+* use pickup as `CLUSTER_API_URL` ([#2179](https://github.com/web3-storage/web3.storage/issues/2179)) ([e486a67](https://github.com/web3-storage/web3.storage/commit/e486a67ae5d49e42525cfeaf977fce166f3833ee))
+
+## [7.13.1](https://github.com/web3-storage/web3.storage/compare/api-v7.13.0...api-v7.13.1) (2023-01-04)
+
+
+### Bug Fixes
+
+* reject not supported codecs ([#2159](https://github.com/web3-storage/web3.storage/issues/2159)) ([811c1b1](https://github.com/web3-storage/web3.storage/commit/811c1b169d4833e2bb116fd869abb263fa833c02)), closes [#2154](https://github.com/web3-storage/web3.storage/issues/2154)
+
+## [7.13.0](https://github.com/web3-storage/web3.storage/compare/api-v7.12.0...api-v7.13.0) (2022-11-30)
+
+
+### Features
+
+* list and ability to delete psa request created though deleted tokens ([#2054](https://github.com/web3-storage/web3.storage/issues/2054)) ([e150d1f](https://github.com/web3-storage/web3.storage/commit/e150d1fa86dc0e6600f159fa92ccb7c8e65900e3))
+
+
+### Bug Fixes
+
+* allow update PSA pin requests with same CID ([#2125](https://github.com/web3-storage/web3.storage/issues/2125)) ([0013efd](https://github.com/web3-storage/web3.storage/commit/0013efdeebaa5af7e4f88daa7bf6e53d706622a8)), closes [#1547](https://github.com/web3-storage/web3.storage/issues/1547)
+* PSA compliance fixes ([#2091](https://github.com/web3-storage/web3.storage/issues/2091)) ([8b1c1d3](https://github.com/web3-storage/web3.storage/commit/8b1c1d3eca4a7ae5a557cb29d3f43f9d6ca29b9d)), closes [#1579](https://github.com/web3-storage/web3.storage/issues/1579)
+
 ## [7.12.0](https://github.com/web3-storage/web3.storage/compare/api-v7.11.3...api-v7.12.0) (2022-11-11)
 
 

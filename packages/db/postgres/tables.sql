@@ -324,6 +324,8 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
 );
 
 CREATE INDEX IF NOT EXISTS psa_pin_request_search_idx ON psa_pin_request (auth_key_id) INCLUDE (content_cid, deleted_at);
+CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
+CREATE INDEX IF NOT EXISTS psa_pin_request_updated_at_idx ON psa_pin_request (updated_at);
 
 CREATE TABLE IF NOT EXISTS agreement (
   id              BIGSERIAL PRIMARY KEY,

@@ -1,5 +1,41 @@
 # Changelog
 
+## [4.5.5](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.4...web3.storage-v4.5.5) (2023-07-19)
+
+
+### Bug Fixes
+
+* this param for fetch calls ([#2292](https://github.com/web3-storage/web3.storage/issues/2292)) ([bf32c53](https://github.com/web3-storage/web3.storage/commit/bf32c53959d731ca567b109ab4d5fc73b4bbbfb7))
+
+## [4.5.4](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.3...web3.storage-v4.5.4) (2023-02-28)
+
+
+### Bug Fixes
+
+* trigger ci ([a88b88a](https://github.com/web3-storage/web3.storage/commit/a88b88a8b4652f8d58249a938f8352a034330ae3))
+
+## [4.5.3](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.2...web3.storage-v4.5.3) (2023-02-28)
+
+
+### Bug Fixes
+
+* trigger ci ([f8a2163](https://github.com/web3-storage/web3.storage/commit/f8a2163705d24aec4d2ab7387fac39f83f2f4268))
+
+## [4.5.2](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.1...web3.storage-v4.5.2) (2023-02-28)
+
+
+### Bug Fixes
+
+* trigger ci ([efe9f14](https://github.com/web3-storage/web3.storage/commit/efe9f1421f9dae4a048ba8c15c32b982cc1be689))
+
+## [4.5.1](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.0...web3.storage-v4.5.1) (2023-02-28)
+
+
+### Bug Fixes
+
+* set client default chunk size to 50MB ([#2227](https://github.com/web3-storage/web3.storage/issues/2227)) ([e34c2ac](https://github.com/web3-storage/web3.storage/commit/e34c2ace59633080898e05bc4bf963d72ffc1565))
+* upload and pin table refactor ([#2018](https://github.com/web3-storage/web3.storage/issues/2018)) ([cbfe9d7](https://github.com/web3-storage/web3.storage/commit/cbfe9d70dbd6ce4ac9e70692160feeec5d2713e2))
+
 ## [4.5.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.4.1...web3.storage-v4.5.0) (2022-09-20)
 
 

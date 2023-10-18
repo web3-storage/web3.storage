@@ -4,6 +4,10 @@ import { S3Client } from '@aws-sdk/client-s3/dist-es/S3Client.js'
 import { Magic } from '@magic-sdk/admin'
 import { DBClient } from '@web3-storage/db'
 import { Cluster } from '@nftstorage/ipfs-cluster'
+import * as ed25519 from '@ucanto/principal/ed25519'
+import * as Delegation from '@ucanto/core/delegation'
+import { DID } from '@ucanto/core'
+import { fromString } from 'uint8arrays/from-string'
 import { DEFAULT_MODE } from './maintenance.js'
 import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
@@ -11,6 +15,7 @@ import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 import { createStripeBillingContext } from './utils/stripe.js'
 import { createMockBillingContext } from './utils/billing.js'
+import { Factory as ClaimFactory } from './utils/content-claims.js'
 
 /**
  * @typedef {object} Env
@@ -45,6 +50,10 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {R2Bucket} CARPARK the bound R2 Bucket interface
  * @property {R2Bucket} SATNAV
  * @property {R2Bucket} DUDEWHERE
+ * @property {string} [CONTENT_CLAIMS_PRIVATE_KEY] Private key for the claims signer.
+ * @property {string} [CONTENT_CLAIMS_PROOF] Proof of delegation.
+ * @property {string} [CONTENT_CLAIMS_SERVICE_DID] DID of the content claims service.
+ * @property {string} [CONTENT_CLAIMS_SERVICE_URL] URL of the content claims service.
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -59,6 +68,7 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {import('./utils/billing-types').CustomersService} customers
  * @property {string} stripeSecretKey
  * @property {string[]} gatewayUrls
+ * @property {import('./utils/content-claims').Factory} [claimFactory]
  */
 
 /**
@@ -68,7 +78,7 @@ import { createMockBillingContext } from './utils/billing.js'
  * @param {Env} env
  * @param {import('./index.js').Ctx} ctx
  */
-export function envAll (req, env, ctx) {
+export async function envAll (req, env, ctx) {
   // In dev, set these vars in a .env file in the parent monorepo project root.
   if (!env.PG_REST_URL) {
     throw new Error('MISSING ENV. Please set PG_REST_URL')
@@ -223,5 +233,25 @@ export function envAll (req, env, ctx) {
   env.gatewayUrls = env.GATEWAY_URL ? env.GATEWAY_URL.split(',') : []
   if (!env.gatewayUrls.length) {
     throw new Error('MISSING ENV. Please set GATEWAY_URL')
+  }
+
+  if (env.CONTENT_CLAIMS_PRIVATE_KEY) {
+    const servicePrincipal = DID.parse(env.CONTENT_CLAIMS_SERVICE_DID ?? 'did:web:claims.web3.storage')
+    /** @type {import('@ucanto/interface').Signer} */
+    let signer = ed25519.parse(env.CONTENT_CLAIMS_PRIVATE_KEY)
+    const proofs = []
+    if (env.CONTENT_CLAIMS_PROOF) {
+      const proof = await Delegation.extract(fromString(env.CONTENT_CLAIMS_PROOF, 'base64pad'))
+      // @ts-expect-error typescript version does not support cause
+      if (!proof.ok) throw new Error('failed to extract proof', { cause: proof.error })
+      proofs.push(proof.ok)
+    } else {
+      // if no proofs, we must be using the service private key to sign
+      signer = signer.withDID(servicePrincipal.did())
+    }
+    const serviceURL = new URL(env.CONTENT_CLAIMS_SERVICE_URL ?? 'https://claims.web3.storage')
+    env.claimFactory = new ClaimFactory(signer, proofs, servicePrincipal, serviceURL)
+  } else {
+    console.warn('content claims are disabled')
   }
 }

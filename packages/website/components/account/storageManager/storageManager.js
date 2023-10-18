@@ -4,8 +4,10 @@ import { useMemo, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 
 import { useUser } from 'components/contexts/userContext';
-import { elementIsInViewport } from 'lib/utils';
+import { elementIsInViewport, formatAsStorageAmount } from 'lib/utils';
 import { usePayment } from '../../../hooks/use-payment';
+import Tooltip from 'ZeroComponents/tooltip/tooltip';
+import InfoIcon from 'assets/icons/info';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
@@ -31,23 +33,18 @@ const StorageManager = ({ className = '', content }) => {
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
   const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
   const limit = useMemo(() => {
-    if (currentPlan?.id === 'earlyAdopter') {
-      return data?.storageLimitBytes || defaultStorageLimit;
-    } else {
-      const byteConversion = currentPlan ? gibibyte * parseInt(currentPlan.baseStorage) : defaultStorageLimit;
-      return byteConversion;
-    }
-  }, [data, currentPlan]);
+    const byteConversion = currentPlan?.tiers?.[0].upTo ? gibibyte * currentPlan.tiers[0].upTo : defaultStorageLimit;
+    return byteConversion;
+  }, [currentPlan]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
-  const { maxSpaceLabel, percentUploaded, percentPinned } = useMemo(
+  const { percentUploaded, percentPinned } = useMemo(
     () => ({
-      maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
       percentUploaded: Math.min((uploaded / limit) * 100, 100),
       percentPinned: Math.min((psaPinned / limit) * 100, 100),
     }),
-    [uploaded, psaPinned, limit, content]
+    [uploaded, psaPinned, limit]
   );
 
   useEffect(() => {
@@ -96,10 +93,10 @@ const StorageManager = ({ className = '', content }) => {
     <div ref={storageManagerRef} className={clsx('section storage-manager-container', className)}>
       <Link href={'account/payment'} passHref>
         <a href={'account/payment'} className="storage-manager-payment-link">
-          Want more storage? Upgrade your plan here!
+          {currentPlan?.isPreferred ? 'View your plan details here.' : 'Want more storage? Upgrade your plan here!'}
         </a>
       </Link>
-      <h6>Your Plan: {currentPlan?.title}</h6>
+      <h6>Your Plan: {currentPlan?.label}</h6>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
           {isLoading ? (
@@ -114,15 +111,14 @@ const StorageManager = ({ className = '', content }) => {
                   standard: 'iec',
                 })}
               </span>
-              {currentPlan?.id === 'earlyAdopter' ? (
-                <>
-                  &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
-                </>
-              ) : (
-                <>
-                  &nbsp;of <span className="storage-number">{currentPlan?.baseStorage}</span> used
-                </>
-              )}
+              &nbsp;of{' '}
+              <span className="storage-number">
+                {currentPlan?.tiers?.[0].upTo ? formatAsStorageAmount(currentPlan?.tiers?.[0].upTo) : ''}
+              </span>{' '}
+              used
+              <Tooltip content={content.tooltip_total}>
+                <InfoIcon />
+              </Tooltip>
             </>
           )}
         </div>

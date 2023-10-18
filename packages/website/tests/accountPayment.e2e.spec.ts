@@ -5,14 +5,14 @@ import { E2EScreenshotPath } from './screenshots';
 // https://magic.link/docs/auth/introduction/test-mode#usage
 const MAGIC_SUCCESS_EMAIL = 'test+success@magic.link';
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('/', { waitUntil: 'commit' });
+test.beforeEach(async ({ page }, testInfo) => {
+  console.log(`Running test: ${testInfo.title}`);
 });
 
 test.describe('/account/payment', () => {
   test('redirects through login and back when not initially authenticated', async ({ page }, testInfo) => {
     const accountPaymentPathname = '/account/payment/';
-    const accountQuery = '?plan=lite'
+    const accountQuery = '?plan=lite';
     const accountUrl = `${accountPaymentPathname}${accountQuery}`;
 
     // try to go to page that requires authn

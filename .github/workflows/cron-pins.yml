@@ -2,7 +2,7 @@ name: Cron Pins
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/60 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -12,7 +12,12 @@ jobs:
     strategy:
       matrix:
         env: ['staging', 'production']
-    timeout-minutes: 30
+        include:
+          - env: production
+            pickup_url: https://pickup.dag.haus
+          - env: staging
+            pickup_url: https://staging.pickup.dag.haus
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v2
         with: 
@@ -37,10 +42,8 @@ jobs:
           STAGING_PG_REST_JWT: ${{ secrets.STAGING_PG_REST_JWT }}
           PROD_PG_REST_URL: ${{ secrets.PROD_PG_REST_URL }}
           STAGING_PG_REST_URL: ${{ secrets.STAGING_PG_REST_URL }}
-          CLUSTER_API_URL: ${{ secrets.CLUSTER_API_URL }}
+          CLUSTER_API_URL: ${{ matrix.pickup_url }}
           CLUSTER_BASIC_AUTH_TOKEN: ${{ secrets.CLUSTER_BASIC_AUTH_TOKEN }}
-          CLUSTER_IPFS_PROXY_API_URL: ${{ secrets.CLUSTER_IPFS_PROXY_API_URL }}
-          CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN: ${{ secrets.CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN }}
         run: npm run start:pins -w packages/cron
 
       - name: Heartbeat

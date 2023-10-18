@@ -187,6 +187,10 @@ async function loadSigningKey(filename) {
 Be careful where you save your keys! Your private signing keys allow the holder to update your published records. Be careful to save your keys to a secure location, and never store your private keys in a source code repository.
 </Callout>
 
+## Rate limits
+
+The w3name API is rate limited at 30 requests per 10 seconds per IP.
+
 [concepts-content-addressing]: /docs/concepts/content-addressing
 [w3name-github]: https://github.com/web3-storage/w3name
 [w3name-npm]: https://www.npmjs.com/package/w3name

@@ -284,10 +284,10 @@ When using `curl`, it's important to set the `--data-binary` flag. A common mist
 </Callout>
 
 ```bash
-curl --headers "Authorization: Bearer $API_TOKEN" --data-binary @mydata.car
+curl --header "Authorization: Bearer $API_TOKEN" --data-binary @mydata.car
 ```
 
-The above example uses the generic `--headers` flag to set the `Authorization` header, since setting headers is supported by all HTTP clients. If you are using `curl`, you can optionally use the more consise `--oauth2-bearer` flag:
+The above example uses the generic `--header` flag to set the `Authorization` header, since setting headers is supported by all HTTP clients. If you are using `curl`, you can optionally use the more consise `--oauth2-bearer` flag:
 
 ```bash
 curl --oauth2-bearer $API_TOKEN --data-binary @mydata.car

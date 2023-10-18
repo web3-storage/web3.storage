@@ -14,6 +14,7 @@ import Button from 'ZeroComponents/button/button';
 import GeneralPageData from '../content/pages/general.json';
 import EnterpriseTierRequestModal from 'components/enterpriseTierRequestModal/enterpriseTierRequestModal';
 import CardListBlock from 'components/cardlistblock/cardlistblock';
+import { saEvent } from 'lib/analytics';
 
 const logos = [
   { src: 'nft-storage.png', alt: 'NFT Storage' },
@@ -126,7 +127,14 @@ const Card = props => {
         <div className="plan-summary">
           <div className="plan-storage-allocation">{storageAllocation}</div>
           <div className="plan-overage-rate">{storageOverageRate}</div>
-          <a href={callToActionUrl}>
+          <a
+            href={callToActionUrl}
+            onClick={() => {
+              saEvent('pricing_card_click', {
+                plan: title,
+              });
+            }}
+          >
             <div className="plan-call-to-action button dark Button">{callToAction}</div>
           </a>
         </div>

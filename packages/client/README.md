@@ -32,6 +32,7 @@ const info = await client.status(rootCid) // Promise<Status | undefined>
 // Fetch and verify files from web3.storage
 const res = await client.get(rootCid) // Promise<Web3Response | null>
 const files = await res.files() // Promise<Web3File[]>
+
 for (const file of files) {
   console.log(`${file.cid} ${file.name} ${file.size}`)
 }

@@ -1,3 +1,5 @@
+import { useEffect, useLayoutEffect, useRef, useCallback } from 'react'
+
 /**
  * If it's a different day, it returns the day, otherwise it returns the hour
  * @param {*} timestamp
@@ -10,6 +12,38 @@ export const formatTimestamp = timestamp => {
     day: 'numeric',
   });
   return formattedDate;
+};
+
+/**
+ * Returns the amount in TiBs if the amount is a multiple of 1024, otherwise returns the amount in GiBs
+ * @param {number} amountInGiB
+ * @returns {string}
+ */
+export const formatAsStorageAmount = amountInGiB => {
+  if (amountInGiB % 1024 === 0) {
+    return `${amountInGiB / 1024} TiB`;
+  } else if (amountInGiB > 1024) {
+    return `${(amountInGiB / 1024).toFixed(2)} TiB`;
+  } else {
+    return `${amountInGiB} GiB`;
+  }
+};
+
+/**
+ * Formats an amount (in dollars) as a currency
+ * @param {number} amount
+ * @param {boolean} shouldTruncateToDollar
+ * @returns {string}
+ */
+export const formatCurrency = (amount, shouldTruncateToDollar = false) => {
+  if (isNaN(amount)) return '';
+
+  const formatter = new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: shouldTruncateToDollar ? 0 : 2,
+  });
+  return formatter.format(amount);
 };
 
 export const formatTimestampFull = timestamp => {
@@ -104,3 +138,44 @@ export const elementIsInViewport = element => {
   }
   return false;
 };
+
+
+/**
+ * This hook is like `useLayoutEffect`, but without the SSR warning.
+ * It seems hacky but it's used in many React libs (Redux, Formik...).
+ * Also mentioned here: https://github.com/facebook/react/issues/16956
+ *
+ * It is useful when you need to update a ref as soon as possible after a React
+ * render (before `useEffect`).
+ */
+export const useIsomorphicLayoutEffect = (typeof window !== 'undefined')
+  ? useLayoutEffect
+  : useEffect;
+
+/**
+ * Temporary userland implementation until an official hook is implemented
+ * See RFC: https://github.com/reactjs/rfcs/pull/220
+ *
+ * Permits to transform an unstable callback (like an arrow function provided as
+ * props) to a "stable" callback that is safe to use in a `useEffect` dependency
+ * array. Useful to avoid React stale closure problems + avoid useless effect
+ * re-executions.
+ *
+ * This generally works but has some potential drawbacks, such as
+ * https://github.com/facebook/react/issues/16956#issuecomment-536636418
+ * 
+ * @template {(...args: never[]) => unknown} T
+ * @param {T} callback
+ * @returns {T}
+ */
+export function useEvent(callback) {
+  const ref = useRef(callback);
+
+  useIsomorphicLayoutEffect(() => {
+    ref.current = callback;
+  }, [callback]);
+
+  // @ts-expect-error: TS is right that this callback may be a supertype of T,
+  // but good enough for our use
+  return useCallback((...args) => ref.current(...args), []);
+}

@@ -106,7 +106,7 @@ export async function updatePinStatuses ({ cluster, db }) {
         return null
       }
 
-      if (status !== 'Pinned') reSyncPins.push(pin)
+      if (status === 'PinQueued' || status === 'Pinning') reSyncPins.push(pin)
 
       if (status === pin.status) {
         log(`🙅 ${pin.contentCid}@${pin.location.peerId}: No status change (${status})`)

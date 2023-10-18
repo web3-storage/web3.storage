@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useAuthorization } from 'components/contexts/authorizationContext';
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
-import { trackCustomLinkClick, events, ui } from 'lib/countly';
+import { events, saEvent, ui } from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
 import Sidebar from 'modules/docs-theme/sidebar/sidebar';
@@ -50,7 +50,8 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
 
   const onLinkClick = useCallback(
     e => {
-      trackCustomLinkClick(events.LINK_CLICK_NAVBAR, e.currentTarget);
+      saEvent(events.LINK_CLICK_NAVBAR, { target: e.currentTarget });
+
       if (isMenuOpen) {
         setMenuOpen(false);
       }
@@ -64,14 +65,6 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
       setMenuOpen(false);
     }
   }, [router, isMenuOpen]);
-
-  const handleKeySelect = useCallback(
-    (e, url) => {
-      onLinkClick(e);
-      router.push(url);
-    },
-    [router, onLinkClick]
-  );
 
   // ======================================================= Templates [Buttons]
   const getAccountMenu = () => {
@@ -252,7 +245,7 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
                   <Fragment key={item.text}>
                     {item.links ? (
                       <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
-                        <ZeroAccordionSection disabled={!Array.isArray(item.links)}>
+                        <ZeroAccordionSection disabled={!Array.isArray(item.links)} trackingId={item.text}>
                           <ZeroAccordionSection.Header>
                             <div className="nav-item-heading">{item.text}</div>
                           </ZeroAccordionSection.Header>
@@ -287,7 +280,7 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
 
                 {isLoggedIn && account && (
                   <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
-                    <ZeroAccordionSection disabled={!Array.isArray(account.links)}>
+                    <ZeroAccordionSection disabled={!Array.isArray(account.links)} trackingId={account.text}>
                       <ZeroAccordionSection.Header>
                         <div className="nav-item-heading">{account.text}</div>
                       </ZeroAccordionSection.Header>
@@ -305,15 +298,8 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
                                   {link.text}
                                 </button>
                               ) : (
-                                <Link href={link.url} key={link.text}>
-                                  <a
-                                    href={link.url}
-                                    className="nav-sublink"
-                                    onClick={onLinkClick}
-                                    onKeyPress={e => handleKeySelect(e, link.url)}
-                                  >
-                                    {link.text}
-                                  </a>
+                                <Link href={link.url} key={link.text} onClick={onLinkClick} className="nav-sublink">
+                                  {link.text}
                                 </Link>
                               )
                             )}

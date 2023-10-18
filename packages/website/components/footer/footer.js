@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
-import { trackCustomLinkClick, events } from '../../lib/countly';
+import { events, saEvent } from '../../lib/analytics';
 import Link, { useIsExternalHref } from '../link/link';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';
@@ -30,7 +30,7 @@ export default function Footer({ isProductApp }) {
 
   // ================================================================= Functions
   const onLinkClick = useCallback(e => {
-    trackCustomLinkClick(events.LINK_CLICK_FOOTER, e.currentTarget);
+    saEvent(events.LINK_CLICK_FOOTER, { target: e.currentTarget });
   }, []);
 
   const handleButtonClick = useCallback(

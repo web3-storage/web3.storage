@@ -1,0 +1,52 @@
+name: Pinning Test
+
+on:
+  push:
+    paths:
+      - '.github/workflows/cron-test-pinning.yml'
+  schedule:
+    - cron: '50 * * * *'
+  workflow_dispatch:
+
+jobs:
+  psa-test:
+    name: Pinning Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Setup kubo
+        uses: ibnesayeed/setup-ipfs@aff2e4ae38368a44ac36ecc244f8c693d2e5b263
+        with:
+          ipfs_version: '0.18.1'
+          run_daemon: true
+
+      - name: IPFS debug info
+        run: |
+          # print multiaddrs for the local node
+          ipfs id -f="<addrs>"
+          ipfs version
+
+      - name: Create a 3MiB file and add it to kubo
+        run: |
+          dd if=/dev/urandom of=./pin-test-3mib bs=1024 count=3072
+          ipfs add --quiet --cid-version=1 ./pin-test-3mib > ./cid-to-pin
+          echo "Added $(cat ./cid-to-pin)"
+
+      # Create a random file. use kubo to pin it to web3.storage and time the duration in seconds
+      # `usr/bin/time -f "%e" -o ./duration_secs` writes the wall-clock runtime in seconds of the command to the file ./duration_secs
+      - name: Pin 3MiB file to web3.storage via kubo
+        run: |
+          ipfs pin remote service add web3 "https://api.web3.storage" ${{ secrets.WEB3_TOKEN }}
+          echo "Pinning $(cat ./cid-to-pin)"
+          /usr/bin/time -f "%e" -o ./pin_duration_secs ipfs pin remote add --service=web3 --name=foo $(cat ./cid-to-pin)
+          cat ./pin_duration_secs
+
+      # format it as a prometheus metric and send it to the push gateway
+      # see: https://github.com/prometheus/pushgateway/blob/master/README.md
+      - name: Push duration metric to prometheus
+        run: |
+          echo "# HELP web3storage_pin_duration_seconds How long it took to pin a file via kubo" > ./pin_metric
+          echo "# TYPE web3storage_pin_duration_seconds gauge" >> ./pin_metric
+          echo "web3storage_pin_duration_seconds{size=\"3MiB\",cmd=\"kubo\"} $(cat ./pin_duration_secs)" >> ./pin_metric
+          cat ./pin_metric
+          curl --silent --show-error --data-binary "@./pin_metric" ${{ secrets.PUSHGATEWAY_URL }}/metrics/job/web3storage_ci/instance/github_action

@@ -496,7 +496,7 @@ describe('Pin Request', () => {
     it('unlists deleted pins', async () => {
       const { results: prs } = await client.listPsaPinRequests(authKeyPinList, { limit: 20 })
       assert.strictEqual(prs.length, totalPinned)
-      await client.deletePsaPinRequest(createdPinningRequests[10]._id, authKeyPinList)
+      await client.deletePsaPinRequest(createdPinningRequests[10]._id, [authKeyPinList])
       const { results: res } = await client.listPsaPinRequests(authKeyPinList, { limit: 20 })
       assert.strictEqual(res.length, totalPinned - 1)
     })
@@ -504,18 +504,18 @@ describe('Pin Request', () => {
 
   describe('Delete Pin', () => {
     it('throws if the request id does not exist', async () => {
-      assert.rejects(client.deletePsaPinRequest(1000, authKey))
+      assert.rejects(client.deletePsaPinRequest(1000, [authKey]))
     })
 
     it('throws if the auth key does not belong to the pin request', async () => {
-      assert.rejects(client.deletePsaPinRequest(aPinRequestOutput._id, 'fakeAuth'))
+      assert.rejects(client.deletePsaPinRequest(aPinRequestOutput._id, ['fakeAuth']))
     })
 
     it('returns the id of the deleted pin request', async () => {
       const aPinRequestOutputId = aPinRequestOutput._id
       const pinRequest = await client.getPsaPinRequest(authKey, aPinRequestOutputId)
       assert.ok(!pinRequest.deleted, 'is null')
-      const deletedPinRequest = await client.deletePsaPinRequest(aPinRequestOutputId, authKey)
+      const deletedPinRequest = await client.deletePsaPinRequest(aPinRequestOutputId, [authKey])
       assert.ok(deletedPinRequest)
       assert.equal(deletedPinRequest._id, pinRequest._id)
     })
@@ -525,7 +525,7 @@ describe('Pin Request', () => {
     })
 
     it('cannot delete a pin request which is already deleted', async () => {
-      assert.rejects(client.deletePsaPinRequest(aPinRequestOutput._id, authKey))
+      assert.rejects(client.deletePsaPinRequest(aPinRequestOutput._id, [authKey]))
     })
   })
 })

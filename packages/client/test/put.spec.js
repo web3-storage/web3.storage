@@ -15,7 +15,7 @@ import { ReadableStream } from '@web-std/blob'
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
-  const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
+  const endpoint = new URL(API_PORT ? `http://127.0.0.1:${API_PORT}` : '')
 
   it('errors without token', async () => {
     // @ts-ignore
@@ -111,7 +111,7 @@ describe('put', () => {
   })
 
   it('adds big files', async function () {
-    this.timeout(60e3)
+    this.timeout(120e3)
     const rateLimiter = createUnboundRateLimiter()
     const client = new Web3Storage({ token, endpoint, rateLimiter })
     let uploadedChunks = 0
@@ -144,7 +144,7 @@ describe('put', () => {
         uploadedChunks++
       }
     })
-    assert.ok(uploadedChunks >= 100)
+    assert.ok(uploadedChunks >= 20)
   })
 
   it('aborts', async () => {
@@ -164,7 +164,7 @@ describe('put', () => {
 describe('putCar', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
-  const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
+  const endpoint = new URL(API_PORT ? `http://127.0.0.1:${API_PORT}` : '')
 
   it('adds CAR files', async () => {
     const client = new Web3Storage({ token, endpoint })

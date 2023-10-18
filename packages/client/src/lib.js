@@ -31,7 +31,7 @@ import {
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
-const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
+const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 50 // chunk to ~50MB CARs
 const MAX_BLOCK_SIZE = 1048576
 const MAX_CHUNK_SIZE = 104857600
 // These match what is enforced server-side
@@ -184,10 +184,10 @@ class Web3Storage {
     }
     const targetSize = maxChunkSize
     const url = new URL('car', endpoint)
-    let headers = Web3Storage.headers(token)
-
-    if (name) {
-      headers = { ...headers, 'X-Name': encodeURIComponent(name) }
+    const headers = {
+      ...Web3Storage.headers(token),
+      'Content-Type': 'application/vnd.ipld.car',
+      ...(name ? { 'X-Name': encodeURIComponent(name) } : {})
     }
 
     const roots = await car.getRoots()
@@ -212,6 +212,17 @@ class Web3Storage {
       }
 
       const carFile = new Blob(carParts, { type: 'application/vnd.ipld.car' })
+
+      /** @type {Blob|ArrayBuffer} */
+      let body = carFile
+      // FIXME: should not be necessary to await arrayBuffer()!
+      // Node.js 20 hangs reading the stream (it never ends) but in
+      // older node versions and the browser it is fine to pass a blob.
+      /* c8 ignore next 3 */
+      if (parseInt(globalThis.process?.versions?.node) > 18) {
+        body = await body.arrayBuffer()
+      }
+
       const res = await pRetry(
         async () => {
           await rateLimiter()
@@ -221,7 +232,7 @@ class Web3Storage {
             response = await fetch(url.toString(), {
               method: 'POST',
               headers,
-              body: carFile,
+              body,
               signal
             })
           } catch (/** @type {any} */err) {

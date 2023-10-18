@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
 import Button from '../button/button';
-import countly from '../../lib/countly';
+import analytics from '../../lib/analytics';
 
 // ====================================================================== Params
 /**
@@ -19,10 +19,10 @@ export default function TextBlock({ block }) {
   const tracking2 = {};
   if (typeof block.cta === 'object') {
     if (block.cta.event) {
-      tracking.event = countly.events[block.cta.event];
+      tracking.event = analytics.events[block.cta.event];
     }
     if (block.cta.ui) {
-      tracking.ui = countly.ui[block.cta.ui];
+      tracking.ui = analytics.ui[block.cta.ui];
     }
     if (block.cta.action) {
       tracking.action = block.cta.action;
@@ -30,10 +30,10 @@ export default function TextBlock({ block }) {
   }
   if (typeof block.cta22 === 'object') {
     if (block.cta2.event) {
-      tracking2.event = countly.events[block.cta2.event];
+      tracking2.event = analytics.events[block.cta2.event];
     }
     if (block.cta2.ui) {
-      tracking2.ui = countly.ui[block.cta2.ui];
+      tracking2.ui = analytics.ui[block.cta2.ui];
     }
     if (block.cta2.action) {
       tracking2.action = block.cta2.action;
