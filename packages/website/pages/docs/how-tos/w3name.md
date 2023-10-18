@@ -188,7 +188,6 @@ Be careful where you save your keys! Your private signing keys allow the holder 
 </Callout>
 
 ## Rate limits
-
 The w3name API is rate limited at 30 requests per 10 seconds per IP.
 
 [concepts-content-addressing]: /docs/concepts/content-addressing
