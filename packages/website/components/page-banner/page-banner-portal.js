@@ -43,12 +43,7 @@ export const PageBannerPortal = ({ id, contentsClassName = defaultContentsClassN
  * render children into a PageBannerPortal at the top of the page
  */
 export const PageBanner = ({ children }) => {
-  const pageBannerPortal = React.useMemo(() => {
-    if (!globalThis?.document) return;
-    return document.querySelector(defaultPortalQuerySelector);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [globalThis?.document]);
-  // const pageBannerPortal = globalThis?.document?.querySelector(defaultPortalQuerySelector);
+  const pageBannerPortal = globalThis?.document?.querySelector(defaultPortalQuerySelector);
   return (
     <>
       {pageBannerPortal &&
