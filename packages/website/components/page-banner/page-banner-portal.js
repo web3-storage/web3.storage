@@ -32,7 +32,6 @@ export function MessageBannerStyled({ children }) {
  * that component (since it needs to be atop the page).
  */
 export const PageBannerPortal = ({ id, contentsRef, contentsClassName = defaultContentsClassName }) => {
-  console.log('contentsRef', contentsRef);
   return (
     <div id={id}>
       <div className={contentsClassName} ref={contentsRef}></div>
@@ -56,6 +55,5 @@ export const PageBanner = ({ children }) => {
       <MessageBannerStyled>{children}</MessageBannerStyled>
     </div>
   );
-  console.log('PageBanner render', { container, bannerChild });
   return <>{container && children && ReactDOM.createPortal(bannerChild, container)}</>;
 };
