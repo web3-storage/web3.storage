@@ -7,6 +7,7 @@ import Script from 'next/script';
 import Metadata from 'components/general/metadata';
 import RestrictedRoute from 'components/general/restrictedRoute';
 import AppProviders from 'components/general/appProviders';
+import { PageBannerPortal, defaultPortalElementId } from '../components/page-banner/page-banner-portal.js';
 import MessageBanner from '../components/messagebanner/messagebanner.js';
 import Navigation from '../components/navigation/navigation.js';
 import Footer from '../components/footer/footer.js';
@@ -43,6 +44,15 @@ const App = ({ Component, pageProps }) => {
         </noscript>
         <div id="master-container" className={clsx(pageClass)}>
           {productApp && <div className="corkscrew-background"></div>}
+          {/* use react-dom createPortal to render page-specific banners into this */}
+          <div
+            style={{
+              // needed so this banner is above .corkscrew-background
+              zIndex: 1,
+            }}
+          >
+            <PageBannerPortal id={defaultPortalElementId} />
+          </div>
           <MessageBanner />
           <Navigation isProductApp={productApp} breadcrumbs={pageProps.breadcrumbs} />
           <Component {...pageProps} />
