@@ -94,7 +94,7 @@ export default function Docs(props) {
         <>
           {shouldShowSunsetAnnouncement() && (
             <PageBannerPortal.PageBanner>
-                <W3upMigrationRecommendationCopy />
+              <W3upMigrationRecommendationCopy />
             </PageBannerPortal.PageBanner>
           )}
           {sharedHead}

@@ -31,24 +31,31 @@ export function MessageBannerStyled({ children }) {
  * Other components will use ReactDOM.createPortal() to render into this even though it isn't a child of
  * that component (since it needs to be atop the page).
  */
-export const PageBannerPortal = ({ id, contentsClassName = defaultContentsClassName }) => {
+export const PageBannerPortal = ({ id, contentsRef, contentsClassName = defaultContentsClassName }) => {
+  console.log('contentsRef', contentsRef);
   return (
     <div id={id}>
-      <div className={contentsClassName}></div>
+      <div className={contentsClassName} ref={contentsRef}></div>
     </div>
   );
 };
 
 /**
+ * React Context used for passing around the HTMLElement for the PageBannerPortal
+ * so that the PageBanner component can pass it to React.createPortal.
+ */
+export const PageBannerPortalContainerContext = React.createContext(undefined);
+
+/**
  * render children into a PageBannerPortal at the top of the page
  */
 export const PageBanner = ({ children }) => {
-  const pageBannerPortal = globalThis?.document?.querySelector(defaultPortalQuerySelector);
+  const container = React.useContext(PageBannerPortalContainerContext);
   const bannerChild = (
-    <div style={{ width: '100%' }}>
+    <div>
       <MessageBannerStyled>{children}</MessageBannerStyled>
     </div>
   );
-  console.log('PageBanner render', { pageBannerPortal, bannerChild });
-  return <>{pageBannerPortal && children && ReactDOM.createPortal(bannerChild, pageBannerPortal)}</>;
+  console.log('PageBanner render', { container, bannerChild });
+  return <>{container && children && ReactDOM.createPortal(bannerChild, container)}</>;
 };
