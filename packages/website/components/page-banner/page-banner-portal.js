@@ -4,22 +4,22 @@
  */
 
 import clsx from 'clsx';
+import * as React from 'react-dom';
 
 export const defaultPortalElementId = 'page-banner-portal';
 export const defaultContentsClassName = 'contents';
+export const defaultPortalQuerySelector = `#${defaultPortalElementId} .${defaultContentsClassName}`;
 
 /**
  * wrap children in stiles like a .message-banner (see ../messagebanner/messagebanner.scss)
  */
-function MessageBannerStyled({ children }) {
+export function MessageBannerStyled({ children }) {
   return (
     <>
       <div className={clsx('message-banner-wrapper')}>
-        <div className="grid-noGutter">
-          <div className="col">
-            <div className="message-banner-container">
-              <div className={clsx('message-banner-content', 'mb-reduced-fontsize')}>{children}</div>
-            </div>
+        <div className="message-banner-container" style={{ padding: '0.5em' }}>
+          <div className={clsx('message-banner-content', 'message-banner-underline-links', 'mb-reduced-fontsize')}>
+            {children}
           </div>
         </div>
       </div>
@@ -35,9 +35,32 @@ function MessageBannerStyled({ children }) {
 export const PageBannerPortal = ({ id, contentsClassName = defaultContentsClassName }) => {
   return (
     <div id={id}>
-      <MessageBannerStyled>
-        <span className={contentsClassName}></span>
-      </MessageBannerStyled>
+      <span className={contentsClassName}></span>
     </div>
+  );
+};
+
+/**
+ * render children into a PageBannerPortal at the top of the page
+ */
+export const PageBanner = ({ children }) => {
+  const pageBannerPortal = document.querySelector(defaultPortalQuerySelector);
+  console.log('in PageBanner component', {
+    pageBannerPortal,
+    children,
+    defaultPortalQuerySelector,
+    found: document.querySelector(defaultPortalQuerySelector),
+  });
+  return (
+    <>
+      {pageBannerPortal &&
+        children &&
+        React.createPortal(
+          <>
+            <MessageBannerStyled>{children}</MessageBannerStyled>
+          </>,
+          pageBannerPortal
+        )}
+    </>
   );
 };

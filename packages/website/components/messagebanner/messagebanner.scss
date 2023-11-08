@@ -75,6 +75,10 @@
   }
 }
 
+.message-banner-underline-links *:link {
+  text-decoration: underline;
+}
+
 .message-banner-close-button {
   position: absolute;
   display: flex;
