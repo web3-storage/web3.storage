@@ -44,11 +44,11 @@ export const PageBannerPortal = ({ id, contentsClassName = defaultContentsClassN
  */
 export const PageBanner = ({ children }) => {
   const pageBannerPortal = globalThis?.document?.querySelector(defaultPortalQuerySelector);
-  return (
-    <>
-      {pageBannerPortal &&
-        children &&
-        ReactDOM.createPortal(<MessageBannerStyled>{children}</MessageBannerStyled>, pageBannerPortal)}
-    </>
+  const bannerChild = (
+    <div style={{ width: '100%' }}>
+      <MessageBannerStyled>{children}</MessageBannerStyled>
+    </div>
   );
+  console.log('PageBanner render', { pageBannerPortal, bannerChild });
+  return <>{pageBannerPortal && children && ReactDOM.createPortal(bannerChild, pageBannerPortal)}</>;
 };
