@@ -177,6 +177,9 @@ jobs:
               core.setFailed('e2e tests did not succeed')
   preview:
     name: Preview
+    environment:
+      name: ${{ (github.ref_name == 'main') && 'staging' || format('preview-{0}', github.ref_name) }}
+      url: ${{ (github.ref_name == 'main') && 'https://staging.web3.storage/' || steps.cloudflare_url.outputs.stdout }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
