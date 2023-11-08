@@ -39,7 +39,6 @@ export const shouldShowSunsetAnnouncement = (at = new Date(), announcementStartD
  * copy for banner message across top of some web3.storage pages when w3up ships
  */
 export const W3upMigrationRecommendationCopy = () => {
-  console.log('rendering W3upMigrationRecommendationCopy', w3upLaunchContextDefaults);
   const createNewAccountHref = 'https://console.web3.storage/?intent=create-account';
   const learnWhatsNewHref = 'https://console.web3.storage/?intent=learn-new-web3storage-experience';
   const sunsetDateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' });

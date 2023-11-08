@@ -42,17 +42,21 @@ const App = ({ Component, pageProps }) => {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </noscript>
-        <div id="master-container" className={clsx(pageClass)}>
+
+        <div
+          style={{
+            // needed so this banner is above .corkscrew-background
+            zIndex: 1,
+            // must be positioned for zIndex to take effect
+            position: 'relative',
+          }}
+        >
+          <PageBannerPortal id={defaultPortalElementId}></PageBannerPortal>
+        </div>
+
+        <div id="master-container" className={clsx(pageClass)} style={{ zIndex: 0 }}>
           {productApp && <div className="corkscrew-background"></div>}
-          {/* use react-dom createPortal to render page-specific banners into this */}
-          <div
-            style={{
-              // needed so this banner is above .corkscrew-background
-              zIndex: 1,
-            }}
-          >
-            <PageBannerPortal id={defaultPortalElementId} />
-          </div>
+
           <MessageBanner />
           <Navigation isProductApp={productApp} breadcrumbs={pageProps.breadcrumbs} />
           <Component {...pageProps} />

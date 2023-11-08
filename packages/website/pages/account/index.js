@@ -10,6 +10,8 @@ import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackground from '../../components/gradientbackground/gradientbackground.js';
 import AppData from '../../content/pages/app/account.json';
 import GeneralPageData from '../../content/pages/general.json';
+import { W3upMigrationRecommendationCopy, shouldShowSunsetAnnouncement } from '../../components/w3up-launch.js';
+import * as PageBannerPortal from '../../components/page-banner/page-banner-portal.js';
 
 export const CTACardTypes = {
   API_TOKENS: 'API_TOKENS',
@@ -79,6 +81,11 @@ const Account = () => {
 
   return (
     <>
+      {shouldShowSunsetAnnouncement() && (
+        <PageBannerPortal.PageBanner>
+          <W3upMigrationRecommendationCopy />
+        </PageBannerPortal.PageBanner>
+      )}
       <div className="page-container account-container">
         <h1 className="table-heading">{dashboard.heading}</h1>
         <div className="account-content">
