@@ -1,12 +1,17 @@
 import '../styles/global.scss';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Script from 'next/script';
 
 import Metadata from 'components/general/metadata';
 import RestrictedRoute from 'components/general/restrictedRoute';
 import AppProviders from 'components/general/appProviders';
+import {
+  PageBannerPortal,
+  defaultPortalElementId,
+  PageBannerPortalContainerContext,
+} from '../components/page-banner/page-banner-portal.js';
 import MessageBanner from '../components/messagebanner/messagebanner.js';
 import Navigation from '../components/navigation/navigation.js';
 import Footer from '../components/footer/footer.js';
@@ -19,6 +24,7 @@ const App = ({ Component, pageProps }) => {
   const productRoutes = ['/login', '/account', '/account/payment', '/tokens', '/callback'];
   const productApp = productRoutes.includes(pathname);
   const pageClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
+  const [pageBannerPortalEl, setPageBannerPortalEl] = useState();
 
   useEffect(() => {
     document.querySelector('body')?.classList.add(pageClass);
@@ -41,13 +47,28 @@ const App = ({ Component, pageProps }) => {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </noscript>
-        <div id="master-container" className={clsx(pageClass)}>
-          {productApp && <div className="corkscrew-background"></div>}
-          <MessageBanner />
-          <Navigation isProductApp={productApp} breadcrumbs={pageProps.breadcrumbs} />
-          <Component {...pageProps} />
-          <Footer isProductApp={productApp} />
+
+        <div
+          style={{
+            // needed so this banner is above .corkscrew-background
+            zIndex: 1,
+            // must be positioned for zIndex to take effect
+            position: 'relative',
+          }}
+        >
+          <PageBannerPortal id={defaultPortalElementId} contentsRef={setPageBannerPortalEl}></PageBannerPortal>
         </div>
+
+        <PageBannerPortalContainerContext.Provider value={pageBannerPortalEl}>
+          <div id="master-container" className={clsx(pageClass)} style={{ zIndex: 0 }}>
+            {productApp && <div className="corkscrew-background"></div>}
+
+            <MessageBanner />
+            <Navigation isProductApp={productApp} breadcrumbs={pageProps.breadcrumbs} />
+            <Component {...pageProps} />
+            <Footer isProductApp={productApp} />
+          </div>
+        </PageBannerPortalContainerContext.Provider>
       </RestrictedRoute>
     </AppProviders>
   );

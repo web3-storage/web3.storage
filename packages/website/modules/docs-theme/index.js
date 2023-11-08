@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { MDXProvider } from '@mdx-js/react';
-
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import hljs from 'highlight.js/lib/core';
@@ -9,10 +8,13 @@ import powershell from 'highlight.js/lib/languages/powershell';
 import bash from 'highlight.js/lib/languages/bash';
 import go from 'highlight.js/lib/languages/go';
 import json from 'highlight.js/lib/languages/json';
+
 import Sidebar from './sidebar/sidebar';
 import Feedback from './feedback/feedback';
 import Toc from './toc/toc';
 import DocsPagination from './docspagination/docspagination';
+import { W3upMigrationRecommendationCopy, shouldShowSunsetAnnouncement } from '../../components/w3up-launch.js';
+import * as PageBannerPortal from '../../components/page-banner/page-banner-portal.js';
 
 hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('powershell', powershell);
@@ -27,7 +29,7 @@ export default function Docs(props) {
   useEffect(() => {
     const pres = document.querySelectorAll('pre');
 
-    pres.forEach((pre) => {
+    pres.forEach(pre => {
       const code = pre.firstElementChild?.innerHTML;
       if (code) {
         const button = document.createElement('button');
@@ -39,7 +41,7 @@ export default function Docs(props) {
         button.classList.add('code-copy-button');
         document.body.appendChild(textarea);
 
-        button.addEventListener('click', (event) => {
+        button.addEventListener('click', event => {
           if (!navigator.clipboard) {
             textarea.focus({ preventScroll: true });
             textarea.select();
@@ -63,7 +65,6 @@ export default function Docs(props) {
 
         pre.appendChild(button);
       }
-
     });
 
     hljs.highlightAll();
@@ -91,6 +92,11 @@ export default function Docs(props) {
     return function Layout({ children }) {
       return (
         <>
+          {shouldShowSunsetAnnouncement() && (
+            <PageBannerPortal.PageBanner>
+              <W3upMigrationRecommendationCopy />
+            </PageBannerPortal.PageBanner>
+          )}
           {sharedHead}
           <div className="docs-container">
             <Sidebar openMenu={null} />
