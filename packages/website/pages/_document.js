@@ -1,5 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
+import { w3upLaunchConfig } from '../components/w3up-launch.js';
+
 class MyDocument extends Document {
   /**
    * @param {import("next/document").DocumentContext} ctx
@@ -28,6 +30,11 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           <div id="modal-root"></div>
+          {/* add this for debuggability of launch announcements that only appear when configured */}
+          <script
+            type="application/json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(w3upLaunchConfig) }}
+          ></script>
         </body>
       </Html>
     );

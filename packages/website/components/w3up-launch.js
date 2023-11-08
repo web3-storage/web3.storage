@@ -16,14 +16,6 @@ const sunsetAnnouncementStartDate = sunsetAnnouncementStartEnv
   ? new Date(Date.parse(sunsetAnnouncementStartEnv))
   : undefined;
 
-export const w3upLaunchContextDefaults = {
-  stages: {
-    sunsetAnnouncement: {
-      start: sunsetAnnouncementStartDate,
-    },
-  },
-};
-
 /**
  * Return whether sunset announcements related to w3up-launch should be shown.
  * An announcement date must be explicitly configured via env var, and now must be after that date.
@@ -33,6 +25,19 @@ export const w3upLaunchContextDefaults = {
  */
 export const shouldShowSunsetAnnouncement = (at = new Date(), announcementStartDate = sunsetAnnouncementStartDate) => {
   return announcementStartDate && at > announcementStartDate;
+};
+
+export const w3upLaunchConfig = {
+  type: 'W3upLaunchConfig',
+  stages: {
+    sunsetAnnouncement: {
+      start: sunsetAnnouncementStartDate,
+    },
+    sunset: {
+      start: sunsetStartDate,
+    },
+  },
+  shouldShowSunsetAnnouncement: shouldShowSunsetAnnouncement(),
 };
 
 /**
