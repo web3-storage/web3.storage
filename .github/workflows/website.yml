@@ -188,7 +188,10 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm run build -w packages/client
-      - run: npm run build -w packages/website
+      - name: build website
+        run: |
+          echo NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START="$NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START"
+          npm run build -w packages/website
         env:
           NEXT_PUBLIC_ENV: staging
           NEXT_PUBLIC_API: https://api-staging.web3.storage
