@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const sunsetStartEnv = process.env.NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START ?? '2023-01-09T00:00:00Z';
+const sunsetStartEnv = process.env.NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START ?? '2023-01-10T00:00:00Z';
 const sunsetStartDate = new Date(Date.parse(sunsetStartEnv));
 
 /**
