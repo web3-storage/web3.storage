@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.37.0](https://github.com/web3-storage/web3.storage/compare/website-v2.36.3...website-v2.37.0) (2023-11-09)
+
+
+### Features
+
+* add w3up-launch announcement banner (when env.NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START is set) ([#2319](https://github.com/web3-storage/web3.storage/issues/2319)) ([f3d5b97](https://github.com/web3-storage/web3.storage/commit/f3d5b97eb781e20ad73d06597c88bd67303a9083))
+* remove 'whats the data layer?' cta2 from website homepage ([#2322](https://github.com/web3-storage/web3.storage/issues/2322)) ([7975fdf](https://github.com/web3-storage/web3.storage/commit/7975fdfb2b21eb570fcfe295064e24ef44d0f58e))
+
 ## [2.36.3](https://github.com/web3-storage/web3.storage/compare/website-v2.36.2...website-v2.36.3) (2023-08-29)
 
 
