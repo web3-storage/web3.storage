@@ -73,6 +73,10 @@ NEXT_PUBLIC_ENV=dev
 # NEXT_PUBLIC_COUNTLY_KEY=
 # NEXT_PUBLIC_COUNTLY_URL=
 
+# set to schedule when announcement banners should show about the w3up launch and related product sunsets
+# NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START='2023-11-21T00:00:00Z'
+# set to schedule when certain features hide bcause the product has been sunset and w3up is launched
+# NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START='2024-01-10T00:00:00Z'
 
 ## ---- cron ------------------------------------------------------------------
 
