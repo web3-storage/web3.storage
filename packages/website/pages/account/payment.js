@@ -18,7 +18,11 @@ import { plans, freePlan } from '../../components/contexts/plansContext';
 import { userBillingSettings } from '../../lib/api';
 import GeneralPageData from '../../content/pages/general.json';
 import constants from '../../lib/constants.js';
-import { W3upMigrationRecommendationCopy, shouldShowSunsetAnnouncement } from '../../components/w3up-launch.js';
+import {
+  W3upMigrationRecommendationCopy,
+  shouldShowSunsetAnnouncement,
+  shouldPreventPlanSwitching,
+} from '../../components/w3up-launch.js';
 import * as PageBannerPortal from '../../components/page-banner/page-banner-portal.js';
 
 /**
@@ -155,6 +159,7 @@ const PaymentSettingsPage = props => {
                 currentPlan={currentPlan}
                 setPlanSelection={setPlanSelection}
                 setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
+                disablePlanSwitching={shouldPreventPlanSwitching()}
               />
             )}
 

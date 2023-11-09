@@ -7,17 +7,37 @@ import { formatAsStorageAmount, formatCurrency } from '../../../lib/utils.js';
 
 const getAdditionalStoragePrice = price => (typeof price === 'number' ? `${formatCurrency(price / 100)} / GiB` : 'N/A');
 
-const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPaymentPlanModalOpen }) => {
+/**
+ * @typedef {import('../../../components/contexts/plansContext.js').Plan} Plan
+ * @typedef {import('../../../components/contexts/plansContext.js').StorageSubscription} StorageSubscription
+ * @typedef {import('../../../components/contexts/plansContext.js').StoragePrice} StoragePrice
+ */
+
+/**
+ * @param {object} props
+ * @param {Plan} [props.currentPlan]
+ * @param {boolean} [props.disablePlanSwitching] - whether to disable plan switching e.g. hide 'select plan' buttons
+ * @param {Plan[]} props.plans
+ * @param {(isOpen: boolean) => void} props.setIsPaymentPlanModalOpen
+ * @param {(plan?: Plan) => void} props.setPlanSelection
+ */
+const PaymentTable = ({
+  plans: plansProp,
+  currentPlan,
+  setPlanSelection,
+  setIsPaymentPlanModalOpen,
+  disablePlanSwitching,
+}) => {
   const plans = useMemo(() => {
-    const isCurrentPlanStandard = ['free', 'lite', 'pro'].includes(currentPlan?.id);
+    const isCurrentPlanStandard = currentPlan ? ['free', 'lite', 'pro'].includes(currentPlan?.id) : false;
 
     if (!isCurrentPlanStandard) {
-      return [currentPlan, ...plansProp.slice(1)];
+      return [...(currentPlan ? [currentPlan] : []), ...plansProp.slice(1)];
     }
 
     return plansProp;
   }, [plansProp, currentPlan]);
-
+  const shouldShowSelectPlanButtons = !disablePlanSwitching;
   return (
     <>
       {currentPlan && (
@@ -42,7 +62,10 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
                 <p>Base Storage Capacity</p>
                 <p>
                   Additional Storage{' '}
-                  <Tooltip content="This is a charge for storage use above your limit. Please refer to <a href='/terms' target='_blank'>Terms of Service</a> for more information.">
+                  <Tooltip
+                    content="This is a charge for storage use above your limit. Please refer to <a href='/terms' target='_blank'>Terms of Service</a> for more information."
+                    element="span"
+                  >
                     <InfoIcon />
                   </Tooltip>
                 </p>
@@ -62,19 +85,21 @@ const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPa
                     </div>
                   </div>
 
-                  {!currentPlan?.tiers?.length && plan.id === currentPlan.id ? (
+                  {!currentPlan?.tiers?.length && plan.id === currentPlan?.id ? (
                     <div className="billing-plan-details">
                       <p className="preferred-desc">{currentPlan.description}</p>
                     </div>
                   ) : (
                     <div className="billing-plan-details">
-                      <p>{formatAsStorageAmount(plan.tiers?.[0]?.upTo)}</p>
+                      <p>{formatAsStorageAmount(plan.tiers?.[0]?.upTo ?? 0)}</p>
                       <p>{getAdditionalStoragePrice(plan.tiers?.[1]?.unitAmount)}</p>
-                      <p>{plan.bandwidth ? `${formatAsStorageAmount(plan.bandwidth)} / month` : 'N/A'}</p>
+                      <p>
+                        {plan.bandwidth ? `${formatAsStorageAmount(parseInt(plan.bandwidth, 10) ?? 0)} / month` : 'N/A'}
+                      </p>
                     </div>
                   )}
 
-                  {currentPlan?.id !== plan.id && (
+                  {shouldShowSelectPlanButtons && currentPlan?.id !== plan.id && (
                     <Button
                       variant="light"
                       disabled={currentPlan?.isPreferred}

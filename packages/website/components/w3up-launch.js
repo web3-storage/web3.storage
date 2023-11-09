@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const sunsetStartEnv = process.env.NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START ?? '2023-01-10T00:00:00Z';
+const sunsetStartEnv = process.env.NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START ?? '2024-01-10T00:00:00Z';
 const sunsetStartDate = new Date(Date.parse(sunsetStartEnv));
 
 /**
@@ -25,6 +25,15 @@ const sunsetAnnouncementStartDate = sunsetAnnouncementStartEnv
  */
 export const shouldShowSunsetAnnouncement = (at = new Date(), announcementStartDate = sunsetAnnouncementStartDate) => {
   return announcementStartDate && at > announcementStartDate;
+};
+
+/**
+ * return whether the website should prevent allowing customers to switch their storage subscription plan.
+ * @param {Date} at - time at which to return whether to show the announcement
+ * @param {Date|undefined} [startDate] - when to begin preventing
+ */
+export const shouldPreventPlanSwitching = (at = new Date(), startDate = sunsetStartDate) => {
+  return at > startDate;
 };
 
 export const w3upLaunchConfig = {
