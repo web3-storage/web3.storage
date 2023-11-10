@@ -21,7 +21,14 @@ import Footer from '../components/footer/footer.js';
  */
 const App = ({ Component, pageProps }) => {
   const { pathname } = useRouter();
-  const productRoutes = ['/login', '/account', '/account/payment', '/tokens', '/callback'];
+  const productRoutes = [
+    '/login',
+    '/login/signups-closed/try-w3up',
+    '/account',
+    '/account/payment',
+    '/tokens',
+    '/callback',
+  ];
   const productApp = productRoutes.includes(pathname);
   const pageClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
   const [pageBannerPortalEl, setPageBannerPortalEl] = useState();
