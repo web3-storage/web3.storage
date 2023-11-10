@@ -17,7 +17,7 @@
     "test:e2e": "env-cmd -f ../../.env npx playwright test",
     "lint": "npm run lint:ts && npm run lint:es",
     "lint:fix": "npm run lint:es:fix",
-    "lint:ts": "tsc --noEmit",
+    "lint:ts": "tsc --build",
     "lint:es": "eslint --max-warnings=0",
     "lint:es:fix": "npm run lint:es -- --fix",
     "lint-staged": "lint-staged",

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "outDir": "./dist",
     "allowJs": true,
     "checkJs": true,
@@ -37,10 +38,15 @@
     "incremental": true
   },
   "include": [
+    "assets/icons/*.js",
+    "assets/illustrations/*.js",
     "lib",
     "pages",
+    "pages/docs/*.json",
     "components",
     "content",
+    "content/pages/*/*.json",
+    "content/pages/*.json",
     "hooks",
     "modules",
     "store",
