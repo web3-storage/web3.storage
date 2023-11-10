@@ -1,5 +1,6 @@
 {
   "name": "@web3-storage/w3up-launch",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "dist/src/index.js",
