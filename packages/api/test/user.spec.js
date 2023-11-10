@@ -586,9 +586,8 @@ describe('userLoginPost', function () {
       port: 0,
       bindings: {
         ...workerGlobals,
-        // NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString(),
+        NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString(),
         NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true',
-        DANGEROUSLY_BYPASS_MAGIC_AUTH: 'true'
       }
     })
     await useServer(mf.startServer(), async (server) => {
