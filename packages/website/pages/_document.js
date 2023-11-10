@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-import { w3upLaunchConfig } from '../components/w3up-launch.js';
+import { createW3upLaunchConfig, W3upLaunchContext } from '../components/w3up-launch.js';
 
 class MyDocument extends Document {
   /**
@@ -31,10 +31,16 @@ class MyDocument extends Document {
           <NextScript />
           <div id="modal-root"></div>
           {/* add this for debuggability of launch announcements that only appear when configured */}
-          <script
-            type="application/json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(w3upLaunchConfig) }}
-          ></script>
+          <W3upLaunchContext.Consumer>
+            {w3upLaunch => {
+              return (
+                <script
+                  type="application/json"
+                  dangerouslySetInnerHTML={{ __html: JSON.stringify(createW3upLaunchConfig(w3upLaunch)) }}
+                ></script>
+              );
+            }}
+          </W3upLaunchContext.Consumer>
         </body>
       </Html>
     );

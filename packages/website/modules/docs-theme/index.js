@@ -13,7 +13,11 @@ import Sidebar from './sidebar/sidebar';
 import Feedback from './feedback/feedback';
 import Toc from './toc/toc';
 import DocsPagination from './docspagination/docspagination';
-import { W3upMigrationRecommendationCopy, shouldShowSunsetAnnouncement } from '../../components/w3up-launch.js';
+import {
+  W3upMigrationRecommendationCopy,
+  shouldShowSunsetAnnouncement,
+  useW3upLaunch,
+} from '../../components/w3up-launch.js';
 import * as PageBannerPortal from '../../components/page-banner/page-banner-portal.js';
 
 hljs.registerLanguage('javascript', javascript);
@@ -90,11 +94,12 @@ export default function Docs(props) {
 
   if (route.startsWith('/docs')) {
     return function Layout({ children }) {
+      const w3upLaunch = useW3upLaunch();
       return (
         <>
-          {shouldShowSunsetAnnouncement() && (
+          {shouldShowSunsetAnnouncement(w3upLaunch) && (
             <PageBannerPortal.PageBanner>
-              <W3upMigrationRecommendationCopy />
+              <W3upMigrationRecommendationCopy sunsetStartDate={w3upLaunch.sunsetStartDate} />
             </PageBannerPortal.PageBanner>
           )}
           {sharedHead}

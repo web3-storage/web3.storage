@@ -10,7 +10,11 @@ import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackground from '../../components/gradientbackground/gradientbackground.js';
 import AppData from '../../content/pages/app/account.json';
 import GeneralPageData from '../../content/pages/general.json';
-import { W3upMigrationRecommendationCopy, shouldShowSunsetAnnouncement } from '../../components/w3up-launch.js';
+import {
+  shouldShowSunsetAnnouncement,
+  useW3upLaunch,
+  W3upMigrationRecommendationCopy,
+} from '../../components/w3up-launch.js';
 import * as PageBannerPortal from '../../components/page-banner/page-banner-portal.js';
 
 export const CTACardTypes = {
@@ -78,12 +82,12 @@ const Account = () => {
     }),
     [uploads.length, onFileUpload, dashboard, user]
   );
-
+  const w3upLaunch = useW3upLaunch();
   return (
     <>
-      {shouldShowSunsetAnnouncement() && (
+      {shouldShowSunsetAnnouncement(w3upLaunch) && (
         <PageBannerPortal.PageBanner>
-          <W3upMigrationRecommendationCopy />
+          <W3upMigrationRecommendationCopy sunsetStartDate={w3upLaunch.sunsetStartDate} />
         </PageBannerPortal.PageBanner>
       )}
       <div className="page-container account-container">

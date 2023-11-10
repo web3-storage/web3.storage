@@ -46,7 +46,9 @@ import * as w3upLaunch from '@web3-storage/w3up-launch'
  * @property {object} db
  * @property {import('./env').Env['db']['upsertUser']} db.upsertUser
  * @property {import('./env').Env['db']['getUser']} db.getUser
- * @property {import('./env').Env['DANGEROUSLY_BYPASS_MAGIC_AUTH']} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {import('./env').Env['NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START']} [NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START]
+ * @property {import('./env').Env['NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START']} [NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START]
+ * @property {import('./env').Env['NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START']} [NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START]
  * @property {RequestAuthenticator} authenticateRequest
  * @property {import('../src/utils/billing-types').CustomersService} customers
  * @property {import('../src/utils/billing-types').SubscriptionsService} subscriptions
@@ -130,7 +132,8 @@ async function loginOrRegister (request, env) {
       ? parseGitHub(data.data, metadata)
       : parseMagic(metadata)
 
-  const newUserRegistrationIsClosed = w3upLaunch.shouldBlockNewUserSignupsBecauseProductSunset()
+  const launch = w3upLaunch.W3upLaunch.fromEnv(env)
+  const newUserRegistrationIsClosed = w3upLaunch.shouldBlockNewUserSignupsBecauseProductSunset(launch)
   console.warn('loginOrRegister', { newUserRegistrationIsClosed })
   let user
 

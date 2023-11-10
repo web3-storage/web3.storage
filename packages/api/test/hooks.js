@@ -128,3 +128,23 @@ export const mochaHooks = () => {
     }
   }
 }
+
+/**
+ * create a miniflare instance to run the api cf worker
+ */
+export function createApiMiniflare ({ initialBindings = workerGlobals, bindings = {}, port = 0 } = {}) {
+  return new Miniflare({
+    // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
+    envPath: true,
+    scriptPath: 'dist/worker.js',
+    packagePath: true,
+    wranglerConfigPath: true,
+    wranglerConfigEnv: 'test',
+    modules: true,
+    port,
+    bindings: {
+      ...initialBindings,
+      ...bindings
+    }
+  })
+}

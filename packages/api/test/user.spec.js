@@ -8,9 +8,8 @@ import { AuthorizationTestContext } from './contexts/authorization.js'
 import { userLoginPost } from '../src/user.js'
 import { Magic } from '@magic-sdk/admin'
 import { createMockCustomerService, createMockSubscriptionsService, createMockUserCustomerService } from '../src/utils/billing.js'
-import { Miniflare } from 'miniflare'
-import * as workerGlobals from './scripts/worker-globals.js'
 import { createMagicTestModeToken } from '../src/magic.link.js'
+import { createApiMiniflare } from './hooks.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -575,22 +574,11 @@ describe('userLoginPost', function () {
      * we're going to create a server with the appropriate configuration using miniflare,
      * boot the server, then request POST /user/login and assert about the response.
      */
-    const mf = new Miniflare({
-      // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
-      envPath: true,
-      scriptPath: 'dist/worker.js',
-      packagePath: true,
-      wranglerConfigPath: true,
-      wranglerConfigEnv: 'test',
-      modules: true,
-      port: 0,
-      bindings: {
-        ...workerGlobals,
-        NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString(),
-        NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true',
-      }
-    })
-    await useServer(mf.startServer(), async (server) => {
+    const apiEnv = {
+      NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString(),
+      NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true'
+    }
+    await useServer(createApiMiniflare({ bindings: apiEnv }).startServer(), async (server) => {
       const loginEndpoint = new URL('/user/login', getServerUrl(server))
       const user = {
         publicAddress: BigInt(Math.round(Math.random() * Number.MAX_SAFE_INTEGER)),
