@@ -52,6 +52,9 @@
   "references": [
     {
       "path": "../client"
+    },
+    {
+      "path": "../w3up-launch"
     }
   ],
   "exclude": [
