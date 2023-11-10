@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError, PSAErrorInvalidData, PSAErrorRequiredData, PSAErrorResourceNotFound, RangeNotSatisfiableError } from './errors.js'
+import { HTTPError, PSAErrorInvalidData, PSAErrorRequiredData, PSAErrorResourceNotFound, RangeNotSatisfiableError, NewUserDeniedTryOtherProductError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -140,7 +140,8 @@ async function loginOrRegister (request, env) {
   if (newUserRegistrationIsClosed) {
     const user = await env.db.getUser(parsed.issuer, {})
     if (!user) {
-      throw new HTTPError('new user registration is closed. Try creating an account at https://console.web3.storage', 403)
+      const otherProduct = new URL('https://console.web3.storage/')
+      throw new NewUserDeniedTryOtherProductError(`new user registration is closed. Try creating an account at ${otherProduct.toString()}`, otherProduct)
     }
   }
 

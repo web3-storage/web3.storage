@@ -587,6 +587,7 @@ describe('userLoginPost', function () {
       const authToken = createMagicTestModeToken(user.publicAddress, user.claims)
       const userPostLoginResponse = await fetch(loginEndpoint, {
         headers: {
+          accept: 'application/json',
           authorization: `Bearer ${authToken}`,
           contentType: 'application/json'
         },
@@ -599,6 +600,12 @@ describe('userLoginPost', function () {
       const responseText = await userPostLoginResponse.text()
       assert.equal(userPostLoginResponse.status, 403, 'response status code is 403 forbidden because new user registration is forbidden')
       assert.ok(responseText.includes('new user registration is closed'), 'response body indicates new user registration is closed')
+
+      const responseJson = JSON.parse(responseText)
+      assert.equal(typeof responseJson, 'object', 'response can be parsed as json')
+      assert.ok(responseJson.message.includes('new user registration is closed'), 'response object message indicates new user registration is closed')
+      assert.equal(responseJson.code, 'NEW_USER_DENIED_TRY_OTHER_PRODUCT')
+      assert.equal(responseJson.otherProduct, 'https://console.web3.storage/')
     })
   })
 })
