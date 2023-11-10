@@ -148,3 +148,38 @@ export function createApiMiniflare ({ initialBindings = workerGlobals, bindings 
     }
   })
 }
+
+/**
+ * @param {Promise<import('http').Server>} serverPromise
+ * @param {(server: import('http').Server) => Promise<void>} withServerCb
+ */
+export function useServer (serverPromise, withServerCb) {
+  const use = async () => {
+    const server = await serverPromise
+    try {
+      await withServerCb(server)
+    } finally {
+      await closeServer(server)
+    }
+  }
+  return use()
+}
+
+/**
+ * @param {import('http').Server} server
+ */
+export async function closeServer (server) {
+  return new Promise((resolve, reject) => {
+    server.close(error => error ? reject(error) : resolve(undefined))
+  })
+}
+
+/**
+ * @param {import('http').Server} server
+ */
+export function getServerUrl (server) {
+  const address = server.address()
+  if (!address) { throw new Error('no address') }
+  if (typeof address !== 'object') { throw new Error(`unexpected address type ${address}`) }
+  return `http://localhost:${address.port}`
+}

@@ -9,7 +9,7 @@ import { userLoginPost } from '../src/user.js'
 import { Magic } from '@magic-sdk/admin'
 import { createMockCustomerService, createMockSubscriptionsService, createMockUserCustomerService } from '../src/utils/billing.js'
 import { createMagicTestModeToken } from '../src/magic.link.js'
-import { createApiMiniflare } from './hooks.js'
+import { createApiMiniflare, useServer, getServerUrl } from './hooks.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -602,38 +602,3 @@ describe('userLoginPost', function () {
     })
   })
 })
-
-/**
- * @param {Promise<import('http').Server>} serverPromise
- * @param {(server: import('http').Server) => Promise<void>} withServerCb
- */
-function useServer (serverPromise, withServerCb) {
-  const use = async () => {
-    const server = await serverPromise
-    try {
-      await withServerCb(server)
-    } finally {
-      await closeServer(server)
-    }
-  }
-  return use()
-}
-
-/**
- * @param {import('http').Server} server
- */
-async function closeServer (server) {
-  return new Promise((resolve, reject) => {
-    server.close(error => error ? reject(error) : resolve(undefined))
-  })
-}
-
-/**
- * @param {import('http').Server} server
- */
-function getServerUrl (server) {
-  const address = server.address()
-  if (!address) { throw new Error('no address') }
-  if (typeof address !== 'object') { throw new Error(`unexpected address type ${address}`) }
-  return `http://localhost:${address.port}`
-}
