@@ -132,9 +132,8 @@ async function loginOrRegister (request, env) {
       ? parseGitHub(data.data, metadata)
       : parseMagic(metadata)
 
-  const launch = w3upLaunch.W3upLaunch.fromEnv(env)
-  const newUserRegistrationIsClosed = w3upLaunch.shouldBlockNewUserSignupsBecauseProductSunset(launch)
-  console.warn('loginOrRegister', { newUserRegistrationIsClosed })
+  const newUserRegistrationIsClosed = w3upLaunch.shouldBlockNewUserSignupsBecauseProductSunset(w3upLaunch.W3upLaunch.fromEnv(env))
+
   let user
 
   // will be true once w3up is launched and this product is sunset

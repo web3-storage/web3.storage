@@ -62,7 +62,7 @@ export const shouldShowSunsetAnnouncement = (launch, at = new Date()) => {
  * @param {Date} at - time at which to return whether to show the announcement
  */
 export const shouldBlockNewUserSignupsBecauseProductSunset = (launch, at = new Date()) => {
-  return launch.sunsetStartDate && at > launch.sunsetStartDate
+  return launch.preventUserRegistrationStartDate && at > launch.preventUserRegistrationStartDate
 }
 
 /**

@@ -569,13 +569,13 @@ describe('userLoginPost', function () {
     assert.deepEqual(contact2.name, githubUserOauth2.userInfo.name, 'customer contact has name from userLoginPost request body after second login')
   })
 
-  it('shoudl not create new users once NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START starts', async () => {
+  it('should not create new users once date is after NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START', async () => {
     /**
      * we're going to create a server with the appropriate configuration using miniflare,
      * boot the server, then request POST /user/login and assert about the response.
      */
     const apiEnv = {
-      NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString(),
+      NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START: (new Date(0)).toISOString(),
       NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true'
     }
     await useServer(createApiMiniflare({ bindings: apiEnv }).startServer(), async (server) => {
@@ -597,8 +597,8 @@ describe('userLoginPost', function () {
         })
       })
       const responseText = await userPostLoginResponse.text()
-      assert.equal(userPostLoginResponse.status, 403, 'new user cannot hit this endpoint')
-      assert.ok(responseText.includes('new user registration is closed'), '403 error indicates new user registration is closed')
+      assert.equal(userPostLoginResponse.status, 403, 'response status code is 403 forbidden because new user registration is forbidden')
+      assert.ok(responseText.includes('new user registration is closed'), 'response body indicates new user registration is closed')
     })
   })
 })

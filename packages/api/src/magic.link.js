@@ -47,7 +47,6 @@ function createMagicTestmodeBypasss () {
     },
     authenticateMagicToken (env, token) {
       const [publicAddress, magicClaims] = env.magic.token.decode(token)
-      console.log('authenticateMagicToken', { publicAddress, magicClaims })
       return {
         issuer: magicClaims.iss,
         publicAddress
