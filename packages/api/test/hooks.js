@@ -12,8 +12,10 @@ import { AuthorizationTestContext } from './contexts/authorization.js'
 import { Response } from '@web-std/fetch'
 import * as Claims from './scripts/content-claims.js'
 
-// @ts-ignore
-global.crypto = webcrypto
+if (typeof globalThis.crypto === 'undefined') {
+  // @ts-expect-error webcrypto not a perfect match
+  globalThis.crypto = webcrypto
+}
 
 // @ts-ignore
 globalThis.Response = Response

@@ -8,6 +8,9 @@ import { AuthorizationTestContext } from './contexts/authorization.js'
 import { userLoginPost } from '../src/user.js'
 import { Magic } from '@magic-sdk/admin'
 import { createMockCustomerService, createMockSubscriptionsService, createMockUserCustomerService } from '../src/utils/billing.js'
+import { Miniflare } from 'miniflare'
+import * as workerGlobals from './scripts/worker-globals.js'
+import { createMagicTestModeToken } from '../src/magic.link.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -566,4 +569,84 @@ describe('userLoginPost', function () {
     assert.deepEqual(contact2.email, user1Authentication2.email, 'customer contact has email from authentication after second login')
     assert.deepEqual(contact2.name, githubUserOauth2.userInfo.name, 'customer contact has name from userLoginPost request body after second login')
   })
+
+  it('shoudl not create new users once NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START starts', async () => {
+    /**
+     * we're going to create a server with the appropriate configuration using miniflare,
+     * boot the server, then request POST /user/login and assert about the response.
+     */
+    const mf = new Miniflare({
+      // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
+      envPath: true,
+      scriptPath: 'dist/worker.js',
+      packagePath: true,
+      wranglerConfigPath: true,
+      wranglerConfigEnv: 'test',
+      modules: true,
+      port: 0,
+      bindings: {
+        ...workerGlobals,
+        // NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString(),
+        NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true',
+        DANGEROUSLY_BYPASS_MAGIC_AUTH: 'true'
+      }
+    })
+    await useServer(mf.startServer(), async (server) => {
+      const loginEndpoint = new URL('/user/login', getServerUrl(server))
+      const user = {
+        publicAddress: BigInt(Math.round(Math.random() * Number.MAX_SAFE_INTEGER)),
+        claims: {}
+      }
+      const authToken = createMagicTestModeToken(user.publicAddress, user.claims)
+      const userPostLoginResponse = await fetch(loginEndpoint, {
+        headers: {
+          authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify({
+          email: `test-${Math.random().toString().slice(2)}@example.com`,
+          issuer: 'test'
+        })
+      })
+      const responseText = await userPostLoginResponse.text()
+      assert.equal(userPostLoginResponse.status, 403, 'new user cannot hit this endpoint')
+      assert.ok(responseText.includes('new user registration is closed'), '403 error indicates new user registration is closed')
+    })
+  })
 })
+
+/**
+ * @param {Promise<import('http').Server>} serverPromise
+ * @param {(server: import('http').Server) => Promise<void>} withServerCb
+ */
+function useServer (serverPromise, withServerCb) {
+  const use = async () => {
+    const server = await serverPromise
+    try {
+      await withServerCb(server)
+    } finally {
+      await closeServer(server)
+    }
+  }
+  return use()
+}
+
+/**
+ * @param {import('http').Server} server
+ */
+async function closeServer (server) {
+  return new Promise((resolve, reject) => {
+    server.close(error => error ? reject(error) : resolve(undefined))
+  })
+}
+
+/**
+ * @param {import('http').Server} server
+ */
+function getServerUrl (server) {
+  const address = server.address()
+  if (!address) { throw new Error('no address') }
+  if (typeof address !== 'object') { throw new Error(`unexpected address type ${address}`) }
+  return `http://localhost:${address.port}`
+}

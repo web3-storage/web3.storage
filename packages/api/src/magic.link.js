@@ -46,9 +46,11 @@ function createMagicTestmodeBypasss () {
       return isMagicTestModeToken(token)
     },
     authenticateMagicToken (env, token) {
-      const [, magicClaims] = env.magic.token.decode(token)
+      const [publicAddress, magicClaims] = env.magic.token.decode(token)
+      console.log('authenticateMagicToken', { publicAddress, magicClaims })
       return {
-        issuer: magicClaims.iss
+        issuer: magicClaims.iss,
+        publicAddress
       }
     }
   }
@@ -67,4 +69,30 @@ function isMagicTestModeToken (token) {
   const isTestModeAud = (claims) => claims.aud === 'TEST_MODE_CLIENT_ID'
   const isTestModeToken = [isTestModeAud(claims), isTestModeSub(claims)].every(Boolean)
   return isTestModeToken
+}
+
+/**
+ * create a token parseable as a magic.link test mode token
+ * @param {BigInt} publicAddress
+ * @param {*} claims
+ * @returns
+ */
+export function createMagicTestModeToken (
+  publicAddress = BigInt(Math.round(Math.random() * Number.MAX_SAFE_INTEGER)),
+  claims
+) {
+  const tokenClaims = {
+    sub: 'TEST_MODE_USER_ID',
+    aud: 'TEST_MODE_CLIENT_ID',
+    iat: Date.now(),
+    ext: '?',
+    iss: '@web3-storage/api/test',
+    nbf: 1,
+    tid: 1,
+    add: 1,
+    ...claims
+  }
+  const tokenJson = JSON.stringify([`0x${publicAddress.toString(16)}`, JSON.stringify(tokenClaims)])
+  const authToken = globalThis.btoa(tokenJson)
+  return authToken
 }
