@@ -150,7 +150,7 @@ export function createApiMiniflare ({ initialBindings = workerGlobals, bindings 
 }
 
 /**
- * @param {Promise<import('http').Server>} serverPromise
+ * @param {import('http').Server} serverPromise
  * @param {(server: import('http').Server) => Promise<void>} withServerCb
  */
 export function useServer (serverPromise, withServerCb) {

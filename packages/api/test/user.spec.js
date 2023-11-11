@@ -574,11 +574,13 @@ describe('userLoginPost', function () {
      * we're going to create a server with the appropriate configuration using miniflare,
      * boot the server, then request POST /user/login and assert about the response.
      */
-    const apiEnv = {
-      NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START: (new Date(0)).toISOString(),
-      NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true'
-    }
-    await useServer(createApiMiniflare({ bindings: apiEnv }).startServer(), async (server) => {
+    const server = await createApiMiniflare({
+      bindings: {
+        NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START: (new Date(0)).toISOString(),
+        NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true'
+      }
+    }).startServer()
+    await useServer(server, async (server) => {
       const loginEndpoint = new URL('/user/login', getServerUrl(server))
       const user = {
         publicAddress: BigInt(Math.round(Math.random() * Number.MAX_SAFE_INTEGER)),
