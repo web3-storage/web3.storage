@@ -33,7 +33,7 @@ prog
       outfile: path.join(__dirname, '..', 'dist', 'worker.js'),
       legalComments: 'external',
       inject: [path.join(__dirname, 'node-globals.js')],
-      loader:  { '.js': 'jsx' },
+      loader: { '.js': 'jsx' },
       plugins: [
         {
           name: 'alias',

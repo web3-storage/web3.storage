@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 export const DEFAULT_SUNSET_START_DATE = new Date(Date.parse('2024-01-10T00:00:00Z'))
 
 /**
