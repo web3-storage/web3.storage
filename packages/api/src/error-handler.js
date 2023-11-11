@@ -28,13 +28,13 @@ export function errorHandler (err, { log }, request) {
     return new JSONResponse(error, { status })
   }
 
-  if (err instanceof HTTPError) {
-    return new JSONResponse(err, { status })
-  }
-
   let error = {
     code: err.code,
     message: err.message
+  }
+
+  if (err instanceof HTTPError) {
+    return new JSONResponse(error, { status })
   }
 
   switch (err.code) {

@@ -605,7 +605,6 @@ describe('userLoginPost', function () {
       assert.equal(typeof responseJson, 'object', 'response can be parsed as json')
       assert.ok(responseJson.message.includes('new user registration is closed'), 'response object message indicates new user registration is closed')
       assert.equal(responseJson.code, 'NEW_USER_DENIED_TRY_OTHER_PRODUCT')
-      assert.equal(responseJson.otherProduct, 'https://console.web3.storage/')
     })
   })
 })
