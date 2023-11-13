@@ -77,7 +77,7 @@ jobs:
           node-version: 18
       - uses: bahmutov/npm-install@v1
       - name: Publish api worker
-        uses: cloudflare/wrangler-action@3.3.2
+        uses: cloudflare/wrangler-action@v3
         env:
           ENV: 'staging' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
@@ -117,7 +117,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - uses: bahmutov/npm-install@v1
       - name: API - Deploy to Cloudflare
-        uses: cloudflare/wrangler-action@3.3.2
+        uses: cloudflare/wrangler-action@v3
         env:
           ENV: 'production' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
