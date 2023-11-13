@@ -22,6 +22,7 @@ import {
   W3upMigrationRecommendationCopy,
   shouldShowSunsetAnnouncement,
   shouldPreventPlanSwitching,
+  useW3upLaunch,
 } from '../../components/w3up-launch.js';
 import * as PageBannerPortal from '../../components/page-banner/page-banner-portal.js';
 
@@ -129,11 +130,12 @@ const PaymentSettingsPage = props => {
   const savedPaymentMethod = useMemo(() => {
     return paymentSettings?.paymentMethod;
   }, [paymentSettings]);
+  const w3upLaunch = useW3upLaunch();
   return (
     <>
-      {shouldShowSunsetAnnouncement() && (
+      {shouldShowSunsetAnnouncement(w3upLaunch) && (
         <PageBannerPortal.PageBanner>
-          <W3upMigrationRecommendationCopy />
+          <W3upMigrationRecommendationCopy sunsetStartDate={w3upLaunch.sunsetStartDate} />
         </PageBannerPortal.PageBanner>
       )}
       <>
@@ -159,7 +161,7 @@ const PaymentSettingsPage = props => {
                 currentPlan={currentPlan}
                 setPlanSelection={setPlanSelection}
                 setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
-                disablePlanSwitching={shouldPreventPlanSwitching()}
+                disablePlanSwitching={shouldPreventPlanSwitching(w3upLaunch)}
               />
             )}
 

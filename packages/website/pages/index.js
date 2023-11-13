@@ -4,7 +4,11 @@ import IndexPageData from '../content/pages/index.json';
 import Scroll2Top from '../components/scroll2top/scroll2top.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../lib/floater-animations.js';
-import { W3upMigrationRecommendationCopy, shouldShowSunsetAnnouncement } from '../components/w3up-launch.js';
+import {
+  shouldShowSunsetAnnouncement,
+  useW3upLaunch,
+  W3upMigrationRecommendationCopy,
+} from '../components/w3up-launch.js';
 import * as PageBannerPortal from '../components/page-banner/page-banner-portal.js';
 
 export default function Home() {
@@ -22,12 +26,12 @@ export default function Home() {
       }
     };
   }, [animations]);
-
+  const w3upLaunch = useW3upLaunch();
   return (
     <>
-      {shouldShowSunsetAnnouncement() && (
+      {shouldShowSunsetAnnouncement(w3upLaunch) && (
         <PageBannerPortal.PageBanner>
-          <W3upMigrationRecommendationCopy />
+          <W3upMigrationRecommendationCopy sunsetStartDate={w3upLaunch.sunsetStartDate} />
         </PageBannerPortal.PageBanner>
       )}
 

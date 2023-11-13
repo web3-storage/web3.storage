@@ -9,6 +9,7 @@
     "packages/cron",
     "packages/db",
     "packages/w3",
+    "packages/w3up-launch",
     "packages/website",
     "packages/tools"
   ],

@@ -1,58 +1,19 @@
 import * as React from 'react';
 
-const sunsetStartEnv = process.env.NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START || '2024-01-10T00:00:00Z';
-const sunsetStartDate = new Date(Date.parse(sunsetStartEnv));
+import { W3upLaunchContext } from './contexts/w3upLaunchContext';
+export { W3upLaunchContext } from './contexts/w3upLaunchContext';
+export * from '@web3-storage/w3up-launch';
 
-/**
- * If this isn't set, no announcements will appear
- */
-const sunsetAnnouncementStartEnv = process.env.NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START;
-
-/**
- * after this datetime, show announcements that web3.storage is sunset
- * and end-users should switch to w3up/console.web3.storage
- */
-const sunsetAnnouncementStartDate = sunsetAnnouncementStartEnv
-  ? new Date(Date.parse(sunsetAnnouncementStartEnv))
-  : undefined;
-
-/**
- * Return whether sunset announcements related to w3up-launch should be shown.
- * An announcement date must be explicitly configured via env var, and now must be after that date.
- * @param {Date} at - time at which to return whether to show the announcement
- * @param {Date|undefined} [announcementStartDate] - when to begin showing announcements.
- * If not provided, always return false.
- */
-export const shouldShowSunsetAnnouncement = (at = new Date(), announcementStartDate = sunsetAnnouncementStartDate) => {
-  return announcementStartDate && at > announcementStartDate;
-};
-
-/**
- * return whether the website should prevent allowing customers to switch their storage subscription plan.
- * @param {Date} at - time at which to return whether to show the announcement
- * @param {Date|undefined} [startDate] - when to begin preventing
- */
-export const shouldPreventPlanSwitching = (at = new Date(), startDate = sunsetStartDate) => {
-  return at > startDate;
-};
-
-export const w3upLaunchConfig = {
-  type: 'W3upLaunchConfig',
-  stages: {
-    sunsetAnnouncement: {
-      start: sunsetAnnouncementStartDate,
-    },
-    sunset: {
-      start: sunsetStartDate,
-    },
-  },
-  shouldShowSunsetAnnouncement: shouldShowSunsetAnnouncement(),
-};
+export function useW3upLaunch(context = W3upLaunchContext) {
+  return React.useContext(context);
+}
 
 /**
  * copy for banner message across top of some web3.storage pages when w3up ships
+ * @param {object} props
+ * @param {Date} props.sunsetStartDate
  */
-export const W3upMigrationRecommendationCopy = () => {
+export const W3upMigrationRecommendationCopy = ({ sunsetStartDate }) => {
   const createNewAccountHref = 'https://console.web3.storage/?intent=create-account';
   const learnWhatsNewHref = 'https://console.web3.storage/?intent=learn-new-web3storage-experience';
   const sunsetDateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' });

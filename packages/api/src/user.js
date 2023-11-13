@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError, PSAErrorInvalidData, PSAErrorRequiredData, PSAErrorResourceNotFound, RangeNotSatisfiableError } from './errors.js'
+import { HTTPError, PSAErrorInvalidData, PSAErrorRequiredData, PSAErrorResourceNotFound, RangeNotSatisfiableError, NewUserDeniedTryOtherProductError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -14,6 +14,7 @@ import { toPinStatusResponse } from './pins.js'
 import { INVALID_REQUEST_ID, REQUIRED_REQUEST_ID, validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
+import * as w3upLaunch from '@web3-storage/w3up-launch'
 
 /**
  * @typedef {string} UserId
@@ -45,7 +46,9 @@ import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSe
  * @property {object} db
  * @property {import('./env').Env['db']['upsertUser']} db.upsertUser
  * @property {import('./env').Env['db']['getUser']} db.getUser
- * @property {import('./env').Env['DANGEROUSLY_BYPASS_MAGIC_AUTH']} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {import('./env').Env['NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START']} [NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START]
+ * @property {import('./env').Env['NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START']} [NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START]
+ * @property {import('./env').Env['NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START']} [NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START]
  * @property {RequestAuthenticator} authenticateRequest
  * @property {import('../src/utils/billing-types').CustomersService} customers
  * @property {import('../src/utils/billing-types').SubscriptionsService} subscriptions
@@ -66,11 +69,11 @@ export async function userLoginPost (request, env) {
  */
 function createMagicLoginController (env, testModeBypass = magicLinkBypassForE2ETestingInTestmode) {
   const createTestmodeMetadata = (token) => {
-    const { issuer } = testModeBypass.authenticateMagicToken(env, token)
+    const { issuer, publicAddress, email } = testModeBypass.authenticateMagicToken(env, token)
     return {
       issuer,
-      email: 'testMode@magic.link',
-      publicAddress: issuer
+      email: email || 'testMode@magic.link',
+      publicAddress: publicAddress || issuer
     }
   }
   /**
@@ -114,7 +117,6 @@ const createMagicLinkRequestAuthenticator = (env) => async (request) => {
  */
 async function loginOrRegister (request, env) {
   const data = await request.json()
-
   const authenticateRequest = env.authenticateRequest || createMagicLinkRequestAuthenticator(env)
   const metadata = await authenticateRequest(request)
   if (!metadata) {
@@ -130,19 +132,36 @@ async function loginOrRegister (request, env) {
       ? parseGitHub(data.data, metadata)
       : parseMagic(metadata)
 
+  const newUserRegistrationIsClosed = w3upLaunch.shouldBlockNewUserSignupsBecauseProductSunset(w3upLaunch.W3upLaunch.fromEnv(env))
+
   let user
+
+  // will be true once w3up is launched and this product is sunset
+  if (newUserRegistrationIsClosed) {
+    const user = await env.db.getUser(parsed.issuer, {})
+    if (!user) {
+      const otherProduct = new URL('https://console.web3.storage/')
+      throw new NewUserDeniedTryOtherProductError(`new user registration is closed. Try creating an account at ${otherProduct.toString()}`, otherProduct)
+    }
+  }
+
   // check if maintenance mode
   if (env.MODE === NO_READ_OR_WRITE) {
     return maintenanceHandler()
   } else if (env.MODE === READ_WRITE) {
-    user = await env.db.upsertUser(parsed)
-    if (!user.inserted) {
-      await updateUserCustomerContact(env, user, parsed)
+    if (newUserRegistrationIsClosed) {
+      // dont upsert even though MODE allows, because we dont want to insert new users
+      user = user || await env.db.getUser(parsed.issuer, {})
+    } else {
+      user = await env.db.upsertUser(parsed)
+      if (!user.inserted) {
+        await updateUserCustomerContact(env, user, parsed)
+      }
     }
   } else if (env.MODE === READ_ONLY) {
-    user = await env.db.getUser(parsed.issuer, {})
+    user = user || await env.db.getUser(parsed.issuer, {})
   } else {
-    throw new Error('Unknown maintenance mode')
+    throw new Error(`Unknown maintenance mode ${env.MODE}`)
   }
 
   return user

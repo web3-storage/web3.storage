@@ -12,8 +12,10 @@ import { AuthorizationTestContext } from './contexts/authorization.js'
 import { Response } from '@web-std/fetch'
 import * as Claims from './scripts/content-claims.js'
 
-// @ts-ignore
-global.crypto = webcrypto
+if (typeof globalThis.crypto === 'undefined') {
+  // @ts-expect-error webcrypto not a perfect match
+  globalThis.crypto = webcrypto
+}
 
 // @ts-ignore
 globalThis.Response = Response
@@ -125,4 +127,59 @@ export const mochaHooks = () => {
       if (claimStore) claimStore.clear()
     }
   }
+}
+
+/**
+ * create a miniflare instance to run the api cf worker
+ */
+export function createApiMiniflare ({ initialBindings = workerGlobals, bindings = {}, port = 0 } = {}) {
+  return new Miniflare({
+    // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
+    envPath: true,
+    scriptPath: 'dist/worker.js',
+    packagePath: true,
+    wranglerConfigPath: true,
+    wranglerConfigEnv: 'test',
+    modules: true,
+    port,
+    bindings: {
+      ...initialBindings,
+      ...bindings
+    }
+  })
+}
+
+/**
+ * @param {import('http').Server} serverPromise
+ * @param {(server: import('http').Server) => Promise<void>} withServerCb
+ */
+export function useServer (serverPromise, withServerCb) {
+  const use = async () => {
+    const server = await serverPromise
+    try {
+      await withServerCb(server)
+    } finally {
+      await closeServer(server)
+    }
+  }
+  return use()
+}
+
+/**
+ * @param {import('http').Server} server
+ */
+export async function closeServer (server) {
+  return new Promise((resolve, reject) => {
+    server.close(error => error ? reject(error) : resolve(undefined))
+  })
+}
+
+/**
+ * @param {import('http').Server} server
+ */
+export function getServerUrl (server) {
+  const address = server.address()
+  if (!address) { throw new Error('no address') }
+  if (typeof address !== 'object') { throw new Error(`unexpected address type ${address}`) }
+  return `http://localhost:${address.port}`
 }

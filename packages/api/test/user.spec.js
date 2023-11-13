@@ -8,6 +8,8 @@ import { AuthorizationTestContext } from './contexts/authorization.js'
 import { userLoginPost } from '../src/user.js'
 import { Magic } from '@magic-sdk/admin'
 import { createMockCustomerService, createMockSubscriptionsService, createMockUserCustomerService } from '../src/utils/billing.js'
+import { createMagicTestModeToken } from '../src/magic.link.js'
+import { createApiMiniflare, useServer, getServerUrl } from './hooks.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -565,5 +567,46 @@ describe('userLoginPost', function () {
     assert.ok(!(contact2 instanceof Error), 'no error getting contact')
     assert.deepEqual(contact2.email, user1Authentication2.email, 'customer contact has email from authentication after second login')
     assert.deepEqual(contact2.name, githubUserOauth2.userInfo.name, 'customer contact has name from userLoginPost request body after second login')
+  })
+
+  it('should not create new users once date is after NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START', async () => {
+    /**
+     * we're going to create a server with the appropriate configuration using miniflare,
+     * boot the server, then request POST /user/login and assert about the response.
+     */
+    const server = await createApiMiniflare({
+      bindings: {
+        NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START: (new Date(0)).toISOString(),
+        NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: 'true'
+      }
+    }).startServer()
+    await useServer(server, async (server) => {
+      const loginEndpoint = new URL('/user/login', getServerUrl(server))
+      const user = {
+        publicAddress: BigInt(Math.round(Math.random() * Number.MAX_SAFE_INTEGER)),
+        claims: {}
+      }
+      const authToken = createMagicTestModeToken(user.publicAddress, user.claims)
+      const userPostLoginResponse = await fetch(loginEndpoint, {
+        headers: {
+          accept: 'application/json',
+          authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify({
+          email: `test-${Math.random().toString().slice(2)}@example.com`,
+          issuer: 'test'
+        })
+      })
+      const responseText = await userPostLoginResponse.text()
+      assert.equal(userPostLoginResponse.status, 403, 'response status code is 403 forbidden because new user registration is forbidden')
+      assert.ok(responseText.includes('new user registration is closed'), 'response body indicates new user registration is closed')
+
+      const responseJson = JSON.parse(responseText)
+      assert.equal(typeof responseJson, 'object', 'response can be parsed as json')
+      assert.ok(responseJson.message.includes('new user registration is closed'), 'response object message indicates new user registration is closed')
+      assert.equal(responseJson.code, 'NEW_USER_DENIED_TRY_OTHER_PRODUCT')
+    })
   })
 })

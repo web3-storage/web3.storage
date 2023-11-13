@@ -54,6 +54,9 @@ import { Factory as ClaimFactory } from './utils/content-claims.js'
  * @property {string} [CONTENT_CLAIMS_PROOF] Proof of delegation.
  * @property {string} [CONTENT_CLAIMS_SERVICE_DID] DID of the content claims service.
  * @property {string} [CONTENT_CLAIMS_SERVICE_URL] URL of the content claims service.
+ * @property {string|undefined} [NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START] - when limited availability starts, e.g. no new user signups, cant change plan
+ * @property {string|undefined} [NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START] - when announcement starts
+ * @property {string|undefined} [NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START] - when the product is actually sunset (after announcement)
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db

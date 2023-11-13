@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "outDir": "./dist",
     "allowJs": true,
     "checkJs": true,
@@ -9,7 +10,8 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "esModuleInterop": true,
-    "noEmit": true,
+    "noEmit": false,
+    "declaration": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
@@ -18,21 +20,13 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
     "baseUrl": "./",
-    "paths": {
-      "web3.storage": ["../client"]
-    },
-    "incremental": true
+    "incremental": true,
+    "jsx": "react"
   },
   "include": [
     "./src",
     "./test"
   ],
   "references": [
-    {
-      "path": "../client"
-    },
-    {
-      "path": "../w3up-launch"
-    }
   ]
 }

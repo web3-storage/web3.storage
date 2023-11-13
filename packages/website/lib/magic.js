@@ -36,7 +36,27 @@ export async function login(token, type = 'magic', data = {}) {
     }),
   });
   if (!res.ok) {
-    throw new Error(`failed to login user: ${await res.text()}`);
+    const resText = await res.text();
+    // try to parse as json
+    let resJson = undefined;
+    try {
+      resJson = JSON.parse(resText);
+    } catch (error) {
+      if (error instanceof Error && error.name === 'SyntaxError') {
+        // expected
+      } else {
+        throw error;
+      }
+    }
+    if (resJson) {
+      switch (resJson.code) {
+        case 'NEW_USER_DENIED_TRY_OTHER_PRODUCT':
+          throw Object.assign(new Error(resJson.message || 'NEW_USER_DENIED_TRY_OTHER_PRODUCT'), resJson);
+        default:
+        // unknown code
+      }
+    }
+    throw new Error(`failed to login user: ${resText}`);
   }
   return res.json();
 }
