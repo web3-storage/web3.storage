@@ -570,7 +570,7 @@ describe('userLoginPost', function () {
   })
 
   it('should not create new users once date is after NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START', async function () {
-    if ( ! process.env.CI_DONT_ACCOMODATE_LONG_TESTS) {
+    if (!process.env.CI_DONT_ACCOMODATE_LONG_TESTS) {
       // this times out on CI in the default 5 seconds.
       // It's not surprising this may take some time, since it relies on creating a whole new miniflare server.
       this.timeout(60 * 1000)
