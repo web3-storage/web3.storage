@@ -17,7 +17,7 @@
     "build": "run-p build:cli typecheck",
     "build:cli": "node scripts/cli.js build",
     "test": "run-s test:worker test:size",
-    "test:worker": "mocha --require test/hooks.js --experimental-vm-modules --timeout 5000",
+    "test:worker": "mocha --require test/hooks.js --experimental-vm-modules",
     "test:size": "npx bundlesize",
     "typecheck": "tsc -b ./tsconfig.json",
     "cluster:start": "web3-storage-tools cluster --start",
