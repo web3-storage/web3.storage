@@ -76,6 +76,10 @@ jobs:
           apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'staging'
+          vars: |
+            NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START
+            NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START
+            NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START
       - name: Test upload to staging
         run: |
           npm run build -w packages/client
@@ -112,3 +116,7 @@ jobs:
           apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'production'
+          vars: |
+            NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START
+            NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START
+            NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START
