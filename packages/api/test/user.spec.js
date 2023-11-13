@@ -569,7 +569,12 @@ describe('userLoginPost', function () {
     assert.deepEqual(contact2.name, githubUserOauth2.userInfo.name, 'customer contact has name from userLoginPost request body after second login')
   })
 
-  it('should not create new users once date is after NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START', async () => {
+  it('should not create new users once date is after NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START', async function () {
+    if ( ! process.env.CI_DONT_ACCOMODATE_LONG_TESTS) {
+      // this times out on CI in the default 5 seconds.
+      // It's not surprising this may take some time, since it relies on creating a whole new miniflare server.
+      this.timeout(60 * 1000)
+    }
     /**
      * we're going to create a server with the appropriate configuration using miniflare,
      * boot the server, then request POST /user/login and assert about the response.
