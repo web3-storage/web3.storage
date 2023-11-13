@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.21.0](https://github.com/web3-storage/web3.storage/compare/api-v7.20.0...api-v7.21.0) (2023-11-13)
+
+
+### Features
+
+* can disable new user registration at /user/login API around w3up launch by setting `NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START` ([#2324](https://github.com/web3-storage/web3.storage/issues/2324)) ([09a59c6](https://github.com/web3-storage/web3.storage/commit/09a59c6d0590493b660b5a6c83ebc6829d52e733))
+
 ## [7.20.0](https://github.com/web3-storage/web3.storage/compare/api-v7.19.0...api-v7.20.0) (2023-10-18)
 
 
