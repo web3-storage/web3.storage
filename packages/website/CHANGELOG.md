@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.38.0](https://github.com/web3-storage/web3.storage/compare/website-v2.37.0...website-v2.38.0) (2023-11-13)
+
+
+### Features
+
+* /account/payment disables changing plans after scheduled sunset date ([#2321](https://github.com/web3-storage/web3.storage/issues/2321)) ([22799fe](https://github.com/web3-storage/web3.storage/commit/22799fe56e0a4b26235ca8714eddfb1496b19972))
+* can disable new user registration at /user/login API around w3up launch by setting `NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START` ([#2324](https://github.com/web3-storage/web3.storage/issues/2324)) ([09a59c6](https://github.com/web3-storage/web3.storage/commit/09a59c6d0590493b660b5a6c83ebc6829d52e733))
+
 ## [2.37.0](https://github.com/web3-storage/web3.storage/compare/website-v2.36.3...website-v2.37.0) (2023-11-09)
 
 
