@@ -79,6 +79,12 @@ export const createW3upLaunchConfig = (launch) => {
   return {
     type: 'W3upLaunchConfig',
     stages: {
+      preventUserRegistration: {
+        start: launch.preventUserRegistrationStartDate
+      },
+      preventPlanSwitching: {
+        start: launch.preventPlanSwitchingStartDate
+      },
       sunsetAnnouncement: {
         start: launch.sunsetAnnouncementStartDate
       },
@@ -87,6 +93,7 @@ export const createW3upLaunchConfig = (launch) => {
       }
     },
     shouldShowSunsetAnnouncement: shouldShowSunsetAnnouncement(launch),
-    shouldBlockNewUserSignupsBecauseProductSunset: shouldBlockNewUserSignupsBecauseProductSunset(launch)
+    shouldBlockNewUserSignupsBecauseProductSunset: shouldBlockNewUserSignupsBecauseProductSunset(launch),
+    shouldPreventPlanSwitching: shouldPreventPlanSwitching(launch)
   }
 }
