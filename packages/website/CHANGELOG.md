@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.38.1](https://github.com/web3-storage/web3.storage/compare/website-v2.38.0...website-v2.38.1) (2023-11-14)
+
+
+### Bug Fixes
+
+* link banner to blogpost instead of console ([#2330](https://github.com/web3-storage/web3.storage/issues/2330)) ([e4f384d](https://github.com/web3-storage/web3.storage/commit/e4f384db1f4a3d0a4963417d8b94154426f65d5f))
+
 ## [2.38.0](https://github.com/web3-storage/web3.storage/compare/website-v2.37.0...website-v2.38.0) (2023-11-13)
 
 
