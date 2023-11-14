@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import filesz from 'filesize';
 import { useMemo, useEffect, useState, useRef } from 'react';
-import Link from 'next/link';
 
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport, formatAsStorageAmount } from 'lib/utils';
@@ -91,11 +90,6 @@ const StorageManager = ({ className = '', content }) => {
 
   return (
     <div ref={storageManagerRef} className={clsx('section storage-manager-container', className)}>
-      <Link href={'account/payment'} passHref>
-        <a href={'account/payment'} className="storage-manager-payment-link">
-          {currentPlan?.isPreferred ? 'View your plan details here.' : 'Want more storage? Upgrade your plan here!'}
-        </a>
-      </Link>
       <h6>Your Plan: {currentPlan?.label}</h6>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
