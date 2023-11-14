@@ -15,7 +15,7 @@ export function useW3upLaunch(context = W3upLaunchContext) {
  */
 export const W3upMigrationRecommendationCopy = ({ sunsetStartDate }) => {
   const createNewAccountHref = 'https://console.web3.storage/?intent=create-account';
-  const learnWhatsNewHref = 'https://console.web3.storage/?intent=learn-new-web3storage-experience';
+  const learnWhatsNewHref = 'https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage';
   const sunsetDateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' });
   return (
     <>
