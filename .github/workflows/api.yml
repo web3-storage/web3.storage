@@ -65,7 +65,7 @@ jobs:
 
   deploy-staging:
     name: Deploy Staging
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || inputs.force_deploy_staging
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event.inputs.force_deploy_staging
     runs-on: ubuntu-latest
     needs: test
     environment:
@@ -101,7 +101,7 @@ jobs:
   
   deploy-production:
     name: Deploy Production
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || $${{ inputs.force_deploy_production }}
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || github.event.inputs.force_deploy_production
     runs-on: ubuntu-latest
     needs:
       - test
