@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.38.2](https://github.com/web3-storage/web3.storage/compare/website-v2.38.1...website-v2.38.2) (2023-11-14)
+
+
+### Bug Fixes
+
+* remove upgrade button ([#2332](https://github.com/web3-storage/web3.storage/issues/2332)) ([4b1da4e](https://github.com/web3-storage/web3.storage/commit/4b1da4ebf73937309c0db4240dc929a46961a3f0))
+
 ## [2.38.1](https://github.com/web3-storage/web3.storage/compare/website-v2.38.0...website-v2.38.1) (2023-11-14)
 
 
