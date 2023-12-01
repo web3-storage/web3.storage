@@ -1,6 +1,8 @@
 <h1 align="center">⁂<br/>web3.storage</h1>
 <p align="center">The JavaScript API client for <a href="https://web3.storage">https://web3.storage</a></p>
 
+> ⚠️ This repo will be archived on January 9, 2024 as this web3.storage API will no longer take new uploads. Please use the [new client and API](https://github.com/web3-storage/w3up/tree/main/packages/w3up-client) for future usage of web3.storage. Documentation for the new client can be found [here](https://web3.storage/docs). You can learn more about these changes [here](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage).
+
 ## Getting started
 
 Install the package using npm
