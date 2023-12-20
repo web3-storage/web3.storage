@@ -87,5 +87,5 @@ function modeBits (m) {
  */
 export function maintenanceHandler () {
   const url = 'https://status.web3.storage'
-  throw new MaintenanceError(`API undergoing maintenance, check ${url} for more info`)
+  throw new MaintenanceError(`web3.storage is now old.web3.storage and is read-only. Please store new data using https://console.web3.storage or https://web3.storage/docs/w3cli/.`)
 }
