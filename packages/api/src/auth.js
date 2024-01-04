@@ -266,7 +266,7 @@ function verifyAuthToken (token, decoded, env) {
   return env.db.getKey(decoded.sub, token)
 }
 
-function getTokenFromRequest (request, { magic }) {
+export function getTokenFromRequest (request, { magic }) {
   const authHeader = request.headers.get('Authorization') || ''
   if (!authHeader) {
     throw new NoTokenError()

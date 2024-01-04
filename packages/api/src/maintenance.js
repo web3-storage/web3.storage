@@ -1,4 +1,5 @@
 import { HTTPError, MaintenanceError } from './errors.js'
+import { getTokenFromRequest } from './auth.js'
 
 /**
  * @typedef {'rw' | 'r-' | '--'} Mode
@@ -61,8 +62,22 @@ export function withMode (mode) {
       })
     }
 
+    const modeSkip = () => {
+      if (!request.headers) {
+        return false
+      }
+
+      const list = env.modeSkipList
+      const token = getTokenFromRequest(request, env)
+
+      if (list.includes(token)) {
+        return true
+      }
+      return false
+    }
+
     // Not enabled, use maintenance handler.
-    if (!enabled()) {
+    if (!enabled() && !modeSkip()) {
       return maintenanceHandler()
     }
   }
