@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.22.0](https://github.com/web3-storage/web3.storage/compare/api-v7.21.0...api-v7.22.0) (2024-01-05)
+
+
+### Features
+
+* add README deprecation message ([#2340](https://github.com/web3-storage/web3.storage/issues/2340)) ([f3c661f](https://github.com/web3-storage/web3.storage/commit/f3c661f111d9b35dc8a133a6c1f9a10f3a861149))
+* bypass maintenance mode for allowed tokens ([#2345](https://github.com/web3-storage/web3.storage/issues/2345)) ([7ec85aa](https://github.com/web3-storage/web3.storage/commit/7ec85aa7902d2337baada4f9eec94c4dc4edf29a))
+
 ## [7.21.0](https://github.com/web3-storage/web3.storage/compare/api-v7.20.0...api-v7.21.0) (2023-11-13)
 
 
