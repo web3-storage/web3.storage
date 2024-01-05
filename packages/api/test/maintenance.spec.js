@@ -65,12 +65,14 @@ describe('maintenance middleware', () => {
   })
 
   it('should bypass maintenance mode with a allowed token', async () => {
-    const issuer = 'test-upload'
-    const token = await getTestJWT(issuer, issuer)
     const { root, car: carBody } = await createCar('dude where\'s my CAR')
     const carBytes = new Uint8Array(await carBody.arrayBuffer())
     const expectedCid = root.toString()
     const expectedCarCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes)).toString()
+
+    // Allowed token
+    const issuer = 'test-upload'
+    const token = await getTestJWT(issuer, issuer)
 
     /** @type {import('miniflare').Miniflare} */
     const mf = globalThis.miniflare
@@ -86,9 +88,24 @@ describe('maintenance middleware', () => {
       },
       body: carBody
     })
+    assert.strictEqual(res.status, 200)
     const { cid, carCid } = await res.json()
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
     assert.strictEqual(carCid, expectedCarCid, 'Server responded with expected CAR CID')
+
+    // Not allowed token
+    const notAllowedIssuer = 'test-upload-not-allowed'
+    const notAllowedToken = await getTestJWT(notAllowedIssuer, notAllowedIssuer)
+
+    const notAllowedRes = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${notAllowedToken}`,
+        'Content-Type': 'application/vnd.ipld.car'
+      },
+      body: carBody
+    })
+    assert.strictEqual(notAllowedRes.status, 503)
 
     // fallback maintenance mode
     bindings.MAINTENANCE_MODE = 'rw'
