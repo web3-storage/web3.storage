@@ -41,6 +41,7 @@ import { Factory as ClaimFactory } from './utils/content-claims.js'
  * @property {string} [SENTRY_RELEASE]
  * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
+ * @property {string} [MODE_SKIP_LIST]
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
  * @property {string} [ELASTIC_IPFS_PEER_ID]
  * @property {string} [ENABLE_ADD_TO_CLUSTER]
@@ -71,6 +72,7 @@ import { Factory as ClaimFactory } from './utils/content-claims.js'
  * @property {import('./utils/billing-types').CustomersService} customers
  * @property {string} stripeSecretKey
  * @property {string[]} gatewayUrls
+ * @property {string[]} modeSkipList
  * @property {import('./utils/content-claims').Factory} [claimFactory]
  */
 
@@ -149,6 +151,8 @@ export async function envAll (req, env, ctx) {
 
   // @ts-ignore
   env.MODE = env.MAINTENANCE_MODE || DEFAULT_MODE
+
+  env.modeSkipList = env.MODE_SKIP_LIST ? JSON.parse(env.MODE_SKIP_LIST) : []
 
   env.ELASTIC_IPFS_PEER_ID = env.ELASTIC_IPFS_PEER_ID ?? 'bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm'
 
