@@ -1,4 +1,4 @@
-import { HTTPError, MaintenanceError } from './errors.js'
+import { FeatureHasBeenSunsetError, HTTPError, MaintenanceError } from './errors.js'
 import { getTokenFromRequest } from './auth.js'
 
 /**
@@ -50,10 +50,10 @@ export function withMode (mode) {
    * @returns {Response|undefined}
    */
   return (request, env, ctx) => {
-    const enabled = () => {
-      const currentMode = env.MODE
-      const currentModeBits = modeBits(currentMode)
+    const currentMode = env.MODE
+    const currentModeBits = modeBits(currentMode)
 
+    const enabled = () => {
       return modeBits(mode).every((bit, i) => {
         if (bit === '-') {
           return true
@@ -78,6 +78,9 @@ export function withMode (mode) {
 
     // Not enabled, use maintenance handler.
     if (!enabled() && !modeSkip()) {
+      if (currentMode === READ_ONLY) {
+        throw new FeatureHasBeenSunsetError(`This API feature has been sunset, and will no longer be available. Use up.web3.storage, @web3-storage/w3up-client, and/or @web3-storage/w3cli instead. Find docs at https://web3.storage/docs/.`)
+      }
       return maintenanceHandler()
     }
   }
