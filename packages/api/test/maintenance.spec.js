@@ -66,7 +66,7 @@ describe('maintenance middleware', () => {
     // after product sunset, READ_ONLY means FeatureHasBeenSunset
     assert.throws(() => block(() => { }, {
       MODE: READ_ONLY,
-      NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString(),
+      NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString()
     }), /FeatureHasBeenSunset/)
   })
 
