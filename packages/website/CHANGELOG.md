@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.1](https://github.com/web3-storage/web3.storage/compare/website-v2.39.0...website-v2.39.1) (2024-01-09)
+
+
+### Bug Fixes
+
+* only display maintenance message for no read or write ([b85827a](https://github.com/web3-storage/web3.storage/commit/b85827ab175db91c29a64da45c2d9653635ff0d9))
+
 ## [2.39.0](https://github.com/web3-storage/web3.storage/compare/website-v2.38.2...website-v2.39.0) (2024-01-09)
 
 
