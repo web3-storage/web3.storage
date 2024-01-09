@@ -1,8 +1,8 @@
+> ⚠️ **DEPRECATED** This repo will be archived on January 9, 2024 as this web3.storage API will no longer take new uploads. Please use the [new client and API](https://github.com/web3-storage/w3up/tree/main/packages/w3up-client) for future usage of web3.storage. Documentation for the new client can be found [here](https://web3.storage/docs). You can learn more about these changes [here](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage).
+
 <h1 align="center"><a href="https://web3.storage"><img width="25%" src="https://user-images.githubusercontent.com/11778450/227262707-1a9674a7-9286-43e3-87b4-98b388677720.png" alt="web3.storage logo" /></a>
 </h1>
 <p align="center">The simple file storage service for IPFS &amp; Filecoin.</p>
-
-> ⚠️ This repo will be archived on January 9, 2024 as this web3.storage API will no longer take new uploads. Please use the [new client and API](https://github.com/web3-storage/w3up/tree/main/packages/w3up-client) for future usage of web3.storage. Documentation for the new client can be found [here](https://web3.storage/docs). You can learn more about these changes [here](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage).
 
 ## Usage
 
