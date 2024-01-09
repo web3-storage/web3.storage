@@ -44,7 +44,7 @@ function carCidV1Base32sFromBackupUrls (backupUrls) {
     } catch (error) {
       console.warn('error extracting car CID from bucket URL', error)
     }
-    if ( ! carCid) continue
+    if (!carCid) continue
     carCidStrings.add(carCid.toString())
   }
   return carCidStrings
