@@ -19,8 +19,7 @@ export const W3upMigrationRecommendationCopy = ({ sunsetStartDate }) => {
   const sunsetDateFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' });
   return (
     <>
-      This web3.storage product will sunset on {sunsetDateFormatter.format(sunsetStartDate)}. We recommend migrating
-      your usage of web3.storage to the new web3.storage.
+      This web3.storage product has sunset for new uploads. To continue uploading, migrate to the new web3.storage API.
       <br />
       <a href={createNewAccountHref}>Click here to create a new account</a> and&nbsp;
       <a href={learnWhatsNewHref}>here to read about what’s awesome</a> about the new web3.storage experience.
