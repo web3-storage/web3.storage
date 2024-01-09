@@ -282,6 +282,7 @@ describe('upload', () => {
     const contentCid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
     const sourceCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
     const exampleCarParkUrl = 'https://carpark-dev.web3.storage/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea.car'
+    const exampleS3Url = 'https://dotstorage-dev-0.s3.us-east-1.amazonaws.com/raw/bafybeiao32xtnrlibcekpw3vyfi5txgrmvvrua4pccx3xik33ll3qhko2q/2/ciqplrl7tuebgpzbo5nqlqus5hj2kowxzz7ayr4z6ao2ftg7ibcr3ca.car'
     const created = new Date().toISOString()
     const name = `rand-${Math.random().toString().slice(2)}`
     await client.createUpload({
@@ -293,7 +294,7 @@ describe('upload', () => {
       dagSize,
       name,
       pins: [initialPinData],
-      backupUrls: [`https://backup.cid/${created}`, exampleCarParkUrl],
+      backupUrls: [`https://backup.cid/${created}`, exampleCarParkUrl, exampleS3Url],
       created
     })
 
