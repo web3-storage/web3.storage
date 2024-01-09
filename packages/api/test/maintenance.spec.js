@@ -62,6 +62,12 @@ describe('maintenance middleware', () => {
     assert.throws(() => block(() => { }, {
       MODE: NO_READ_OR_WRITE
     }), /API undergoing maintenance/)
+
+    // after product sunset, READ_ONLY means FeatureHasBeenSunset
+    assert.throws(() => block(() => { }, {
+      MODE: READ_ONLY,
+      NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START: (new Date(0)).toISOString()
+    }), /FeatureHasBeenSunset/)
   })
 
   it('should bypass maintenance mode with a allowed token', async () => {

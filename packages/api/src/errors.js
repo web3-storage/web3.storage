@@ -193,6 +193,24 @@ export class MaintenanceError extends Error {
 }
 MaintenanceError.CODE = 'ERROR_MAINTENANCE'
 
+export class FeatureHasBeenSunsetError extends Error {
+  /**
+   * @param {string} reason
+   */
+  constructor (reason) {
+    super(reason)
+    this.name = 'FeatureHasBeenSunset'
+    /**
+     * The 410 (Gone) status code indicates that access to the target resource
+     * is no longer available at the origin server and that this condition is likely
+     * to be permanent.
+     */
+    this.status = 410 // Gone
+    this.code = FeatureHasBeenSunsetError.CODE
+  }
+}
+FeatureHasBeenSunsetError.CODE = 'ERROR_FEATURE_HAS_BEEN_SUNSET'
+
 export class PSAErrorInvalidData extends PinningServiceApiError {
   /**
    * @param {string} message
