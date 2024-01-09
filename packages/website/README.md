@@ -1,6 +1,6 @@
 # Website
 
-Frontend build for the web3.storage website.
+Frontend build of the web3.storage website.
 
 ## Getting Started
 
