@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.2](https://github.com/web3-storage/web3.storage/compare/website-v2.39.1...website-v2.39.2) (2024-01-09)
+
+
+### Bug Fixes
+
+* force website release ([07881a3](https://github.com/web3-storage/web3.storage/commit/07881a341432e4261f0498467e9570873fc6964b))
+
 ## [2.39.1](https://github.com/web3-storage/web3.storage/compare/website-v2.39.0...website-v2.39.1) (2024-01-09)
 
 
