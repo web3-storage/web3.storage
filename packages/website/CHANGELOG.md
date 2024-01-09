@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.0](https://github.com/web3-storage/web3.storage/compare/website-v2.38.2...website-v2.39.0) (2024-01-09)
+
+
+### Features
+
+* api maintenance message is a FeatureHasBeenSunsetError when env.MODE is READ_ONLY ([#2346](https://github.com/web3-storage/web3.storage/issues/2346)) ([8c29cec](https://github.com/web3-storage/web3.storage/commit/8c29cec0e7dda7ac06ffac0339a734f0b0151b91))
+
 ## [2.38.2](https://github.com/web3-storage/web3.storage/compare/website-v2.38.1...website-v2.38.2) (2023-11-14)
 
 
