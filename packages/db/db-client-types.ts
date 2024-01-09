@@ -206,6 +206,7 @@ export type UploadItem = {
   created?: definitions['upload']['inserted_at']
   updated?: definitions['upload']['updated_at']
   content: ContentItem
+  backupUrls: definitions['upload']['backup_urls']
 }
 
 export type UploadItemOutput = {
@@ -218,6 +219,8 @@ export type UploadItemOutput = {
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
   deals: Array<Deal>
+  // array of links to things containing this Upload (e.g. CARs)
+  partOf: Array<string>
 }
 
 export type UploadOutput = definitions['upload'] & {

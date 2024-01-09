@@ -6,8 +6,12 @@
  */
 export function normalizeUpload (upload) {
   const nUpload = { ...upload }
+  const backupUrls = nUpload.backupUrls ?? []
+  delete nUpload.backupUrls
   delete nUpload.content
   delete nUpload.sourceCid
+
+  const partOf = [...carUrlsFromBackupUrls(backupUrls)]
 
   return {
     ...nUpload,
@@ -15,8 +19,26 @@ export function normalizeUpload (upload) {
     cid: upload.sourceCid, // Overwrite cid to source cid
     pins: normalizePins(upload.content.pins, {
       isOkStatuses: true
-    })
+    }),
+    partOf
   }
+}
+
+/**
+ * given array of backup_urls from uploads table, return a set of ipfs:// URIs for any CAR files in the backup_urls
+ * @param {string[]} backupUrls
+ * @returns {Iterable<string>}
+ */
+function carUrlsFromBackupUrls (backupUrls) {
+  const carCIDUrls = new Set()
+  for (const backupUrl of backupUrls) {
+    // match cid v1 starting with 'ba'.
+    // there are also backupUrls from s3 with .car suffix and path stem is base32(multihash) (not a CID). exclude those.
+    const carCidFileSuffixMatch = String(backupUrl).match(/\/(ba[^/]+).car$/)
+    if (!carCidFileSuffixMatch) continue
+    carCIDUrls.add(`ipfs://${carCidFileSuffixMatch[1]}`)
+  }
+  return carCIDUrls
 }
 
 /**

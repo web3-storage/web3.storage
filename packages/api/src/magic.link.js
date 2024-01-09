@@ -62,7 +62,7 @@ function isMagicTestModeToken (token) {
   try {
     parsed = JSON.parse(globalThis.atob(token))
   } catch (error) {
-    return false;
+    return false
   }
   if (parsed.length !== 2) {
     // unexpeced parse
