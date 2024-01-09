@@ -22,6 +22,7 @@ const uploadQuery = `
         created:inserted_at,
         updated:updated_at,
         backupUrls:backup_urls,
+        backup( url ),
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
