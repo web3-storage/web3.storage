@@ -47,7 +47,7 @@ export default function MessageBanner() {
   }
   if (
     apiVersionData &&
-    apiVersionData.mode !== 'rw' &&
+    apiVersionData.mode === '--' &&
     (bannerContent.html === '' || bannerContent.html === undefined)
   ) {
     if (bannerContent.html !== GeneralPageData.message_banner.maintenceAlert) {
