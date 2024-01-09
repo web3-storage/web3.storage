@@ -11,7 +11,8 @@ export function normalizeUpload (upload) {
   delete nUpload.content
   delete nUpload.sourceCid
 
-  const partOf = [...carUrlsFromBackupUrls(backupUrls)]
+  /** @type {import('./db-client-types').UploadItemOutput['parts']} */
+  const parts = [...carUrlsFromBackupUrls(backupUrls)]
 
   return {
     ...nUpload,
@@ -20,7 +21,7 @@ export function normalizeUpload (upload) {
     pins: normalizePins(upload.content.pins, {
       isOkStatuses: true
     }),
-    partOf
+    parts
   }
 }
 
@@ -36,7 +37,7 @@ function carUrlsFromBackupUrls (backupUrls) {
     // there are also backupUrls from s3 with .car suffix and path stem is base32(multihash) (not a CID). exclude those.
     const carCidFileSuffixMatch = String(backupUrl).match(/\/(ba[^/]+).car$/)
     if (!carCidFileSuffixMatch) continue
-    carCIDUrls.add(`ipfs://${carCidFileSuffixMatch[1]}`)
+    carCIDUrls.add(carCidFileSuffixMatch[1])
   }
   return carCIDUrls
 }

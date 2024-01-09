@@ -219,8 +219,11 @@ export type UploadItemOutput = {
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
   deals: Array<Deal>
-  // array of links to things containing this Upload (e.g. CARs)
-  partOf: Array<string>
+  /**
+   * the graph from `cid` can be recreated from the blocks in these parts
+   * @see https://github.com/web3-storage/content-claims#partition-claim
+   */
+  parts: Array<string>
 }
 
 export type UploadOutput = definitions['upload'] & {
