@@ -276,7 +276,6 @@ describe('upload', () => {
     // Default sort {inserted_at, Desc}
     const { uploads: userUploads } = await client.listUploads(user._id, { page: 1 })
     assert.ok(userUploads.find(upload => upload.cid === sourceCid))
-    console.log('userUploads', userUploads)
   })
 
   it('lists user uploads with CAR links in partOf', async () => {
