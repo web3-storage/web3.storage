@@ -278,7 +278,7 @@ describe('upload', () => {
     assert.ok(userUploads.find(upload => upload.cid === sourceCid))
   })
 
-  it('lists user uploads with CAR links in partOf', async () => {
+  it('lists user uploads with CAR links in parts', async () => {
     const contentCid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
     const sourceCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
     const exampleCarParkUrl = 'https://carpark-dev.web3.storage/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea.car'
@@ -303,12 +303,12 @@ describe('upload', () => {
     for (const upload of uploads) {
       // backupUrls raw is private
       assert.ok(!('backupUrls' in upload), 'upload does not have backupUrls property')
-      assert.ok(Array.isArray(upload.partOf), 'upload.partOf is an array')
+      assert.ok(Array.isArray(upload.parts), 'upload.parts is an array')
     }
     const namedUpload = uploads.find(u => u.name === name)
-    assert.deepEqual(namedUpload.partOf, [
+    assert.deepEqual(namedUpload.parts, [
       // this corresponds to `exampleCarParkUrl`
-      'ipfs://bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea'
+      'bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea'
     ])
   })
 
