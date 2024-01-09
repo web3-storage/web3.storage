@@ -1,3 +1,7 @@
+import * as Link from 'multiformats/link'
+import * as Digest from 'multiformats/hashes/digest'
+import { fromString } from 'uint8arrays'
+
 /**
  * Normalize upload item.
  *
@@ -12,7 +16,7 @@ export function normalizeUpload (upload) {
   delete nUpload.sourceCid
 
   /** @type {import('./db-client-types').UploadItemOutput['parts']} */
-  const parts = [...carUrlsFromBackupUrls(backupUrls)]
+  const parts = [...carCidV1Base32sFromBackupUrls(backupUrls)]
 
   return {
     ...nUpload,
@@ -26,20 +30,24 @@ export function normalizeUpload (upload) {
 }
 
 /**
- * given array of backup_urls from uploads table, return a set of ipfs:// URIs for any CAR files in the backup_urls
+ * given array of backup_urls from uploads table, return a corresponding set of CAR CIDv1 using base32 multihash
+ * for any CAR files in the backup_urls.
  * @param {string[]} backupUrls
  * @returns {Iterable<string>}
  */
-function carUrlsFromBackupUrls (backupUrls) {
-  const carCIDUrls = new Set()
+function carCidV1Base32sFromBackupUrls (backupUrls) {
+  const carCidStrings = new Set()
   for (const backupUrl of backupUrls) {
-    // match cid v1 starting with 'ba'.
-    // there are also backupUrls from s3 with .car suffix and path stem is base32(multihash) (not a CID). exclude those.
-    const carCidFileSuffixMatch = String(backupUrl).match(/\/(ba[^/]+).car$/)
-    if (!carCidFileSuffixMatch) continue
-    carCIDUrls.add(carCidFileSuffixMatch[1])
+    let carCid
+    try {
+      carCid = bucketKeyToPartCID(backupUrl)
+    } catch (error) {
+      console.warn('error extracting car CID from bucket URL', error)
+    }
+    if ( ! carCid) continue
+    carCidStrings.add(carCid.toString())
   }
-  return carCIDUrls
+  return carCidStrings
 }
 
 /**
@@ -154,4 +162,31 @@ export function safeNumber (num) {
     throw new Error('Invalid integer number.')
   }
   return num
+}
+
+const CAR_CODE = 0x0202
+
+/**
+ * Attempts to extract a CAR CID from a bucket key.
+ *
+ * @param {string} key
+ */
+const bucketKeyToPartCID = key => {
+  const filename = String(key.split('/').at(-1))
+  const [hash] = filename.split('.')
+  try {
+    // recent buckets encode CAR CID in filename
+    const cid = Link.parse(hash).toV1()
+    if (cid.code === CAR_CODE) return cid
+    throw new Error('not a CAR CID')
+  } catch (err) {
+    // older buckets base32 encode a CAR multihash <base32(car-multihash)>.car
+    try {
+      const digestBytes = fromString(hash, 'base32')
+      const digest = Digest.decode(digestBytes)
+      return Link.create(CAR_CODE, digest)
+    } catch (error) {
+      // console.warn('error trying to create CID from s3 key', error)
+    }
+  }
 }

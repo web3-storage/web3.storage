@@ -22,6 +22,7 @@
   "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
     "@supabase/postgrest-js": "^0.37.0",
+    "multiformats": "^13.0.0",
     "p-retry": "^4.6.1"
   },
   "devDependencies": {
