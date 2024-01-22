@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.24.0](https://github.com/web3-storage/web3.storage/compare/api-v7.23.0...api-v7.24.0) (2024-01-22)
+
+
+### Features
+
+* listUploads includes parts property with list of links to CARs that contain it ([#2347](https://github.com/web3-storage/web3.storage/issues/2347)) ([b870346](https://github.com/web3-storage/web3.storage/commit/b87034604882252f314f9abfb96d347c30f17d25))
+
 ## [7.23.0](https://github.com/web3-storage/web3.storage/compare/api-v7.22.0...api-v7.23.0) (2024-01-09)
 
 
