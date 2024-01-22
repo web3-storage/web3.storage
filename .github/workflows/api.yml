@@ -94,6 +94,8 @@ jobs:
             NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_ANNOUNCEMENT_START
             NEXT_PUBLIC_W3UP_LAUNCH_SUNSET_START
       - name: Test upload to staging
+        # api-staging.web3.storage is now in read-only mode to match api.web3.storage being in 'read only' mode due to product sunset
+        continue-on-error: true
         run: |
           npm run build -w packages/client
           echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
