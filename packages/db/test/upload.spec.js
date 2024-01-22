@@ -278,6 +278,41 @@ describe('upload', () => {
     assert.ok(userUploads.find(upload => upload.cid === sourceCid))
   })
 
+  it('lists user uploads with CAR links in parts', async () => {
+    const contentCid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
+    const sourceCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+    const exampleCarParkUrl = 'https://carpark-dev.web3.storage/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea.car'
+    const exampleS3Url = 'https://dotstorage-dev-0.s3.us-east-1.amazonaws.com/raw/bafybeiao32xtnrlibcekpw3vyfi5txgrmvvrua4pccx3xik33ll3qhko2q/2/ciqplrl7tuebgpzbo5nqlqus5hj2kowxzz7ayr4z6ao2ftg7ibcr3ca.car'
+    const created = new Date().toISOString()
+    const name = `rand-${Math.random().toString().slice(2)}`
+    await client.createUpload({
+      user: user._id,
+      contentCid,
+      sourceCid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [`https://backup.cid/${created}`, exampleCarParkUrl, exampleS3Url],
+      created
+    })
+
+    // Default sort {inserted_at, Desc}
+    const { uploads } = await client.listUploads(user._id, { page: 1 })
+    assert.ok(uploads.length > 0)
+    for (const upload of uploads) {
+      // backupUrls raw is private
+      assert.ok(!('backupUrls' in upload), 'upload does not have backupUrls property')
+      assert.ok(Array.isArray(upload.parts), 'upload.parts is an array')
+    }
+    const namedUpload = uploads.find(u => u.name === name)
+    assert.deepEqual(namedUpload.parts, [
+      // this corresponds to `exampleCarParkUrl`
+      'bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea'
+    ])
+  })
+
   it('can list user uploads with several options', async () => {
     const { uploads: previousUserUploads, count: previousUserUploadCount } = await client.listUploads(user._id, { page: 1 })
     assert(previousUserUploads, 'user has uploads')

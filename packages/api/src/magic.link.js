@@ -58,7 +58,12 @@ function createMagicTestmodeBypasss () {
 export const magicLinkBypassForE2ETestingInTestmode = createMagicTestmodeBypasss()
 
 function isMagicTestModeToken (token) {
-  const parsed = JSON.parse(globalThis.atob(token))
+  let parsed
+  try {
+    parsed = JSON.parse(globalThis.atob(token))
+  } catch {
+    return false
+  }
   if (parsed.length !== 2) {
     // unexpeced parse
     return false

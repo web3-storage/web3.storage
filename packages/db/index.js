@@ -21,6 +21,7 @@ const uploadQuery = `
         sourceCid:source_cid,
         created:inserted_at,
         updated:updated_at,
+        backupUrls:backup_urls,
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
@@ -555,7 +556,6 @@ export class DBClient {
     // Get deals
     const cids = uploads?.map((u) => u.content.cid)
     const deals = await this.getDealsForCids(cids)
-
     return {
       count,
       uploads: uploads?.map((u) => ({

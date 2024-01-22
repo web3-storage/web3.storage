@@ -300,6 +300,7 @@ CREATE INDEX IF NOT EXISTS pin_sync_request_inserted_at_idx ON pin_sync_request 
 
 -- Setting search_path to public scope for uuid function(s)
 SET search_path TO public;
+DROP TABLE IF EXISTS psa_pin_request;
 DROP extension IF EXISTS "uuid-ossp";
 CREATE extension "uuid-ossp" SCHEMA public;
 
@@ -356,6 +357,8 @@ CREATE TABLE IF NOT EXISTS email_history
   sent_at         TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+
+DROP VIEW IF EXISTS admin_search;
 CREATE VIEW admin_search as
 select
   u.id::text as user_id,

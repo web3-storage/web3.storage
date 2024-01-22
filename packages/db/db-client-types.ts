@@ -206,6 +206,7 @@ export type UploadItem = {
   created?: definitions['upload']['inserted_at']
   updated?: definitions['upload']['updated_at']
   content: ContentItem
+  backupUrls: definitions['upload']['backup_urls']
 }
 
 export type UploadItemOutput = {
@@ -218,6 +219,11 @@ export type UploadItemOutput = {
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
   deals: Array<Deal>
+  /**
+   * the graph from `cid` can be recreated from the blocks in these parts
+   * @see https://github.com/web3-storage/content-claims#partition-claim
+   */
+  parts: Array<string>
 }
 
 export type UploadOutput = definitions['upload'] & {
