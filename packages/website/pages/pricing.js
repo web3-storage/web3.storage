@@ -143,6 +143,7 @@ const Card = props => {
   );
 };
 
+// eslint-disable-next-line
 const PricingTiers = () => {
   const [isEnterpriseRequestModelOpen, setIsEnterpriseRequestModelOpen] = useState(false);
 
