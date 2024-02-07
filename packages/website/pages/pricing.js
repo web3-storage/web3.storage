@@ -143,6 +143,7 @@ const Card = props => {
   );
 };
 
+// eslint-disable-next-line
 const PricingTiers = () => {
   const [isEnterpriseRequestModelOpen, setIsEnterpriseRequestModelOpen] = useState(false);
 
@@ -476,7 +477,7 @@ export default function Home() {
         <div className="sectionals" id="tiered_pricing_section_1">
           <GradientBackground variant="light" />
           <PricingHeader />
-          <PricingTiers />
+          {/* <PricingTiers /> */}
         </div>
         <FaqSection />
         <LinkSection />
