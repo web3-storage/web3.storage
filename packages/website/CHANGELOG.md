@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.3](https://github.com/web3-storage/web3.storage/compare/website-v2.39.2...website-v2.39.3) (2024-02-07)
+
+
+### Bug Fixes
+
+* hide pricing info ([#2357](https://github.com/web3-storage/web3.storage/issues/2357)) ([3a727ec](https://github.com/web3-storage/web3.storage/commit/3a727ec572134a5a1559acf0d0c461d54e5d83c5))
+
 ## [2.39.2](https://github.com/web3-storage/web3.storage/compare/website-v2.39.1...website-v2.39.2) (2024-01-09)
 
 
