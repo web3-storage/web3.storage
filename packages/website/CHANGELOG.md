@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.4](https://github.com/web3-storage/web3.storage/compare/website-v2.39.3...website-v2.39.4) (2024-03-08)
+
+
+### Bug Fixes
+
+* remove plans and payment link from menu ([715df70](https://github.com/web3-storage/web3.storage/commit/715df70a53addc404eeff360ffdbeb3ebefa9fa9))
+
 ## [2.39.3](https://github.com/web3-storage/web3.storage/compare/website-v2.39.2...website-v2.39.3) (2024-02-07)
 
 
