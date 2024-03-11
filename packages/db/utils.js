@@ -10,13 +10,21 @@ import { fromString } from 'uint8arrays'
  */
 export function normalizeUpload (upload) {
   const nUpload = { ...upload }
-  const backupUrls = nUpload.backupUrls ?? []
-  delete nUpload.backupUrls
+
   delete nUpload.content
   delete nUpload.sourceCid
 
+  // get hash links to CARs that contain parts of this upload
   /** @type {import('./db-client-types').UploadItemOutput['parts']} */
-  const parts = [...carCidV1Base32sFromBackupUrls(backupUrls)]
+  const parts = [
+    // from upload table 'backup_urls' column
+    ...carCidV1Base32sFromBackupUrls(nUpload.backupUrls ?? []),
+    // there is also a backup table that maybe have been joined in
+    // each backup has a url column
+    ...carCidV1Base32sFromBackupUrls((nUpload.backup ?? []).map(o => o.url))
+  ]
+  delete nUpload.backupUrls
+  delete nUpload.backup
 
   return {
     ...nUpload,
