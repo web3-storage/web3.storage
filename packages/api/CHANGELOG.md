@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.25.0](https://github.com/web3-storage/web3.storage/compare/api-v7.24.0...api-v7.25.0) (2024-03-11)
+
+
+### Features
+
+* bump db package to 4.1.0 and use dep on that new version from cron, api packages ([#2362](https://github.com/web3-storage/web3.storage/issues/2362)) ([18af9c6](https://github.com/web3-storage/web3.storage/commit/18af9c673a7d600105796b271ee962e2865c1eeb))
+
 ## [7.24.0](https://github.com/web3-storage/web3.storage/compare/api-v7.23.0...api-v7.24.0) (2024-01-22)
 
 
