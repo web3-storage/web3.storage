@@ -356,6 +356,102 @@ export interface paths {
       };
     };
   };
+  "/backup": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.backup.id"];
+          upload_id?: parameters["rowFilter.backup.upload_id"];
+          url?: parameters["rowFilter.backup.url"];
+          inserted_at?: parameters["rowFilter.backup.inserted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["backup"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** backup */
+          backup?: definitions["backup"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.backup.id"];
+          upload_id?: parameters["rowFilter.backup.upload_id"];
+          url?: parameters["rowFilter.backup.url"];
+          inserted_at?: parameters["rowFilter.backup.inserted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.backup.id"];
+          upload_id?: parameters["rowFilter.backup.upload_id"];
+          url?: parameters["rowFilter.backup.url"];
+          inserted_at?: parameters["rowFilter.backup.inserted_at"];
+        };
+        body: {
+          /** backup */
+          backup?: definitions["backup"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/content": {
     get: {
       parameters: {
@@ -1592,164 +1688,23 @@ export interface paths {
       };
     };
   };
-  "/rpc/upsert_pins": {
+  "/rpc/upsert_user": {
     post: {
       parameters: {
         body: {
           args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_url": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/pgrst_watch": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_nil": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v1": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/create_content": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_oid": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/user_uploaded_storage": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: bigint */
-            query_user_id: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/users_by_storage_used": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: integer */
-            to_percent?: number;
-            /** Format: bigint */
-            user_id_gt?: number;
-            /** Format: integer */
-            from_percent: number;
-            /** Format: bigint */
-            user_id_lte?: number;
+            /** Format: text */
+            _github: string;
+            /** Format: text */
+            _email: string;
+            /** Format: text */
+            _name: string;
+            /** Format: text */
+            _picture: string;
+            /** Format: text */
+            _issuer: string;
+            /** Format: text */
+            _public_address: string;
           };
         };
         header: {
@@ -1768,255 +1723,10 @@ export interface paths {
       parameters: {
         body: {
           args: {
+            /** Format: bigint */
+            query_user_id: number;
             /** Format: boolean */
             include_deleted?: boolean;
-            /** Format: bigint */
-            query_user_id: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/find_deals_by_content_cids": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: text[] */
-            cids: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v5": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: uuid */
-            namespace: string;
-            /** Format: text */
-            name: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/upsert_pin": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_x500": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/json_arr_to_text_arr": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            _json: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v3": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: uuid */
-            namespace: string;
-            /** Format: text */
-            name: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/upsert_user": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: text */
-            _issuer: string;
-            /** Format: text */
-            _github: string;
-            /** Format: text */
-            _name: string;
-            /** Format: text */
-            _email: string;
-            /** Format: text */
-            _public_address: string;
-            /** Format: text */
-            _picture: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/create_key": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v4": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_dns": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/json_arr_to_json_element_array": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            _json: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/user_psa_storage": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: bigint */
-            query_user_id: number;
           };
         };
         header: {
@@ -2070,7 +1780,121 @@ export interface paths {
       };
     };
   };
+  "/rpc/json_arr_to_json_element_array": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_key": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/json_arr_to_text_arr": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/user_uploaded_storage": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            query_user_id: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/uuid_generate_v1mc": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v1": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v4": {
     post: {
       parameters: {
         body: {
@@ -2094,6 +1918,298 @@ export interface paths {
           args: {
             /** Format: json */
             data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/upsert_pin": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/find_deals_by_content_cids": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text[] */
+            cids: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/users_by_storage_used": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            to_percent?: number;
+            /** Format: bigint */
+            user_id_gt?: number;
+            /** Format: integer */
+            from_percent: number;
+            /** Format: bigint */
+            user_id_lte?: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_url": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v5": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text */
+            name: string;
+            /** Format: uuid */
+            namespace: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_content_with_pin_sync_request": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_content": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_oid": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/user_psa_storage": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            query_user_id: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/pgrst_watch": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_x500": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_nil": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_dns": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/upsert_pins": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v3": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text */
+            name: string;
+            /** Format: uuid */
+            namespace: string;
           };
         };
         header: {
@@ -2205,6 +2321,27 @@ export interface definitions {
     inserted_at: string;
     /** Format: timestamp with time zone */
     deleted_at?: string;
+  };
+  backup: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `upload.id`.<fk table='upload' column='id'/>
+     */
+    upload_id: number;
+    /** Format: text */
+    url: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    inserted_at: string;
   };
   content: {
     /**
@@ -2639,6 +2776,16 @@ export interface parameters {
   "rowFilter.auth_key_history.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.auth_key_history.deleted_at": string;
+  /** @description backup */
+  "body.backup": definitions["backup"];
+  /** Format: bigint */
+  "rowFilter.backup.id": string;
+  /** Format: bigint */
+  "rowFilter.backup.upload_id": string;
+  /** Format: text */
+  "rowFilter.backup.url": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.backup.inserted_at": string;
   /** @description content */
   "body.content": definitions["content"];
   /** Format: text */
