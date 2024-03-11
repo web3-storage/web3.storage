@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.7.1...cron-v1.8.0) (2024-03-11)
+
+
+### Features
+
+* bump db package to 4.1.0 and use dep on that new version from cron, api packages ([#2362](https://github.com/web3-storage/web3.storage/issues/2362)) ([18af9c6](https://github.com/web3-storage/web3.storage/commit/18af9c673a7d600105796b271ee962e2865c1eeb))
+
 ## [1.7.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.7.0...cron-v1.7.1) (2023-03-17)
 
 
