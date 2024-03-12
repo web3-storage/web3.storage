@@ -52,7 +52,7 @@ $ w3 put ~/Pictures/ayy-lamo.jpg
 ⁂ https://dweb.link/ipfs/bafybeid6gpbsqkpfrsx6b6ywrt24je4xqe4eo4y2wldisl6sk7byny5uky
 ```
 
-Use it anywhere you can get a shell. Get creative! For example, we use this for perfomance testing the [upload speed in CI](https://github.com/web3-storage/web3.storage/blob/9fafc830b841da0dd6bd5319c77febaded232240/.github/workflows/cron-test.yml#L36)!
+Use it anywhere you can get a shell. Get creative! For example, we use this for performance testing the [upload speed in CI](https://github.com/web3-storage/web3.storage/blob/9fafc830b841da0dd6bd5319c77febaded232240/.github/workflows/cron-test.yml#L36)!
 
 Run `w3 --help` or have a look at https://github.com/web3-storage/web3.storage/tree/main/packages/w3#readme to find out everything it can do.
 
@@ -144,7 +144,7 @@ npm init -w packages/website
 To run an npm script in one or more workspaces
 
 ```console
-# run test commmand in package `a` and `b`
+# run test command in package `a` and `b`
 npm run test --workspace=packages/a --workspace=packages/b
 ```
 
