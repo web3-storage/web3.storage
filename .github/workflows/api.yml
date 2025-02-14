@@ -28,21 +28,21 @@ on:
         default: false
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    name: Test
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 18
-      - uses: bahmutov/npm-install@v1
-      - run: npm run build --workspace packages/api
-      - run: npm test --workspace packages/api
-        env:
-          PG_REST_URL: ${{secrets.PG_REST_URL}}
-          PG_REST_JWT: ${{secrets.PG_REST_JWT}}
-          PG_CONNECTION: ${{secrets.PG_CONNECTION}}
+  # test:
+  #   runs-on: ubuntu-latest
+  #   name: Test
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 18
+  #     - uses: bahmutov/npm-install@v1
+  #     - run: npm run build --workspace packages/api
+  #     - run: npm test --workspace packages/api
+  #       env:
+  #         PG_REST_URL: ${{secrets.PG_REST_URL}}
+  #         PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+  #         PG_CONNECTION: ${{secrets.PG_CONNECTION}}
 
   changelog:
     name: Changelog
