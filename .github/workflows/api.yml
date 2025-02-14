@@ -75,6 +75,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - name: Publish api worker
         uses: cloudflare/wrangler-action@v3
+        wranglerVersion: "2.20.0"
         env:
           ENV: 'staging' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
@@ -116,6 +117,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - name: API - Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
+        wranglerVersion: "2.20.0"
         env:
           ENV: 'production' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
