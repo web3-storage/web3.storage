@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.25.1](https://github.com/web3-storage/web3.storage/compare/api-v7.25.0...api-v7.25.1) (2025-02-14)
+
+
+### Bug Fixes
+
+* **api:** re-enable tokens endpoints outside read-write ([#2374](https://github.com/web3-storage/web3.storage/issues/2374)) ([2aff012](https://github.com/web3-storage/web3.storage/commit/2aff01295ea6f5b89f9a31f516561492e2802c17))
+
 ## [7.25.0](https://github.com/web3-storage/web3.storage/compare/api-v7.24.0...api-v7.25.0) (2024-03-11)
 
 
