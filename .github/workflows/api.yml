@@ -28,27 +28,26 @@ on:
         default: false
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   name: Test
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 18
-  #     - uses: bahmutov/npm-install@v1
-  #     - run: npm run build --workspace packages/api
-  #     - run: npm test --workspace packages/api
-  #       env:
-  #         PG_REST_URL: ${{secrets.PG_REST_URL}}
-  #         PG_REST_JWT: ${{secrets.PG_REST_JWT}}
-  #         PG_CONNECTION: ${{secrets.PG_CONNECTION}}
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - uses: bahmutov/npm-install@v1
+      - run: npm run build --workspace packages/api
+      - run: npm test --workspace packages/api
+        env:
+          PG_REST_URL: ${{secrets.PG_REST_URL}}
+          PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+          PG_CONNECTION: ${{secrets.PG_CONNECTION}}
 
   changelog:
     name: Changelog
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: test
     outputs:
       releases_created: ${{ steps.tag-release.outputs.releases_created }}
     steps:
@@ -66,7 +65,6 @@ jobs:
     name: Deploy Staging
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event.inputs.force_deploy_staging
     runs-on: ubuntu-latest
-    needs: test
     environment:
       name: staging
     steps:
@@ -105,7 +103,6 @@ jobs:
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || github.event.inputs.force_deploy_production
     runs-on: ubuntu-latest
     needs:
-      - test
       - changelog
     environment:
       name: production
