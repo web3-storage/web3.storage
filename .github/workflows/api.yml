@@ -37,7 +37,6 @@ jobs:
         with:
           node-version: 18
       - uses: bahmutov/npm-install@v1
-      - run: npx playwright install-deps
       - run: npm run build --workspace packages/api
       - run: npm test --workspace packages/api
         env:
