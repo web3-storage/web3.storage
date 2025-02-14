@@ -78,6 +78,10 @@ router.options('*', corsOptions)
 // Needs to be added first
 router.post('/user/login',          auth['🌍'](userLoginPost))
 
+// Exception to keep token functionality enabled by skipping mode middleware
+router.post('/user/tokens',              auth['👤'](userTokensPost))
+router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
+
 router.get('*', withMode(READ_ONLY))
 router.head('*', withMode(READ_ONLY))
 router.delete('*', withMode(READ_WRITE))
@@ -104,9 +108,7 @@ router.post('/blog/subscription',   auth['🌍'](blogSubscriptionCreate))
 router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
 router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))
 router.get('/user/tokens',               auth['👤'](userTokensGet))
-router.post('/user/tokens',              auth['👤'](userTokensPost))
 router.post('/user/request',             auth['👤'](userRequestPost))
-router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
 router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
