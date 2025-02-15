@@ -33,10 +33,6 @@ const App = ({ Component, pageProps }) => {
   const pageClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
   const [pageBannerPortalEl, setPageBannerPortalEl] = useState();
 
-  useEffect(() => {
-    document.querySelector('body')?.classList.add(pageClass);
-  });
-
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
