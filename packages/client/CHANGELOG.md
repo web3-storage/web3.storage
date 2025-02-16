@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.6.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.5...web3.storage-v4.6.0) (2024-03-11)
+
+
+### Features
+
+* add README deprecation message ([#2339](https://github.com/web3-storage/web3.storage/issues/2339)) ([f790baa](https://github.com/web3-storage/web3.storage/commit/f790baabae4b916dc0f8a502a24c6652721b697d))
+
+
+### Bug Fixes
+
+* add types to package.json exports ([#2278](https://github.com/web3-storage/web3.storage/issues/2278)) ([3ad45ab](https://github.com/web3-storage/web3.storage/commit/3ad45ab595bdcbc4ca253010ac3734165ea21f27))
+
 ## [4.5.5](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.5.4...web3.storage-v4.5.5) (2023-07-19)
 
 

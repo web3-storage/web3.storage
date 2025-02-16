@@ -1,6 +1,6 @@
 {
   "name": "web3.storage",
-  "version": "4.5.5",
+  "version": "4.6.0",
   "description": "API client for web3.storage",
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
@@ -75,7 +75,7 @@
   "main": "./dist/src/lib.cjs",
   "exports": {
     ".": {
-			      "types": "./dist/src/lib.d.ts",
+      "types": "./dist/src/lib.d.ts",
       "browser": "./src/lib.js",
       "require": "./dist/src/lib.cjs",
       "node": "./src/lib.js"
