@@ -110,6 +110,7 @@
           "action": "Upload File",
           "accountRestrictedText": "You are unable to upload files when your account is blocked. Please contact support@web3.storage"
         },
+        "pins_message": "You don't have any files pinned yet.",
         "file_row_labels": {
           "date": {
             "label": "Date"
