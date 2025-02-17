@@ -1,0 +1,111 @@
+[
+  {
+    "name": "",
+    "menu": [
+      {
+        "name": "Welcome",
+        "src": "intro"
+      }
+    ]
+  },
+  {
+    "name": "How-tos",
+    "menu": [
+      {
+        "name": "Create and manage accounts",
+        "src": "how-tos/manage-accounts"
+      },
+      {
+        "name": "Integrate with user accounts",
+        "src": "how-tos/integrate-with-user-accounts"
+      },
+      {
+        "name": "Store",
+        "src": "how-tos/store"
+      },
+      {
+        "name": "Retrieve",
+        "src": "how-tos/retrieve"
+      },
+      {
+        "name": "List",
+        "src": "how-tos/list"
+      },
+      {
+        "name": "List directory contents",
+        "src": "how-tos/list-directory-contents"
+      },
+      {
+        "name": "Update data with w3name",
+        "src": "how-tos/w3name"
+      },
+      {
+        "name": "Work with Content Archives",
+        "src": "how-tos/work-with-car-files"
+      },
+      {
+        "name": "Troubleshooting",
+        "src": "how-tos/troubleshooting"
+      }
+    ]
+  },
+  {
+    "name": "Concepts",
+    "menu": [
+      {
+        "name": "Content addressing",
+        "src": "concepts/content-addressing"
+      },
+      {
+        "name": "Decentralized storage",
+        "src": "concepts/decentralized-storage"
+      },
+      {
+        "name": "Accounts and DIDs",
+        "src": "concepts/dids-and-accounts"
+      },
+      {
+        "name": "UCAN",
+        "src": "concepts/ucan"
+      },
+      {
+        "name": "Our infrastructure",
+        "src": "concepts/infrastructure"
+      },
+      {
+        "name": "Comparing our APIs",
+        "src": "concepts/api-comparison"
+      },
+      {
+        "name": "IPFS Gateways",
+        "src": "concepts/w3link"
+      }
+    ]
+  },
+  {
+    "name": "Examples",
+    "menu": [
+      {
+        "name": "Simple upload",
+        "src": "examples/simple-upload"
+      },
+      {
+        "name": "Forever Note",
+        "src": "examples/forever-note"
+      }
+    ]
+  },
+  {
+    "name": "Reference",
+    "menu": []
+  },
+  {
+    "name": "Community",
+    "menu": [
+      {
+        "name": "Help & support",
+        "src": "community/help-and-support"
+      }
+    ]
+  }
+]
